@@ -36,7 +36,7 @@ public interface ApiStores {
     //登录本地服务器2，登陆新接口2017.5.16
     @GET("login")
     @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
-    Observable<LoginModel> login2(@Query("userId") String userId,@Query("pwd") String pwd,@Query("cid") String cid);
+    Observable<LoginModel> login2(@Query("userId") String userId,@Query("pwd") String pwd,@Query("cid") String cid,@Query("appId") String appId);
 
     //获取短信验证码
     @FormUrlEncoded

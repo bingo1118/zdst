@@ -6,9 +6,9 @@ package com.smart.cloud.fire.global;
 public class ConstantValues {
     //public static final String SERVER_IP_NEW ="http://192.168.4.111:51091/fireSystem/";
     //测试IP:
-//    public static final String SERVER_IP_NEW ="http://119.29.224.28:51091/fireSystem/";
+    public static final String SERVER_IP_NEW ="http://119.29.224.28:51091/fireSystem/";
     //中电数通测试IP:
-    public static final String SERVER_IP_NEW ="http://119.29.224.28:51091/fireSystemback/";
+//    public static final String SERVER_IP_NEW ="http://119.29.224.28:51091/fireSystemback/";
 
 //    public static final String SERVER_IP_NEW ="http://192.168.4.88:51091/fireSystem/";
     //测试IP:

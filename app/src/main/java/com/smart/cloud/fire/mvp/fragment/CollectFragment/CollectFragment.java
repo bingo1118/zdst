@@ -542,6 +542,11 @@ public class CollectFragment extends MvpFragment<CollectFragmentPresenter> imple
     }
 
     @Override
+    public void updateAlarmMsgSuccess(int index) {//@@5.18
+        adapter.setList(index);//@@5.19
+    }
+
+    @Override
     public void getShopTypeFail(String msg) {
         T.showShort(mContext, msg);
         shangPuTypeChoice.setClickable(true);

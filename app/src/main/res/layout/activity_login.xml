@@ -8,7 +8,7 @@
         android:id="@+id/login_image"
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:background="@drawable/yxf_denglu"/>
+        android:background="@drawable/an_denglu"/>
 
     <RelativeLayout
         android:id="@+id/login_rela"

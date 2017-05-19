@@ -194,7 +194,7 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             RxView.clicks(((ItemViewHolder) holder).dealAlarmActionTv).throttleFirst(2, TimeUnit.SECONDS).subscribe(new Action1<Void>() {
                 @Override
                 public void call(Void aVoid) {
-                    collectFragmentPresenter.dealAlarm(userId, mNormalAlarmMessage.getMac(), privilege);
+                    collectFragmentPresenter.dealAlarm(userId, mNormalAlarmMessage.getMac(), privilege,messageModelList.indexOf(mNormalAlarmMessage));
                 }
             });
             RxView.clicks(((ItemViewHolder) holder).userSmokeMarkPhoneTv).throttleFirst(2, TimeUnit.SECONDS).subscribe(new Action1<Void>() {
@@ -250,6 +250,12 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public int getItemCount() {
         return messageModelList.size();
+    }
+
+    //@@5.18
+    public void setList(int index) {
+        this.messageModelList.get(index).setIfDealAlarm(1);//@@5.19
+        notifyDataSetChanged();
     }
 
     //自定义的ViewHolder，持有每个Item的的所有界面元素

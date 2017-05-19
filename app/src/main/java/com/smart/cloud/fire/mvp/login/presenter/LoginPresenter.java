@@ -153,7 +153,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
      * @param userId
      */
     private void loginServer2(String userId,String pwd,String cid){
-        Observable<LoginModel> observable = apiStores1.login2(userId,pwd,cid);
+        Observable<LoginModel> observable = apiStores1.login2(userId,pwd,cid,"2");//@@5.19添加app编号
         addSubscription(observable,new SubscriberCallBack<>(new ApiCallback<LoginModel>() {
             @Override
             public void onSuccess(LoginModel model) {

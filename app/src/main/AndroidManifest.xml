@@ -61,7 +61,7 @@
         <!-- 生产模式key -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="F0GrSzPf0G6As4uGGRGbSFsIYLqOFmKT" />
+            android:value="W6B4Hr0CPPCbZG2eYm2FbNYfU1za6EUc" />
 
         <!--
         测试模式key
