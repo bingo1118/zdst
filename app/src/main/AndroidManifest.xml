@@ -179,7 +179,9 @@
         <activity android:name="com.smart.cloud.fire.mvp.printScreen.PrintScreenActivity" />
         <activity android:name="com.smart.cloud.fire.mvp.printScreen.ImageSeeActivity" />
         <activity android:name="com.smart.cloud.fire.mvp.modifyCameraInfo.ModifyCameraPwdActivity" />
-        <activity android:name="com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Security.AirInfoActivity"></activity>
+        <activity android:name="com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Security.AirInfoActivity" />
+        <activity android:name="com.smart.cloud.fire.activity.GetLocationActivity" />
+        <activity android:name="com.smart.cloud.fire.GetLocationActivity"></activity>
     </application>
 
 </manifest>

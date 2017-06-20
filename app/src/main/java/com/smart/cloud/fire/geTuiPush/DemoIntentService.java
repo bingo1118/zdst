@@ -57,7 +57,7 @@ public class DemoIntentService extends GTIntentService {
                 SharedPreferencesManager.SP_FILE_GWELL,
                 SharedPreferencesManager.KEY_RECENTNAME);
         SharedPreferencesManager.getInstance().putData(context,SharedPreferencesManager.SP_FILE_GWELL,
-                "CID",cid);
+                "CID",cid);//@@
         PushManager.getInstance().bindAlias(this.getApplicationContext(),userID);
         goToServer(cid,userID);
     }

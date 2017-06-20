@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -34,6 +35,7 @@ import com.p2p.core.update.UpdateManager;
 import com.smart.cloud.fire.base.ui.MvpActivity;
 import com.smart.cloud.fire.global.ConstantValues;
 import com.smart.cloud.fire.global.MainService;
+import com.smart.cloud.fire.global.MainThread;
 import com.smart.cloud.fire.global.MyApp;
 import com.smart.cloud.fire.mvp.login.SplashActivity;
 import com.smart.cloud.fire.mvp.main.presenter.MainPresenter;
@@ -93,6 +95,12 @@ public class MainActivity extends MvpActivity<MainPresenter> implements MainView
         PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), com.smart.cloud.fire.geTuiPush.DemoIntentService.class);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new MyTast().execute(mContext);//@@5.31
+    }
+
     private void initView() {
         P2PHandler.getInstance().p2pInit(this,
                 new P2PListener(),
@@ -135,7 +143,7 @@ public class MainActivity extends MvpActivity<MainPresenter> implements MainView
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(final Context context, Intent intent) {
             //退出。。
             if (intent.getAction().equals("APP_EXIT")) {
                 SharedPreferencesManager.getInstance().putData(mContext,
@@ -230,11 +238,13 @@ public class MainActivity extends MvpActivity<MainPresenter> implements MainView
                         }.start();
                     }
                 });
+                final String ignoreVersion=intent.getStringExtra("ignoreVersion");//@@5.31
                 button2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (null != dialog_update) {
                             dialog_update.cancel();
+                            SharedPreferencesManager.getInstance().putData(context,"ignoreVersion",ignoreVersion);//@@5.31
                         }
                     }
                 });
@@ -245,8 +255,8 @@ public class MainActivity extends MvpActivity<MainPresenter> implements MainView
                 dialog_update.setContentView(view);
                 FrameLayout.LayoutParams layout = (FrameLayout.LayoutParams) view
                         .getLayoutParams();
-                layout.width = (int) mContext.getResources().getDimension(
-                        R.dimen.update_dialog_width);
+//                layout.width = (int) mContext.getResources().getDimension(
+//                        R.dimen.update_dialog_width);//@@5.31会产生提示框空挡
                 view.setLayoutParams(layout);
                 dialog_update.setCanceledOnTouchOutside(false);
                 Window window = dialog_update.getWindow();
@@ -259,7 +269,7 @@ public class MainActivity extends MvpActivity<MainPresenter> implements MainView
      * 个推解绑@@5.16
      */
     private void unbindAlias() {
-        String userCID = SharedPreferencesManager.getInstance().getData(this,SharedPreferencesManager.SP_FILE_GWELL,"CID");
+        String userCID = SharedPreferencesManager.getInstance().getData(this,SharedPreferencesManager.SP_FILE_GWELL,"CID");//@@
         String username = SharedPreferencesManager.getInstance().getData(mContext,
                 SharedPreferencesManager.SP_FILE_GWELL,
                 SharedPreferencesManager.KEY_RECENTNAME);
@@ -337,7 +347,8 @@ public class MainActivity extends MvpActivity<MainPresenter> implements MainView
     @Override
     public void exitBy2Click(boolean isExit) {
         if (isExit) {
-            moveTaskToBack(false);
+//            moveTaskToBack(false);
+            moveTaskToBack(true);//@@5.31
         }
     }
 
@@ -345,5 +356,23 @@ public class MainActivity extends MvpActivity<MainPresenter> implements MainView
     protected void onDestroy() {
         unregisterReceiver(mReceiver);
         super.onDestroy();
+    }
+
+    //@@5.31
+    class MyTast extends AsyncTask<Context, Integer, Integer> {
+
+        @Override
+        protected Integer doInBackground(Context... params) {
+            // TODO Auto-generated method stub\
+            Context context = params[0];
+            long ll = -2;
+            int result = new MainThread(context).checkUpdate(ll);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(Integer s) {
+            super.onPostExecute(s);
+        }
     }
 }

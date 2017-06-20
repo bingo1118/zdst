@@ -97,7 +97,7 @@ public interface ApiStores {
     Observable<HttpError> getNeedSmoke(@Query("userId") String userId, @Query("privilege") String privilege,
                                             @Query("areaId") String areaId,@Query("page") String page,
                                             @Query("placeTypeId") String placeTypeId);
-    //根据条件查询用户安防设备列表
+    //@@根据条件查询用户安防设备列表
     @GET("getNeedSecurity")
     @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
     Observable<HttpError> getNeedSecurity(@Query("userId") String userId, @Query("privilege") String privilege,
@@ -189,16 +189,18 @@ public interface ApiStores {
     Observable<HttpError> textAlarmAck(@Query("userId") String userId, @Query("alarmSerialNumber") String alarmSerialNumber);
 
 
+    //@@5.25添加appId字段，1或null为智能云消防，2为安全监控
     @GET("getNeedLossSmoke")
     @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
     Observable<HttpError> getNeedLossSmoke(@Query("userId") String userId, @Query("privilege") String privilege,
                                            @Query("areaId") String areaId,@Query("page") String page,
-                                           @Query("placeTypeId") String placeTypeId);
+                                           @Query("placeTypeId") String placeTypeId,@Query("appId") String appId);
 
+    //@@5.25添加appId字段，1或null为智能云消防，2为安全监控
     @GET("getSmokeSummary")
     @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
     Observable<SmokeSummary> getSmokeSummary(@Query("userId") String userId, @Query("privilege") String privilege,
-                                             @Query("areaId") String areaId);
+                                             @Query("areaId") String areaId,@Query("appId") String appId);
 
     @GET("getAllElectricInfo")
     @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")

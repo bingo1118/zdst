@@ -120,7 +120,7 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
         if(!refresh){
             mvpView.showLoading();
         }
-        Observable mObservable = apiStores1.getNeedLossSmoke(userId,privilege,areaId,page,placeTypeId);
+        Observable mObservable = apiStores1.getNeedLossSmoke(userId,privilege,areaId,page,placeTypeId,"2");//@@5.25添加appid字段
         addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<HttpError>() {
             @Override
             public void onSuccess(HttpError model) {
@@ -242,7 +242,7 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
     }
 
     public void getSmokeSummary(String userId,String privilege,String areaId){
-        Observable mObservable = apiStores1.getSmokeSummary(userId,privilege,areaId);
+        Observable mObservable = apiStores1.getSmokeSummary(userId,privilege,areaId,"2");//@@5.25添加appid字段
         addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<SmokeSummary>() {
             @Override
             public void onSuccess(SmokeSummary model) {

@@ -94,9 +94,13 @@ public class MainThread {
                     int result = CompareVersion.compareVersion(serverCode,clientCode);
 
                     if (result==1) {
+                        if(last_check_update_time==-2&&serverCode.equals(SharedPreferencesManager.getInstance().getData(mContext,"ignoreVersion"))){
+                            return 1;//@@5.31
+                        }
                         Intent i = new Intent("Constants.Action.ACTION_UPDATE");
                         i.putExtra("url", mUpdateInfo.url);
                         i.putExtra("message", mUpdateInfo.message);
+                        i.putExtra("ignoreVersion",serverCode );
                         MyApp.app.sendBroadcast(i);
                     }
                     if(last_check_update_time==-1&&result<1){

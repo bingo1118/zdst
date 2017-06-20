@@ -81,12 +81,12 @@ public class MyOverlayManager extends OverlayManager {
                 Camera mCamera = smoke.getCamera();
                 int alarmState = smoke.getIfDealAlarm();
                 Bundle bundle = new Bundle();
-                if(mCamera!=null&&mCamera.getLatitude()!=null&&mCamera.getLatitude().length()>0){
-                    double latitude = Double.parseDouble(mCamera.getLatitude());
-                    double longitude = Double.parseDouble(mCamera.getLongitude());
-                    LatLng latLng = new LatLng(latitude, longitude);
-                    bundle.putSerializable("mNormalSmoke",mCamera);
-                    markMap(latLng,overlayOptionses,alarmState,giflist2,viewList.get(3),bundle);
+                if(mCamera!=null&&mCamera.getLatitude()!=null&&mCamera.getLatitude().length()>0){//@@5.25取消摄像机显示
+//                    double latitude = Double.parseDouble(mCamera.getLatitude());
+//                    double longitude = Double.parseDouble(mCamera.getLongitude());
+//                    LatLng latLng = new LatLng(latitude, longitude);
+//                    bundle.putSerializable("mNormalSmoke",mCamera);
+//                    markMap(latLng,overlayOptionses,alarmState,giflist2,viewList.get(3),bundle);
                 }else{
                     if(smoke.getLatitude().length()==0||smoke.getLongitude().length()==0){
                        continue;

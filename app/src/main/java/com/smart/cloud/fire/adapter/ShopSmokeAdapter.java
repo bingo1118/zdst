@@ -186,7 +186,7 @@ public class ShopSmokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             }
                             Intent intent = new Intent(mContext, AirInfoActivity.class);
                             intent.putExtra("Mac",normalSmoke.getMac());
-                            intent.putExtra("Position",normalSmoke.getAddress());
+                            intent.putExtra("Position",normalSmoke.getName());
                             mContext.startActivity(intent);
                         }
                     });
