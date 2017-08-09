@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/title_rela"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/login_btn">
+        <TextView
+            android:id="@+id/title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设置"
+            android:textColor="#ffffff"
+            android:layout_centerInParent="true"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/ip_rela"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="10dp"
+        android:layout_below="@id/title_rela">
+        <TextView
+            android:id="@+id/ip_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="系统IP:"
+            android:layout_centerVertical="true"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/ip_edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/ip_tv"
+            android:layout_centerVertical="true"
+            android:hint="请输入系统IP地址"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/userid_rela"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="10dp"
+        android:layout_below="@id/ip_rela">
+        <TextView
+            android:id="@+id/userid_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="用户ID:"
+            android:layout_centerVertical="true"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/userid_edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/userid_tv"
+            android:layout_centerVertical="true"
+            android:hint="请输入用户ID"/>
+    </RelativeLayout>
+    <Button
+        android:id="@+id/save_btn"
+        android:layout_below="@id/userid_rela"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:text="保存"
+        android:textColor="#fff"
+        android:layout_centerHorizontal="true"
+        android:background="@color/blue"/>
+</RelativeLayout>

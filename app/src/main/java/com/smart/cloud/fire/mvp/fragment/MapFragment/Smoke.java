@@ -1,5 +1,7 @@
 package com.smart.cloud.fire.mvp.fragment.MapFragment;
 
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.EnviDev.EnviInfo;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -46,6 +48,8 @@ public class Smoke implements Serializable {
     private Camera camera;
     private int areaId;
     private int deviceType;
+
+    private EnviInfo enviInfo;//@@7.28
 
     public String getAddress() {
         return address;
@@ -205,5 +209,13 @@ public class Smoke implements Serializable {
 
     public void setDeviceType(int deviceType) {
         this.deviceType = deviceType;
+    }
+
+    public EnviInfo getEnviInfo() {
+        return enviInfo;
+    }
+
+    public void setEnviInfo(EnviInfo enviInfo) {
+        this.enviInfo = enviInfo;
     }
 }

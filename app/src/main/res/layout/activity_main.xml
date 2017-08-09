@@ -150,7 +150,7 @@
                     myradio:drawableTop="@drawable/user_radio_button_selector"
                     myradio:myDrawableSize="25dp"
                     android:gravity="center"
-                    android:text="个人中心"
+                    android:text="巡检"
                     android:textColor="@color/color_radio_button"
                     android:textSize="12sp" />
             </RadioGroup>

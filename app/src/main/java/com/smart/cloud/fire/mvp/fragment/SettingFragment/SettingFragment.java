@@ -6,10 +6,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.smart.cloud.fire.activity.InspectionActivity;
+import com.smart.cloud.fire.activity.SafetyStudyItemsActivity;
 import com.smart.cloud.fire.base.ui.MvpFragment;
 import com.smart.cloud.fire.global.MyApp;
 import com.smart.cloud.fire.mvp.camera.AddCameraFirstActivity;
@@ -38,6 +43,14 @@ public class SettingFragment extends MvpFragment<SettingFragmentPresenter> imple
     RelativeLayout settingCameraRelative;
     @Bind(R.id.line_state)
     TextView lineState;
+    @Bind(R.id.safety_study_rela)
+    RelativeLayout safety_study_rela;//@@7.24 安全培训
+    @Bind(R.id.safety_rule_info)
+    RelativeLayout safety_rule_info;//@@7.26 安全制度
+    @Bind(R.id.safety_xj_rela)
+    RelativeLayout safety_xj_rela;//@@7.26
+    @Bind(R.id.safety_push_switch)
+    Switch safety_push_switch;//@@8.7
     private Context mContext;
 
     @Override
@@ -78,9 +91,34 @@ public class SettingFragment extends MvpFragment<SettingFragmentPresenter> imple
             settingHelpRela.setVisibility(View.VISIBLE);//显示添加摄像机。。
             settingCameraRelative.setVisibility(View.VISIBLE);//显示绑定摄像机。。
         }
+        String ifSecurityPush = SharedPreferencesManager.getInstance().getData(mContext,
+                "setting",
+                "ifSecurityPush");
+        if(ifSecurityPush=="2"){
+            safety_push_switch.setChecked(false);
+        }else{
+            safety_push_switch.setChecked(true);
+        }
+        safety_push_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    SharedPreferencesManager.getInstance().putData(mContext,
+                            "setting",
+                            "ifSecurityPush","1");
+                    Toast.makeText(mContext,"已开启接收安防设备报警",Toast.LENGTH_SHORT).show();
+                }else{
+                    SharedPreferencesManager.getInstance().putData(mContext,
+                            "setting",
+                            "ifSecurityPush","2");
+                    Toast.makeText(mContext,"已关闭接收安防设备报警",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
-    @OnClick({R.id.app_update, R.id.setting_help_about, R.id.setting_help_rela, R.id.setting_help_exit, R.id.setting_camera_relative})
+    @OnClick({R.id.app_update, R.id.setting_help_about, R.id.setting_help_rela, R.id.setting_help_exit
+                , R.id.setting_camera_relative,R.id.safety_study_rela,R.id.safety_rule_info,R.id.safety_xj_rela})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.app_update:
@@ -101,6 +139,20 @@ public class SettingFragment extends MvpFragment<SettingFragmentPresenter> imple
                 break;
             case R.id.setting_camera_relative:
                 mvpPresenter.bindDialog(mContext);
+                break;
+            case R.id.safety_study_rela:
+                Intent intent3 = new Intent(mContext, SafetyStudyItemsActivity.class);
+                intent3.putExtra("StudyType",1);
+                startActivity(intent3);
+                break;
+            case R.id.safety_rule_info:
+                Intent intent4 = new Intent(mContext, SafetyStudyItemsActivity.class);
+                intent4.putExtra("StudyType",2);
+                startActivity(intent4);
+                break;
+            case R.id.safety_xj_rela:
+                Intent intent5 = new Intent(mContext, InspectionActivity.class);
+                startActivity(intent5);
                 break;
             default:
                 break;

@@ -8,24 +8,25 @@
     <!-- title bar -->
     <include android:id="@+id/title_include" layout="@layout/title_bar"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="42dp">
-        <com.smart.cloud.fire.view.TopIndicator
-            android:id="@+id/top_indicator"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
-        <TextView
-            android:id="@+id/lost_count"
-            android:layout_width="25dp"
-            android:layout_height="wrap_content"
-            android:textColor="#ff0000"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:textSize="12sp"
-            android:layout_alignParentRight="true" />
-    </RelativeLayout>
+            android:layout_height="88dp">
+            <com.smart.cloud.fire.view.TopIndicator
+                android:id="@+id/top_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+            <TextView
+                android:id="@+id/lost_count"
+                android:layout_width="25dp"
+                android:layout_height="wrap_content"
+                android:textColor="#ff0000"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
     <!-- 数量显示 -->
     <include android:id="@+id/search_include" layout="@layout/include_search"/>
 

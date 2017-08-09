@@ -2,6 +2,7 @@ package com.smart.cloud.fire.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.smart.cloud.fire.activity.GPSMapActivity;
+import com.smart.cloud.fire.activity.MapPathActivity;
+import com.smart.cloud.fire.global.ConstantValues;
+import com.smart.cloud.fire.global.Contact;
 import com.smart.cloud.fire.mvp.fragment.MapFragment.Smoke;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Security.AirInfoActivity;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.ShopInfoFragmentPresenter;
@@ -168,6 +173,44 @@ public class ShopSmokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.mc_ygtubiao_sxj);
                     }
                     break;
+                case 15://水禁设备@@8.3。。
+                    if (netStates == 0) {
+                        ((ItemViewHolder) holder).categoryGroupLin.setBackgroundResource(R.drawable.alarm_rela_lx_bg);
+                        ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.sj_ygtubiao_sxj_lx);
+                    } else {
+                        ((ItemViewHolder) holder).categoryGroupLin.setBackgroundResource(R.drawable.alarm_rela_zx_bg);
+                        ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.sj_ygtubiao_sxj);
+                    }
+                    break;
+                case 14://GPS
+                    if (netStates == 0) {//设备不在线。。
+                        ((ItemViewHolder) holder).categoryGroupLin.setBackgroundResource(R.drawable.alarm_rela_lx_bg);
+                        ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.yg_yg_lx);
+                    } else {//设备在线。。
+                        ((ItemViewHolder) holder).categoryGroupLin.setBackgroundResource(R.drawable.alarm_rela_zx_bg);
+                        ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.yg_yg_zx);
+                    }
+                    ((ItemViewHolder) holder).repeaterRela.setVisibility(View.GONE);
+                    ((ItemViewHolder) holder).groupTvAddress.setVisibility(View.GONE);
+                    ((ItemViewHolder) holder).categoryGroupLin.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Contact mContact = new Contact();
+                            mContact.contactType = 0;
+                            mContact.contactId = normalSmoke.getCamera().getCameraId();
+                            mContact.contactPassword = normalSmoke.getCamera().getCameraPwd();
+                            mContact.contactName = normalSmoke.getCamera().getCameraName();
+                            mContact.apModeState = 1;
+
+                            Intent intent=new Intent(mContext, GPSMapActivity.class);
+                            intent.putExtra("mac",normalSmoke.getMac());
+                            intent.putExtra("cameraId",normalSmoke.getCamera().getCameraId());
+                            intent.putExtra("cameraPsw",normalSmoke.getCamera().getCameraPwd());
+                            intent.putExtra("contact", mContact);
+                            mContext.startActivity(intent);
+                        }
+                    });
+                    break;
                 case 13://环境探测器@@5.15。。
                     if (netStates == 0) {
                         ((ItemViewHolder) holder).categoryGroupLin.setBackgroundResource(R.drawable.alarm_rela_lx_bg);
@@ -176,6 +219,28 @@ public class ShopSmokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         ((ItemViewHolder) holder).categoryGroupLin.setBackgroundResource(R.drawable.alarm_rela_zx_bg);
                         ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.hjtcq_ygtubiao_sxj);
                     }
+                    if (normalSmoke.getEnviInfo()!=null){
+                        ((ItemViewHolder) holder).envi_tv.setVisibility(View.VISIBLE);
+                        switch (normalSmoke.getEnviInfo().getPriority()){
+                            case "1":
+                                ((ItemViewHolder) holder).envi_tv.setText("空气质量：优");
+                                ((ItemViewHolder) holder).envi_tv.setTextColor(Color.parseColor("#2dac5a"));
+                                break;
+                            case "2":
+                                ((ItemViewHolder) holder).envi_tv.setText("空气质量：良");
+                                ((ItemViewHolder) holder).envi_tv.setTextColor(Color.parseColor("#4278d0"));
+                                break;
+                            case "3":
+                                ((ItemViewHolder) holder).envi_tv.setText("空气质量：中");
+                                ((ItemViewHolder) holder).envi_tv.setTextColor(Color.parseColor("#e7963f"));
+                                break;
+                            case "4":
+                                ((ItemViewHolder) holder).envi_tv.setText("空气质量：差");
+                                ((ItemViewHolder) holder).envi_tv.setTextColor(Color.parseColor("#dd5c3e"));
+                                break;
+                        }
+
+                    }//@@7.28
                     //@@5.18
                     ((ItemViewHolder) holder).categoryGroupLin.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -290,6 +355,8 @@ public class ShopSmokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         TextView groupPhone2;
         @Bind(R.id.category_group_lin)
         LinearLayout categoryGroupLin;
+        @Bind(R.id.envi_tv)
+        TextView envi_tv;//@@7.28
         public ItemViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);

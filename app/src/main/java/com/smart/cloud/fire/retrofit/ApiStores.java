@@ -71,6 +71,12 @@ public interface ApiStores {
     @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
     Observable<HttpError> getSecurityInfo(@Query("userId") String userId, @Query("privilege") String privilege,@Query("page") String page);
 
+    //@@7.28获取环境探测器列表
+    @GET("getNeedEnviDev")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<HttpError> getNeedEnviDev(@Query("userId") String userId, @Query("privilege") String privilege,@Query("page") String page,@Query("areaId") String areaId,
+                                         @Query("placeTypeId") String placeTypeId);
+
 //    @FormUrlEncoded
 //    @POST("getAllSmoke")
 //    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
@@ -228,4 +234,21 @@ public interface ApiStores {
     @FormUrlEncoded
     @POST("changeCameraPwd")
     Observable<HttpError> changeCameraPwd(@Field("cameraId") String cameraId, @Field("cameraPwd") String cameraPwd);
+
+    //获取用户所有的摄像头
+    @GET("getContentlist")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<HttpError> getContentlist(@Query("firstDir") String firstDir, @Query("secondDir") String secondDir);
+
+    //获取用户所有的摄像头
+    @GET("getRuleContentlist")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<HttpError> getRuleContentlist(@Query("firstDir") String firstDir);
+
+    //获取用户所有的烟感
+    @GET("getNeedGPSDev")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<HttpError> getNeedGPSDev(@Query("userId") String userId, @Query("privilege") String privilege,
+                                        @Query("areaId") String areaId,@Query("page") String page,
+                                        @Query("placeTypeId") String placeTypeId);
 }

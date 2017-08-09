@@ -12,6 +12,7 @@ import com.smart.cloud.fire.mvp.fragment.MapFragment.HttpError;
 import com.smart.cloud.fire.mvp.fragment.MapFragment.Smoke;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.AllDevFragment.AllDevFragment;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Electric.ElectricFragment;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.EnviDev.EnviDevFragment;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.OffLineDevFragment.OffLineDevFragment;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Security.SecurityFragment;
 import com.smart.cloud.fire.rxjava.ApiCallback;
@@ -223,6 +224,40 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
         }));
     }
 
+    //@@5.13安防界面查询设备
+    public void getNeedEnviDev(String userId, String privilege, String areaId, String placeTypeId, final EnviDevFragment securityFragment){
+        mvpView.showLoading();
+        Observable mObservable = apiStores1.getNeedEnviDev(userId,privilege,"",areaId,placeTypeId);
+        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<HttpError>() {
+            @Override
+            public void onSuccess(HttpError model) {
+                if(model!=null){
+                    int errorCode = model.getErrorCode();
+                    if(errorCode==0){
+                        List<Smoke> smokes = model.getSmoke();
+                        securityFragment.getDataSuccess(smokes,true);
+                    }else {
+                        mvpView.getDataFail("无数据");
+                        List<Smoke> smokes = new ArrayList<Smoke>();//@@4.27
+                        securityFragment.getDataSuccess(smokes,true);//@@4.27
+                    }
+                }else{
+                    mvpView.getDataFail("无数据");
+                    List<Smoke> smokes = new ArrayList<Smoke>();//@@4.27
+                    securityFragment.getDataSuccess(smokes,true);//@@4.27
+                }
+            }
+            @Override
+            public void onFailure(int code, String msg) {
+                mvpView.getDataFail("网络错误");
+            }
+            @Override
+            public void onCompleted() {
+                mvpView.hideLoading();
+            }
+        }));
+    }
+
     public void unSubscribe(String type){
         mvpView.hideLoading();
         onUnsubscribe();
@@ -304,12 +339,12 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
             }
         }));
     }
-    //@@5.15获取安防设备
-    public void getSecurityInfo(String userId, String privilege, String page, final List<Smoke> list, final int type,boolean refresh){
+    //@@8.8获取GPS设备
+    public void getNeedGPSDev(String userId, String privilege, String page, final List<Smoke> list, final int type,boolean refresh){
         if(!refresh){
             mvpView.showLoading();
         }
-        Observable mObservable = apiStores1.getSecurityInfo(userId,privilege,page);//@@5.15
+        Observable mObservable = apiStores1.getNeedGPSDev(userId,privilege,"",page,"");
         addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<HttpError>() {
             @Override
             public void onSuccess(HttpError model) {
@@ -347,7 +382,87 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
             }
         }));
     }
+    //@@5.15获取安防设备
+    public void getSecurityInfo(String userId, String privilege, String page, final List<Smoke> list, final int type,boolean refresh){
+        if(!refresh){
+            mvpView.showLoading();
+        }
+        Observable mObservable = apiStores1.getSecurityInfo(userId,privilege,page);//@@5.15
+        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<HttpError>() {
+            @Override
+            public void onSuccess(HttpError model) {
+                int result=model.getErrorCode();
+                if(result==0){
+                    List<Smoke> smokeList = model.getSmoke();
+                    if(type==1){
+                        if(list==null||list.size()==0){
+                            mvpView.getDataSuccess(smokeList,false);
+                        }else if(list!=null&&list.size()>=20){
+                            mvpView.onLoadingMore(smokeList);
+                        }
+                    }
+                }else{
+                    List<Smoke> mSmokeList = new ArrayList<>();
+                    mvpView.getDataSuccess(mSmokeList,false);
+                    mvpView.getDataFail("无数据");
+                }
+            }
+            @Override
+            public void onFailure(int code, String msg) {
+                if(type!=1){
+                    List<Smoke> mSmokeList = new ArrayList<>();
+                    mvpView.getDataSuccess(mSmokeList,false);
+                }
+                mvpView.getDataFail("网络错误");
+            }
 
+            @Override
+            public void onCompleted() {
+                mvpView.hideLoading();
+            }
+        }));
+    }
+
+    //@@7.28获取环境探测器
+    public void getEnviDev(String userId, String privilege, String page, final List<Smoke> list, final int type,boolean refresh){
+        if(!refresh){
+            mvpView.showLoading();
+        }
+        Observable mObservable = apiStores1.getNeedEnviDev(userId,privilege,page,"","");//@@7.28
+        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<HttpError>() {
+            @Override
+            public void onSuccess(HttpError model) {
+                int result=model.getErrorCode();
+                if(result==0){
+                    List<Smoke> smokeList = model.getSmoke();
+                    if(type==1){
+                        if(list==null||list.size()==0){
+                            mvpView.getDataSuccess(smokeList,false);
+                        }else if(list!=null&&list.size()>=20){
+                            mvpView.onLoadingMore(smokeList);
+                        }
+                    }
+                }else{
+                    List<Smoke> mSmokeList = new ArrayList<>();
+                    mvpView.getDataSuccess(mSmokeList,false);
+                    mvpView.getDataFail("无数据");
+                }
+            }
+            @Override
+            public void onFailure(int code, String msg) {
+                if(type!=1){
+                    List<Smoke> mSmokeList = new ArrayList<>();
+                    mvpView.getDataSuccess(mSmokeList,false);
+                }
+                mvpView.getDataFail("网络错误");
+            }
+
+            @Override
+            public void onCompleted() {
+                mvpView.hideLoading();
+            }
+        }));
+    }
     /**
      * @@4.27
      * @param userId

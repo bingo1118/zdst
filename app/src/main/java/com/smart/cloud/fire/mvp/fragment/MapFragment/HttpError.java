@@ -26,6 +26,8 @@ public class HttpError<T> {
     private List<AlarmMessageModel> Alarm;
     private List<ElectricInfo> Electric;
 
+    private List<String> safetyItems;//@@7.25
+
     public String getError() {
         return error;
     }
@@ -88,5 +90,13 @@ public class HttpError<T> {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public List<String> getSafetyItems() {
+        return safetyItems;
+    }
+
+    public void setSafetyItems(List<String> safetyItems) {
+        this.safetyItems = safetyItems;
     }
 }

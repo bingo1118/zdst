@@ -54,10 +54,10 @@ public class MyOverlayManager extends OverlayManager {
         List<OverlayOptions> overlayOptionses = new ArrayList<>();
         if(mapNormalSmoke!=null&&mapNormalSmoke.size()>0){
             ArrayList<BitmapDescriptor> giflist = new ArrayList<>();
-            giflist.add(viewList.get(2));
+            giflist.add(viewList.get(0));
             giflist.add(viewList.get(1));
             ArrayList<BitmapDescriptor> giflistRQ = new ArrayList<>();
-            giflistRQ.add(viewList.get(0));
+            giflistRQ.add(viewList.get(2));
             giflistRQ.add(viewList.get(1));
             ArrayList<BitmapDescriptor> giflist2 = new ArrayList<>();
             giflist2.add(viewList.get(3));
@@ -130,7 +130,7 @@ public class MyOverlayManager extends OverlayManager {
                          ArrayList<BitmapDescriptor> bitmapDescriptors,BitmapDescriptor bitmapDescriptor, Bundle bundle){
         if(alarmState==0){
             overlayOptions.add(new MarkerOptions().position(latLng).icons(bitmapDescriptors).extraInfo(bundle)
-                    .zIndex(0).period(10));
+                    .zIndex(0).draggable(false).period(10));
 //                    .animateType(MarkerOptions.MarkerAnimateType.drop));//取消下落动画。。
         }else{
             overlayOptions.add(new MarkerOptions().position(latLng).icon(bitmapDescriptor).extraInfo(bundle)

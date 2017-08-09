@@ -18,6 +18,7 @@ import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapPoi;
+import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
@@ -215,7 +216,9 @@ public class GetLocationActivity extends Activity implements View.OnClickListene
                 isFristLocation = false;
                 LatLng ll = new LatLng(location.getLatitude(),
                         location.getLongitude());
-                MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
+                MapStatus ms = new MapStatus.Builder().overlook(-20).target(ll).zoom(17).build();
+//                MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
+                MapStatusUpdate u = MapStatusUpdateFactory.newMapStatus(ms);
                 mBaiduMap.animateMapStatus(u);
                 findAddress(new LatLng(location.getLatitude(),
                         location.getLongitude()));//@@6.20

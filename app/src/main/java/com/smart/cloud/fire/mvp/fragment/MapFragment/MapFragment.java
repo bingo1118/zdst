@@ -221,9 +221,9 @@ public class MapFragment extends MvpFragment<MapFragmentPresenter> implements Ma
         BitmapDescriptor sjsbImage = BitmapDescriptorFactory
                 .fromView(viewSJSB);//@@5.4
         List<BitmapDescriptor> listView = new ArrayList<>();
-        listView.add(bdA);
-        listView.add(bdC);
-        listView.add(bdRQ);
+        listView.add(bdA);//烟感
+        listView.add(bdC);//报警
+        listView.add(bdRQ);//燃气
         listView.add(cameraImage);
         listView.add(cameraImage2);
         listView.add(bdDq);

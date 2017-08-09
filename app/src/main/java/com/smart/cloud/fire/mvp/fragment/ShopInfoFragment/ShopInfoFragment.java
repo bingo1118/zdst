@@ -25,6 +25,9 @@ import com.smart.cloud.fire.global.SmokeSummary;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.AllDevFragment.AllDevFragment;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.CameraFragment.CameraFragment;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Electric.ElectricFragment;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.EnviDev.EnviDevFragment;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.GPS.GPSFragment;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.LiftFragment;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.OffLineDevFragment.OffLineDevFragment;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Security.SecurityFragment;
 import com.smart.cloud.fire.utils.SharedPreferencesManager;
@@ -80,11 +83,17 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
     private FragmentManager fragmentManager;
     private ElectricFragment electricFragment;
     private SecurityFragment securityFragment;//@@5.13安防设备界面
+    private EnviDevFragment enviDevFragment;//@@7.26
+    private GPSFragment gpsFragment;//@@8.7
+    private LiftFragment liftFragment;//@@8.7
     public static final int FRAGMENT_ONE = 0;
     public static final int FRAGMENT_TWO = 1;
-    public static final int FRAGMENT_THREE = 3;
-    public static final int FRAGMENT_FOUR = 4;
+    public static final int FRAGMENT_THREE = 4;
+    public static final int FRAGMENT_FOUR = 5;
     public static final int FRAGMENT_SECURITY = 2;//@@5.13安防设备
+    public static final int FRAGMENT_ENVIDEV = 3;//@@环境探测器7.26
+    public static final int FRAGMENT_GPS = 6;//@@车辆管理8.7
+    public static final int FRAGMENT_LIFT = 7;//@@电梯管理8.7
     private int position;
     private boolean visibility = false;
     private ShopType mShopType;
@@ -203,6 +212,9 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
                         case FRAGMENT_SECURITY://@@5.13安防
                             mvpPresenter.getNeedSecurity(userID, privilege + "", areaId, shopTypeId, securityFragment);//显示设备。。
                             break;
+                        case FRAGMENT_ENVIDEV://@@7.26
+                            mvpPresenter.getNeedEnviDev(userID, privilege + "", areaId, shopTypeId, enviDevFragment);//显示设备。。
+                            break;
                         default:
                             break;
                     }
@@ -275,6 +287,31 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
                     ft.show(securityFragment);
                 }
                 break;
+            case FRAGMENT_ENVIDEV:
+                addFire.setVisibility(View.VISIBLE);//@@5.13
+                if (enviDevFragment == null) {
+                    enviDevFragment = new EnviDevFragment();
+                    ft.add(R.id.fragment_content, enviDevFragment);
+                } else {
+                    ft.show(enviDevFragment);
+                }
+                break;
+            case FRAGMENT_GPS:
+                if (gpsFragment == null) {
+                    gpsFragment = new GPSFragment();
+                    ft.add(R.id.fragment_content, gpsFragment);
+                } else {
+                    ft.show(gpsFragment);
+                }
+                break;
+            case FRAGMENT_LIFT:
+                if (liftFragment == null) {
+                    liftFragment = new LiftFragment();
+                    ft.add(R.id.fragment_content, liftFragment);
+                } else {
+                    ft.show(liftFragment);
+                }
+                break;
         }
         ft.commit();
     }
@@ -295,6 +332,15 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
         }
         if (securityFragment != null) {//@@5.13
             ft.hide(securityFragment);
+        }
+        if (enviDevFragment != null) {//@@7.26
+            ft.hide(enviDevFragment);
+        }
+        if (gpsFragment != null) {//@@8.7
+            ft.hide(gpsFragment);
+        }
+        if (liftFragment != null) {//@@8.7
+            ft.hide(liftFragment);
         }
     }
 
@@ -325,13 +371,25 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
                 smokeTotal.setVisibility(View.GONE);
                 mvpPresenter.unSubscribe("security");
                 break;
-            case 3:
+            case 4:
                 smokeTotal.setVisibility(View.GONE);
                 mvpPresenter.unSubscribe("allCamera");
                 break;
-            case 4:
+            case 5:
                 smokeTotal.setVisibility(View.VISIBLE);
                 mvpPresenter.unSubscribe("lostSmoke");
+                break;
+            case 3:
+                smokeTotal.setVisibility(View.GONE);
+                mvpPresenter.unSubscribe("enviDev");
+                break;
+            case 6:
+                smokeTotal.setVisibility(View.GONE);
+                mvpPresenter.unSubscribe("gps");
+                break;
+            case 7:
+                smokeTotal.setVisibility(View.GONE);
+                mvpPresenter.unSubscribe("lift");
                 break;
             default:
                 break;
@@ -361,6 +419,15 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
         }
         if (securityFragment != null) {
             securityFragment = null;
+        }
+        if (enviDevFragment != null) {//@@7.26
+            enviDevFragment = null;
+        }
+        if (gpsFragment != null) {//@@7.26
+            gpsFragment = null;
+        }
+        if (liftFragment != null) {//@@7.26
+            liftFragment = null;
         }
     }
 
@@ -464,6 +531,24 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
                 searchFire.setVisibility(View.GONE);
                 addFire.setVisibility(View.VISIBLE);
                 showFragment(FRAGMENT_TWO);
+                break;
+            case "enviDev":
+                lin1.setVisibility(View.GONE);
+                searchFire.setVisibility(View.GONE);
+                addFire.setVisibility(View.VISIBLE);
+                showFragment(FRAGMENT_ENVIDEV);
+                break;
+            case "gps":
+                lin1.setVisibility(View.GONE);
+                searchFire.setVisibility(View.GONE);
+                addFire.setVisibility(View.VISIBLE);
+                showFragment(FRAGMENT_GPS);
+                break;
+            case "lift":
+                lin1.setVisibility(View.GONE);
+                searchFire.setVisibility(View.GONE);
+                addFire.setVisibility(View.VISIBLE);
+                showFragment(FRAGMENT_LIFT);
                 break;
             default:
                 break;

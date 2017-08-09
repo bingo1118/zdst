@@ -93,6 +93,9 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
             case "H"://@@5.13空气探测器
                 smokeMac = smokeMac.replace("H","");
                 break;
+            case "Y"://@@8.1水禁
+                smokeMac = smokeMac.replace("Y","");
+                break;
         }
         if(smokeMac!=null&&smokeMac.length()>0){
             Observable mObservable = apiStores1.getOneSmoke(userId,smokeMac,privilege);
@@ -190,44 +193,53 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
         String deviceType="1";//烟感。。
 
         String macStr = (String) smokeMac.subSequence(0, 1);
-        switch (macStr){
-            case "R":
-                smokeMac = smokeMac.replace("R","");//燃气
-                deviceType="2";
-                break;
-            case "Q":
-                smokeMac = smokeMac.replace("Q","");//电气火灾
-                deviceType="5";
-                break;
-            case "G":
-                smokeMac = smokeMac.replace("G","");//声光报警器 6
-                deviceType="7";
-                break;
-            case "S":
-                smokeMac = smokeMac.replace("S","");//手动报警，显示 7
-                deviceType="8";
-                break;
-            case "J":
-                smokeMac = smokeMac.replace("J","");//三江设备
-                deviceType="9";
-                break;
-            case "W":
-                smokeMac = smokeMac.replace("W","");//水压设备
-                deviceType="10";
-                break;
-            case "L":
-                smokeMac = smokeMac.replace("L","");//红外设备
-                deviceType="11";
-                break;
-            case "M":
-                smokeMac = smokeMac.replace("M","");//门磁设备
-                deviceType="12";
-                break;
-            case "H":
-                smokeMac = smokeMac.replace("H","");//空气探测器
-                deviceType="13";
-                break;
+        if(macStr.length()==15){//@@8.8
+            deviceType="14";
+        }else{
+            switch (macStr){
+                case "R":
+                    smokeMac = smokeMac.replace("R","");//燃气
+                    deviceType="2";
+                    break;
+                case "Q":
+                    smokeMac = smokeMac.replace("Q","");//电气火灾
+                    deviceType="5";
+                    break;
+                case "G":
+                    smokeMac = smokeMac.replace("G","");//声光报警器 6
+                    deviceType="7";
+                    break;
+                case "S":
+                    smokeMac = smokeMac.replace("S","");//手动报警，显示 7
+                    deviceType="8";
+                    break;
+                case "J":
+                    smokeMac = smokeMac.replace("J","");//三江设备
+                    deviceType="9";
+                    break;
+                case "W":
+                    smokeMac = smokeMac.replace("W","");//水压设备
+                    deviceType="10";
+                    break;
+                case "L":
+                    smokeMac = smokeMac.replace("L","");//红外设备
+                    deviceType="11";
+                    break;
+                case "M":
+                    smokeMac = smokeMac.replace("M","");//门磁设备
+                    deviceType="12";
+                    break;
+                case "H":
+                    smokeMac = smokeMac.replace("H","");//空气探测器
+                    deviceType="13";
+                    break;
+                case "Y":
+                    smokeMac = smokeMac.replace("Y","");//水禁
+                    deviceType="15";
+                    break;
+            }
         }
+
 
         mvpView.showLoading();
         Observable mObservable = apiStores1.addSmoke(userID,smokeName,privilege,smokeMac,address,

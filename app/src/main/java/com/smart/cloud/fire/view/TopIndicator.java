@@ -28,20 +28,20 @@ import fire.cloud.smart.com.smartcloudfire.R;
  *
  *
  */
-public class TopIndicator extends RelativeLayout {
+public class TopIndicator extends LinearLayout {
 
     private static final String TAG = "TopIndicator";
     private int[] mDrawableIds = new int[] { R.drawable.yg_dh_tb_all,R.drawable.yg_dh_tb_dq,
-            R.drawable.yg_dh_tb_all,R.drawable.yg_dh_tb_zx, R.drawable.yg_dh_tb_lx};//@@5.13
+            R.drawable.yg_dh_tb_afsb,R.drawable.yg_dh_tb_hjjc,R.drawable.yg_dh_tb_zx,
+            R.drawable.yg_dh_tb_lx,R.drawable.yg_dh_tb_clgl,R.drawable.yg_dh_tb_dt};//@@5.13
     private List<CheckedTextView> mCheckedList = new ArrayList<>();
     private List<LinearLayout> mLinearLayout = new ArrayList<>();
     private List<TextView> mTextView = new ArrayList<>();
     private List<View> mViewList = new ArrayList<>();
     // 顶部菜单的文字数组
-    private CharSequence[] mLabels = new CharSequence[] { "消防设备", "电气火灾","安防设备","视频", "离线"};//@@5.13
+    private CharSequence[] mLabels = new CharSequence[] { "消防设备", "电气火灾","安防设备","环境监测","视频监控", "离线设备","车辆管理","电梯监管"};//@@5.13
     private int mScreenWidth;
     private int mUnderLineWidth;
-    private View mUnderLine;//底部滑块。。
     // 底部线条移动初始位置
     private int mUnderLineFromX = 0;
 
@@ -61,31 +61,35 @@ public class TopIndicator extends RelativeLayout {
     }
 
     private void init(final Context context) {
-        //setOrientation(LinearLayout.VERTICAL);
+        this.setOrientation(LinearLayout.VERTICAL);
         this.setBackgroundColor(Color.rgb(255, 255, 255));
 
-        mScreenWidth = context.getResources().getDisplayMetrics().widthPixels;
-        mUnderLineWidth = mScreenWidth / mLabels.length;//每个分块长度。。
 
-        mUnderLine = new View(context);
-        mUnderLine.setBackgroundResource(R.drawable.yg_dh_an);
-        LayoutParams underLineParams = new LayoutParams(
-                mUnderLineWidth, 14);//滑块长高参数。。
+        mScreenWidth = context.getResources().getDisplayMetrics().widthPixels;
+        mUnderLineWidth = mScreenWidth /4;//每个分块长度。。
+
+
+
+
 
         // 标题layout
-        LinearLayout topLayout = new LinearLayout(context);
+        LinearLayout topLayout1 = new LinearLayout(context);
+        LinearLayout topLayout2 = new LinearLayout(context);//@@8.7
         LinearLayout.LayoutParams topLayoutParams = new LinearLayout.LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        topLayout.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout.LayoutParams topLayoutParams2 = new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);//@@8.7
+        topLayout1.setOrientation(LinearLayout.HORIZONTAL);
+        topLayout2.setOrientation(LinearLayout.HORIZONTAL);//@@8.7
         LayoutInflater inflater = LayoutInflater.from(context);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params.width = mUnderLineWidth;
         params.gravity = Gravity.CENTER;
-        params.topMargin=5;//@@6.2
+        params.topMargin=1;//@@6.2
 
         int size = mLabels.length;
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < 4; i++) {
             final int index = i;
             final View view = inflater.inflate(R.layout.top_indicator_item,
                     null);
@@ -100,7 +104,7 @@ public class TopIndicator extends RelativeLayout {
                     null);
             itemName.setCompoundDrawablePadding(5);
             itemName.setText(mLabels[i]);
-            topLayout.addView(view, params);
+            topLayout1.addView(view, params);
             //topLayout.addView(mUnderLine, underLineParams);
             itemName.setTag(index);
 
@@ -128,9 +132,51 @@ public class TopIndicator extends RelativeLayout {
             }
 
         }
-        this.addView(topLayout, topLayoutParams);
-        underLineParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        this.addView(mUnderLine, underLineParams);
+        for (int i = 4; i < size; i++) {
+            final int index = i;
+            final View view = inflater.inflate(R.layout.top_indicator_item,
+                    null);
+            final MyCheckedTextView itemName = (MyCheckedTextView) view
+                    .findViewById(R.id.item_name);
+            final LinearLayout itemLin = (LinearLayout) view
+                    .findViewById(R.id.top_lin);
+            final TextView tvTop = (TextView) view
+                    .findViewById(R.id.top_tv);
+            itemName.setCompoundDrawablesWithIntrinsicBounds(context
+                            .getResources().getDrawable(mDrawableIds[i]), null, null,
+                    null);
+            itemName.setCompoundDrawablePadding(5);
+            itemName.setText(mLabels[i]);
+            topLayout2.addView(view, params);
+            //topLayout.addView(mUnderLine, underLineParams);
+            itemName.setTag(index);
+
+            mCheckedList.add(itemName);
+            mLinearLayout.add(itemLin);
+            mTextView.add(tvTop);
+            mViewList.add(view);
+
+            view.setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    if (null != mTabListener) {
+                        mTabListener.onIndicatorSelected(index);
+                    }
+                }
+            });
+
+            // 初始化 底部菜单选中状态,默认第一个选中
+            if (i == 0) {
+                itemName.setChecked(true);
+                mLinearLayout.get(0).setBackgroundColor(Color.rgb(241, 241, 241));
+            } else {
+                itemName.setChecked(false);
+            }
+
+        }
+        this.addView(topLayout1, topLayoutParams);
+        this.addView(topLayout2, topLayoutParams2);//@@8.7
 
     }
 
@@ -153,19 +199,9 @@ public class TopIndicator extends RelativeLayout {
                 textView.setVisibility(View.VISIBLE);
             }
         }
-        // 下划线动画
-        doUnderLineAnimation(index);
     }
 
-    private void doUnderLineAnimation(int index) {
-        TranslateAnimation animation = new TranslateAnimation(mUnderLineFromX,
-                index * mUnderLineWidth, 0, 0);
-        animation.setInterpolator(new AccelerateDecelerateInterpolator());
-        animation.setFillAfter(true);
-        animation.setDuration(150);
-        mUnderLine.startAnimation(animation);
-        mUnderLineFromX = index * mUnderLineWidth;
-    }
+
 
     // 回调接口
     private OnTopIndicatorListener mTabListener;

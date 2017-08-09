@@ -112,6 +112,49 @@ public class DemoIntentService extends GTIntentService {
                         intent1.putExtra("alarmMsg",message);
                         context.startActivity(intent1);
                         break;
+                    case 11://红外
+                    case 12://门磁
+                    case 15://水禁
+                        String message7 = null;
+                        int alarmType7 = dataJson.getInt("alarmType");
+                        switch (deviceType){
+                            case 11:
+                                if(alarmType7==202) {
+                                    message7="发生报警";
+                                }else{
+                                    message7="红外电量低，请更换电池";
+                                }
+                                break;
+                            case 12:
+                                if(alarmType7==202) {
+                                    message7="发生报警";
+                                }else{
+                                    message7="门磁电量低，请更换电池";
+                                }
+                                break;
+                            case 15://@@8.3
+                                if(alarmType7==202) {
+                                    message7="发生报警";
+                                }else{
+                                    message7="水禁电量低，请更换电池";
+                                }
+                                break;
+                        }
+                        String ifSecurityPush = SharedPreferencesManager.getInstance().getData(context,
+                                "setting",
+                                "ifSecurityPush");
+                        if(ifSecurityPush=="2"){
+                            break;
+                        }
+                        PushAlarmMsg mPushAlarmMsg1 = jsJson(dataJson);
+                        Random random2 = new Random();
+                        showDownNotification(context,message7,mPushAlarmMsg1,random2.nextInt(),AlarmActivity.class);
+                        Intent intent4 = new Intent(context, AlarmActivity.class);
+                        intent4.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent4.putExtra("mPushAlarmMsg",mPushAlarmMsg1);
+                        intent4.putExtra("alarmMsg",message7);
+                        context.startActivity(intent4);
+                        break;
                     case 5://电气
                         PushAlarmMsg pushAlarmMsg1 = jsJson(dataJson);
                         int alarmFamily = pushAlarmMsg1.getAlarmFamily();
@@ -153,6 +196,9 @@ public class DemoIntentService extends GTIntentService {
                                     case 9:
                                         alarmMsg = "电气探测器发出：断路故障报警";
                                         break;
+                                    case 10://@@6.28
+                                        alarmMsg = "电气探测器发出：故障报警";
+                                        break;
                                 }
                                 break;
                             case 45://电气报警
@@ -177,6 +223,12 @@ public class DemoIntentService extends GTIntentService {
                                 int alarmType5 = pushAlarmMsg1.getAlarmType();
                                 if(alarmType5!=0){
                                     alarmMsg = "电气探测器发出：温度报警";
+                                }
+                                break;
+                            case 48://分闸报警@@6.28
+                                int alarmType6 = pushAlarmMsg1.getAlarmType();
+                                if(alarmType6!=0){
+                                    alarmMsg = "电气探测器发出：分闸报警";
                                 }
                                 break;
                             default:

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ffffff"
+    >
+    <RelativeLayout
+        android:id="@+id/title_rela"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/login_btn"
+        >
+        <TextView
+            android:id="@+id/title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="地图"
+            android:textColor="#ffffff"
+            android:layout_centerInParent="true"
+            android:textSize="18sp"
+            />
+    </RelativeLayout>
+
+    <com.baidu.mapapi.map.MapView
+        android:id="@+id/bmapView"
+        android:layout_below="@id/title_rela"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </com.baidu.mapapi.map.MapView>
+    <include layout="@layout/progress_bar"/>
+
+    <RelativeLayout
+        android:id="@+id/id_marker_info"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#CC4e5a6b"
+        android:clickable="true" >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="vertical"
+            android:background="#fff">
+            <TextView
+                android:id="@+id/dev_id_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="编号："
+                android:layout_margin="8dp"/>
+            <TextView
+                android:id="@+id/dev_depart_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="部门："
+                android:layout_margin="8dp"/>
+            <TextView
+                android:id="@+id/dev_location_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="位置："
+                android:layout_margin="8dp"/>
+            <TextView
+                android:id="@+id/dev_time_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="时间："
+                android:layout_margin="8dp"/>
+            <Button
+                android:id="@+id/path_btn"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:text="历史轨迹"
+                android:layout_margin="8dp"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>
