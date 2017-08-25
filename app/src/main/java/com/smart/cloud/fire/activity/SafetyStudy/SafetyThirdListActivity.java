@@ -1,4 +1,4 @@
-package com.smart.cloud.fire.activity;
+package com.smart.cloud.fire.activity.SafetyStudy;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,13 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.smart.cloud.fire.adapter.SafetyStudyAdapter;
 import com.smart.cloud.fire.global.ConstantValues;
 import com.smart.cloud.fire.mvp.fragment.MapFragment.Camera;
@@ -25,10 +19,6 @@ import com.smart.cloud.fire.retrofit.ApiStores;
 import com.smart.cloud.fire.retrofit.AppClient;
 import com.smart.cloud.fire.rxjava.ApiCallback;
 import com.smart.cloud.fire.rxjava.SubscriberCallBack;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;

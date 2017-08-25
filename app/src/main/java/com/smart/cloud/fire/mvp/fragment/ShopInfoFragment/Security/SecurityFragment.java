@@ -104,6 +104,7 @@ public class SecurityFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
                 page = "1";
                 list.clear();
                 mvpPresenter.getSecurityInfo(userID, privilege + "", page, list, 1,true);//@@5.15
+                mvpPresenter.getSmokeSummary(userID,privilege+"","", "","3");//@@8.11
 //                mvpPresenter.getSmokeSummary(userID,privilege+"","");
             }
         });

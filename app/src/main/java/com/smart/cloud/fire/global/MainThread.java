@@ -93,7 +93,7 @@ public class MainThread {
                     String clientCode = getlocalVersion();
                     int result = CompareVersion.compareVersion(serverCode,clientCode);
 
-                    if (result==1) {
+                    if (result>=1) {
                         if(last_check_update_time==-2&&serverCode.equals(SharedPreferencesManager.getInstance().getData(mContext,"ignoreVersion"))){
                             return 1;//@@5.31
                         }
@@ -101,11 +101,13 @@ public class MainThread {
                         i.putExtra("url", mUpdateInfo.url);
                         i.putExtra("message", mUpdateInfo.message);
                         i.putExtra("ignoreVersion",serverCode );
+                        i.setPackage("fire.cloud.smart.com.smartcloudfire_zdst");//@@8.8只传当前应用
                         MyApp.app.sendBroadcast(i);
                     }
                     if(last_check_update_time==-1&&result<1){
                         Intent i = new Intent("Constants.Action.ACTION_UPDATE_NO");
                         i.putExtra("message", mUpdateInfo.message);
+                        i.setPackage("fire.cloud.smart.com.smartcloudfire_zdst");//@@8.8只传当前应用
                         MyApp.app.sendBroadcast(i);
                     }
                 }

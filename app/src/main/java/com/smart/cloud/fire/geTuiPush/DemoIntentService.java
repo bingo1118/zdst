@@ -94,10 +94,11 @@ public class DemoIntentService extends GTIntentService {
                                 message="手动报警";
                                 break;
                             case 10://@@4.28
+                                int alarmFamily = dataJson.getInt("alarmFamily");
                                 if(alarmType==218) {
-                                    message="发生高水压报警";
+                                    message="发生高水压报警 水压值："+alarmFamily+"kpa";
                                 }else if(alarmType==209){
-                                    message="发生低水压报警";
+                                    message="发生低水压报警 水压值："+alarmFamily+"kpa";
                                 }else{
                                     message="电量低，请更换电池";
                                 }
@@ -136,7 +137,7 @@ public class DemoIntentService extends GTIntentService {
                                 if(alarmType7==202) {
                                     message7="发生报警";
                                 }else{
-                                    message7="水禁电量低，请更换电池";
+                                    message7="水浸电量低，请更换电池";
                                 }
                                 break;
                         }
@@ -225,10 +226,40 @@ public class DemoIntentService extends GTIntentService {
                                     alarmMsg = "电气探测器发出：温度报警";
                                 }
                                 break;
-                            case 48://分闸报警@@6.28
+                            case 48://合闸报警@@6.28
                                 int alarmType6 = pushAlarmMsg1.getAlarmType();
                                 if(alarmType6!=0){
-                                    alarmMsg = "电气探测器发出：分闸报警";
+                                    alarmMsg = "电气探测器发出：合闸报警";
+                                }
+                                break;
+                            case 143://@@电气报警（贵州电气报警）8.11
+                                int alarmType11 = pushAlarmMsg1.getAlarmType();
+                                if(alarmType11!=0){
+                                    alarmMsg = "电气探测器发出：过压报警（线路已断开）";
+                                }
+                                break;
+                            case 145://电气报警
+                                int alarmType12 = pushAlarmMsg1.getAlarmType();
+                                if(alarmType12!=0){
+                                    alarmMsg = "电气探测器发出：过流报警（线路已断开）";
+                                }
+                                break;
+                            case 144://欠压报警
+                                int alarmType13 = pushAlarmMsg1.getAlarmType();
+                                if(alarmType13!=0){
+                                    alarmMsg = "电气探测器发出：欠压报警（线路已断开）";
+                                }
+                                break;
+                            case 146://电气报警
+                                int alarmType14 = pushAlarmMsg1.getAlarmType();
+                                if(alarmType14!=0){
+                                    alarmMsg = "电气探测器发出：漏电报警（线路已断开）";
+                                }
+                                break;
+                            case 147://电气报警
+                                int alarmType15 = pushAlarmMsg1.getAlarmType();
+                                if(alarmType15!=0){
+                                    alarmMsg = "电气探测器发出：温度报警（线路已断开）";
                                 }
                                 break;
                             default:

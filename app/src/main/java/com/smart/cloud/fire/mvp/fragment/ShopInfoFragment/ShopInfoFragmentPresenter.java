@@ -13,6 +13,7 @@ import com.smart.cloud.fire.mvp.fragment.MapFragment.Smoke;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.AllDevFragment.AllDevFragment;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Electric.ElectricFragment;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.EnviDev.EnviDevFragment;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.GPS.GPSFragment;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.OffLineDevFragment.OffLineDevFragment;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Security.SecurityFragment;
 import com.smart.cloud.fire.rxjava.ApiCallback;
@@ -258,6 +259,40 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
         }));
     }
 
+    //@@5.13GPS界面查询设备
+    public void getNeedGPSDev(String userId, String privilege, String areaId, String placeTypeId, final GPSFragment gpsFragment){
+        mvpView.showLoading();
+        Observable mObservable = apiStores1.getNeedGPSDev(userId,privilege,"",areaId,placeTypeId);
+        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<HttpError>() {
+            @Override
+            public void onSuccess(HttpError model) {
+                if(model!=null){
+                    int errorCode = model.getErrorCode();
+                    if(errorCode==0){
+                        List<Smoke> smokes = model.getSmoke();
+                        gpsFragment.getDataSuccess(smokes,true);
+                    }else {
+                        mvpView.getDataFail("无数据");
+                        List<Smoke> smokes = new ArrayList<Smoke>();//@@4.27
+                        gpsFragment.getDataSuccess(smokes,true);//@@4.27
+                    }
+                }else{
+                    mvpView.getDataFail("无数据");
+                    List<Smoke> smokes = new ArrayList<Smoke>();//@@4.27
+                    gpsFragment.getDataSuccess(smokes,true);//@@4.27
+                }
+            }
+            @Override
+            public void onFailure(int code, String msg) {
+                mvpView.getDataFail("网络错误");
+            }
+            @Override
+            public void onCompleted() {
+                mvpView.hideLoading();
+            }
+        }));
+    }
+
     public void unSubscribe(String type){
         mvpView.hideLoading();
         onUnsubscribe();
@@ -276,8 +311,8 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
         mvpView.getChoiceArea(area);
     }
 
-    public void getSmokeSummary(String userId,String privilege,String areaId){
-        Observable mObservable = apiStores1.getSmokeSummary(userId,privilege,areaId,"2");//@@5.25添加appid字段
+    public void getSmokeSummary(String userId,String privilege,String areaId,String placeTypeId,String devType){
+        Observable mObservable = apiStores1.getSmokeSummary(userId,privilege,areaId,"2",placeTypeId,devType);//@@5.25添加appid字段
         addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<SmokeSummary>() {
             @Override
             public void onSuccess(SmokeSummary model) {

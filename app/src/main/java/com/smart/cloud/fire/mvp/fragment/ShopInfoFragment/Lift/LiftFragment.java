@@ -76,7 +76,7 @@ public class LiftFragment extends MvpFragment<ShopInfoFragmentPresenter> impleme
         privilege = MyApp.app.getPrivilege();
         page = "1";
         list = new ArrayList<>();
-//        refreshListView();
+        refreshListView();
 //        mvpPresenter.getAllSmoke(userID, privilege + "", page, list, 1,false);
         Toast.makeText(mContext,"无数据",Toast.LENGTH_SHORT).show();
     }
@@ -100,8 +100,11 @@ public class LiftFragment extends MvpFragment<ShopInfoFragmentPresenter> impleme
             public void onRefresh() {
                 page = "1";
                 list.clear();
-                mvpPresenter.getAllSmoke(userID, privilege + "", page, list, 1,true);
-                mvpPresenter.getSmokeSummary(userID,privilege+"","");
+//                mvpPresenter.getAllSmoke(userID, privilege + "", page, list, 1,true);
+                mvpPresenter.getSmokeSummary(userID,privilege+"","", "","7");//@@8.11
+//                mvpPresenter.getSmokeSummary(userID,privilege+"","");
+                Toast.makeText(mContext,"无数据",Toast.LENGTH_SHORT).show();
+                swipereFreshLayout.setRefreshing(false);
             }
         });
 

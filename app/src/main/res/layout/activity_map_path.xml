@@ -75,13 +75,7 @@
                 android:text="历史轨迹"
                 android:layout_margin="8dp"
                 android:layout_gravity="center"/>
-            <Button
-                android:id="@+id/video_btn"
-                android:layout_width="150dp"
-                android:layout_height="45dp"
-                android:text="视频监控"
-                android:layout_margin="8dp"
-                android:layout_gravity="center"/>
+
         </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

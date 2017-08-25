@@ -1,4 +1,4 @@
-package com.smart.cloud.fire.activity;
+package com.smart.cloud.fire.activity.SafetyStudy;
 
 import android.app.Activity;
 import android.content.Context;

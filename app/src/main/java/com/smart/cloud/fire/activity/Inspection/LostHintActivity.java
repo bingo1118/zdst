@@ -1,4 +1,4 @@
-package com.smart.cloud.fire.activity;
+package com.smart.cloud.fire.activity.Inspection;
 
 import android.app.Activity;
 import android.content.Context;
@@ -73,7 +73,7 @@ public class LostHintActivity extends Activity {
         String begintime=sdf.format(now);
 
         RequestQueue mQueue = Volley.newRequestQueue(mContext);
-        String url=inspc_ip+":8091/CloudPatrolStd/lostHint?callback=json&userid="+inspc_userid+"&begintime="+begintime+"&endtime="+endtime;
+        String url=inspc_ip+"/CloudPatrolStd/lostHint?callback=json&userid="+inspc_userid+"&begintime="+begintime+"&endtime="+endtime;
         StringRequest stringRequest = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override

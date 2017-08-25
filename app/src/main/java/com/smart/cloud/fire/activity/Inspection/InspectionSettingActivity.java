@@ -1,4 +1,4 @@
-package com.smart.cloud.fire.activity;
+package com.smart.cloud.fire.activity.Inspection;
 
 import android.app.Activity;
 import android.content.Context;
@@ -40,7 +40,7 @@ public class InspectionSettingActivity extends Activity {
     Button save_btn;
 
     Context mContext;
-    String inspc_ip="http://101.200.238.252";
+    String inspc_ip="http://101.200.238.252:8091";
     String inspc_userid="166";
 
 
@@ -85,7 +85,7 @@ public class InspectionSettingActivity extends Activity {
             Toast.makeText(mContext,"输入不正确，保存失败",Toast.LENGTH_SHORT).show();
             return;
         }
-        String url=temp_ip+":8091/CloudPatrolStd/getDept?callback=json&userid="+temp_id+"&username=admin";
+        String url=temp_ip+"/CloudPatrolStd/getDept?callback=json&userid="+temp_id+"&username=admin";
         final StringRequest stringRequest = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override

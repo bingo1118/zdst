@@ -181,21 +181,22 @@
         <activity android:name="com.smart.cloud.fire.mvp.modifyCameraInfo.ModifyCameraPwdActivity" />
         <activity android:name="com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Security.AirInfoActivity" />
         <activity android:name="com.smart.cloud.fire.GetLocationActivity" />
-        <activity android:name="com.smart.cloud.fire.activity.SafetyStudyItemsActivity" />
-        <activity android:name="com.smart.cloud.fire.activity.TestSafetyActivity" />
-        <activity android:name="com.smart.cloud.fire.activity.SafetySecondListActivity" />
-        <activity android:name="com.smart.cloud.fire.activity.SafetyThirdListActivity" />
-        <activity android:name="com.smart.cloud.fire.activity.InspectionActivity" />
-        <activity android:name="com.smart.cloud.fire.activity.ChooseConditionActivity" />
-        <activity android:name="com.smart.cloud.fire.activity.ChooseAreaActivity" />
-        <activity android:name="com.smart.cloud.fire.activity.ChooseDevActivity" />
-        <activity android:name="com.smart.cloud.fire.activity.MapPathActivity" />
-        <activity android:name="com.smart.cloud.fire.activity.AttendanceActivity" />
-        <activity android:name="com.smart.cloud.fire.activity.InspectionAlarmActivity" />
-        <activity android:name="com.smart.cloud.fire.activity.LostHintActivity" />
-        <activity android:name="com.smart.cloud.fire.activity.InspectionSettingActivity" />
-        <activity android:name="com.smart.cloud.fire.activity.DevTraceActivity" />
-        <activity android:name="com.smart.cloud.fire.activity.GPSMapActivity"></activity>
+        <activity android:name="com.smart.cloud.fire.activity.SafetyStudy.SafetyStudyItemsActivity" />
+        <activity android:name="com.smart.cloud.fire.activity.SafetyStudy.TestSafetyActivity" />
+        <activity android:name="com.smart.cloud.fire.activity.SafetyStudy.SafetySecondListActivity" />
+        <activity android:name="com.smart.cloud.fire.activity.SafetyStudy.SafetyThirdListActivity" />
+        <activity android:name="com.smart.cloud.fire.activity.Inspection.InspectionActivity" />
+        <activity android:name="com.smart.cloud.fire.activity.Inspection.ChooseConditionActivity" />
+        <activity android:name="com.smart.cloud.fire.activity.Inspection.ChooseAreaActivity" />
+        <activity android:name="com.smart.cloud.fire.activity.Inspection.ChooseDevActivity" />
+        <activity android:name="com.smart.cloud.fire.activity.Inspection.MapPathActivity" />
+        <activity android:name="com.smart.cloud.fire.activity.Inspection.AttendanceActivity" />
+        <activity android:name="com.smart.cloud.fire.activity.Inspection.InspectionAlarmActivity" />
+        <activity android:name="com.smart.cloud.fire.activity.Inspection.LostHintActivity" />
+        <activity android:name="com.smart.cloud.fire.activity.Inspection.InspectionSettingActivity" />
+        <activity android:name="com.smart.cloud.fire.activity.Inspection.DevTraceActivity" />
+        <activity android:name="com.smart.cloud.fire.activity.Inspection.GPSMapActivity" />
+        <activity android:name="com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Security.NewAirInfoActivity"></activity>
     </application>
 
 </manifest>

@@ -78,6 +78,7 @@ public class GPSFragment extends MvpFragment<ShopInfoFragmentPresenter> implemen
         list = new ArrayList<>();
         refreshListView();
         mvpPresenter.getNeedGPSDev(userID, privilege + "", page, list, 1,false);
+        mvpPresenter.getSmokeSummary(userID,privilege+"","", "","6");//@@8.11
     }
 
     private void refreshListView() {

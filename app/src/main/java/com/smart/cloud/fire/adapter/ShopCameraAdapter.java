@@ -80,8 +80,9 @@ public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType
 public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
     if (holder instanceof ItemViewHolder) {
         final Camera camera = listCamera.get(position);
-        ((ItemViewHolder) holder).groupTvAddress.setText(camera.getCameraAddress());
+        ((ItemViewHolder) holder).groupTvAddress.setText("位置:"+camera.getCameraAddress());
         ((ItemViewHolder) holder).groupTv.setText(camera.getCameraName());
+        ((ItemViewHolder) holder).mac_tv.setText("ID:"+camera.getCameraId());
         ((ItemViewHolder) holder).repeaterNameTv.setText(camera.getPlaceType());
         ((ItemViewHolder) holder).repeaterMacTv.setText(camera.getAreaName());
         ((ItemViewHolder) holder).groupPrincipal1.setText(camera.getPrincipal1());
@@ -198,6 +199,8 @@ public static class ItemViewHolder extends RecyclerView.ViewHolder {
     TextView groupPhone2;
     @Bind(R.id.category_group_lin)
     LinearLayout categoryGroupLin;
+    @Bind(R.id.mac_tv)
+    TextView mac_tv;
     public ItemViewHolder(View view) {
         super(view);
         ButterKnife.bind(this, view);

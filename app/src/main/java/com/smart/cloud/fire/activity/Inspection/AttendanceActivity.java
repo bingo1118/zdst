@@ -1,4 +1,4 @@
-package com.smart.cloud.fire.activity;
+package com.smart.cloud.fire.activity.Inspection;
 
 import android.app.Activity;
 import android.content.Context;
@@ -90,7 +90,7 @@ public class AttendanceActivity extends Activity {
             return;
         }
         RequestQueue mQueue = Volley.newRequestQueue(mContext);
-        String url=inspc_ip+":8091/CloudPatrolStd/attendance?callback=json&deptid="+deptid+"&begintime="+begintime+"&endtime="+endtime+"&userid="+inspc_userid;
+        String url=inspc_ip+"/CloudPatrolStd/attendance?callback=json&deptid="+deptid+"&begintime="+begintime+"&endtime="+endtime+"&userid="+inspc_userid;
         StringRequest stringRequest = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override

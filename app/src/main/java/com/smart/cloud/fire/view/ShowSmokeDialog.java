@@ -31,6 +31,8 @@ public class ShowSmokeDialog {
     TextView userSmokeDialogTv2;
     @Bind(R.id.user_smoke_dialog_tv3)
     TextView userSmokeDialogTv3;
+    @Bind(R.id.user_smoke_dialog_tv4)
+    TextView userSmokeDialogTv4;
     @Bind(R.id.user_smoke_mark_principal)
     TextView userSmokeMarkPrincipal;
     @Bind(R.id.user_smoke_mark_phone_tv)
@@ -73,6 +75,7 @@ public class ShowSmokeDialog {
         userSmokeMarkPrincipal.setText(smoke.getPrincipal1());
         userSmokeDialogTv2.setText(smoke.getName());
         userSmokeDialogTv3.setText(smoke.getAddress());
+        userSmokeDialogTv4.setText("ID:"+smoke.getMac());
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         dialog = builder.create();
         if(!dialog.isShowing()){

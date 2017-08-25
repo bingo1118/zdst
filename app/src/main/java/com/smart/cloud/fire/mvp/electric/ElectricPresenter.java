@@ -1,5 +1,7 @@
 package com.smart.cloud.fire.mvp.electric;
 
+import android.widget.Toast;
+
 import com.smart.cloud.fire.base.presenter.BasePresenter;
 import com.smart.cloud.fire.global.ElectricInfo;
 import com.smart.cloud.fire.global.ElectricValue;
@@ -32,13 +34,17 @@ public class ElectricPresenter extends BasePresenter<ElectricView>{
                 if(resultCode==0){
                     List<ElectricValue> electricList = model.getElectric();
                     List<ElectricValue.ElectricValueBean> electricValueBeen = new ArrayList<>();
-                    for(ElectricValue electricValue : electricList){
-                        int electricType = electricValue.getElectricType();
-                        List<ElectricValue.ElectricValueBean> list = electricValue.getElectricValue();
-                        for(ElectricValue.ElectricValueBean electric: list){
-                            electric.setElectricType(electricType);
-                            electricValueBeen.add(electric);
+                    if(electricList!=null){
+                        for(ElectricValue electricValue : electricList){
+                            int electricType = electricValue.getElectricType();
+                            List<ElectricValue.ElectricValueBean> list = electricValue.getElectricValue();
+                            for(ElectricValue.ElectricValueBean electric: list){
+                                electric.setElectricType(electricType);
+                                electricValueBeen.add(electric);
+                            }
                         }
+                    }else{
+                        mvpView.getDataFail("无数据");
                     }
                     mvpView.getDataSuccess(electricValueBeen);
                 }

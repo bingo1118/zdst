@@ -13,8 +13,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.smart.cloud.fire.activity.InspectionActivity;
-import com.smart.cloud.fire.activity.SafetyStudyItemsActivity;
+import com.smart.cloud.fire.activity.Inspection.InspectionActivity;
+import com.smart.cloud.fire.activity.SafetyStudy.SafetyStudyItemsActivity;
 import com.smart.cloud.fire.base.ui.MvpFragment;
 import com.smart.cloud.fire.global.MyApp;
 import com.smart.cloud.fire.mvp.camera.AddCameraFirstActivity;
@@ -135,6 +135,7 @@ public class SettingFragment extends MvpFragment<SettingFragmentPresenter> imple
             case R.id.setting_help_exit:
                 Intent in = new Intent();
                 in.setAction("APP_EXIT");
+                in.setPackage("fire.cloud.smart.com.smartcloudfire_zdst");//@@8.8只传当前应用
                 mContext.sendBroadcast(in);
                 break;
             case R.id.setting_camera_relative:

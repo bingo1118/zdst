@@ -1,4 +1,4 @@
-package com.smart.cloud.fire.activity;
+package com.smart.cloud.fire.activity.SafetyStudy;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,7 +17,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonArray;
 import com.smart.cloud.fire.adapter.SafetyStudyAdapter;
 import com.smart.cloud.fire.global.ConstantValues;
 

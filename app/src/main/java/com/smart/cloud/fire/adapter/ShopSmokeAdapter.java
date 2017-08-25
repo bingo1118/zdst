@@ -13,12 +13,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.smart.cloud.fire.activity.GPSMapActivity;
-import com.smart.cloud.fire.activity.MapPathActivity;
-import com.smart.cloud.fire.global.ConstantValues;
+import com.smart.cloud.fire.activity.Inspection.GPSMapActivity;
 import com.smart.cloud.fire.global.Contact;
 import com.smart.cloud.fire.mvp.fragment.MapFragment.Smoke;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Security.AirInfoActivity;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Security.NewAirInfoActivity;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.ShopInfoFragmentPresenter;
 import com.smart.cloud.fire.utils.T;
 
@@ -185,10 +184,10 @@ public class ShopSmokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 case 14://GPS
                     if (netStates == 0) {//设备不在线。。
                         ((ItemViewHolder) holder).categoryGroupLin.setBackgroundResource(R.drawable.alarm_rela_lx_bg);
-                        ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.yg_yg_lx);
+                        ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.gps_ygtubiao_sxj_lx);
                     } else {//设备在线。。
                         ((ItemViewHolder) holder).categoryGroupLin.setBackgroundResource(R.drawable.alarm_rela_zx_bg);
-                        ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.yg_yg_zx);
+                        ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.gps_ygtubiao_sxj);
                     }
                     ((ItemViewHolder) holder).repeaterRela.setVisibility(View.GONE);
                     ((ItemViewHolder) holder).groupTvAddress.setVisibility(View.GONE);
@@ -223,21 +222,24 @@ public class ShopSmokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         ((ItemViewHolder) holder).envi_tv.setVisibility(View.VISIBLE);
                         switch (normalSmoke.getEnviInfo().getPriority()){
                             case "1":
-                                ((ItemViewHolder) holder).envi_tv.setText("空气质量：优");
+                                ((ItemViewHolder) holder).envi_tv.setText("环境质量：优");
                                 ((ItemViewHolder) holder).envi_tv.setTextColor(Color.parseColor("#2dac5a"));
                                 break;
                             case "2":
-                                ((ItemViewHolder) holder).envi_tv.setText("空气质量：良");
+                                ((ItemViewHolder) holder).envi_tv.setText("环境质量：良");
                                 ((ItemViewHolder) holder).envi_tv.setTextColor(Color.parseColor("#4278d0"));
                                 break;
                             case "3":
-                                ((ItemViewHolder) holder).envi_tv.setText("空气质量：中");
+                                ((ItemViewHolder) holder).envi_tv.setText("环境质量：中");
                                 ((ItemViewHolder) holder).envi_tv.setTextColor(Color.parseColor("#e7963f"));
                                 break;
                             case "4":
-                                ((ItemViewHolder) holder).envi_tv.setText("空气质量：差");
+                                ((ItemViewHolder) holder).envi_tv.setText("环境质量：差");
                                 ((ItemViewHolder) holder).envi_tv.setTextColor(Color.parseColor("#dd5c3e"));
                                 break;
+                            default:
+                                ((ItemViewHolder) holder).envi_tv.setText("环境质量：--");
+                                ((ItemViewHolder) holder).envi_tv.setTextColor(Color.parseColor("#2dac5a"));
                         }
 
                     }//@@7.28
@@ -249,8 +251,11 @@ public class ShopSmokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 Toast.makeText(mContext,"设备不在线",Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                            Intent intent = new Intent(mContext, AirInfoActivity.class);
+                            Intent intent = new Intent(mContext, NewAirInfoActivity.class);
                             intent.putExtra("Mac",normalSmoke.getMac());
+
+
+
                             intent.putExtra("Position",normalSmoke.getName());
                             mContext.startActivity(intent);
                         }

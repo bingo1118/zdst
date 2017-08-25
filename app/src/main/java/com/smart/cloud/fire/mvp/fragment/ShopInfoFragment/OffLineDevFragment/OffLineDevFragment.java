@@ -98,7 +98,7 @@ public class OffLineDevFragment extends MvpFragment<ShopInfoFragmentPresenter> i
                 page = 1;
                 list.clear();
                 mvpPresenter.getNeedLossSmoke(userID, privilege + "", "", "", page+"",true,1,list,OffLineDevFragment.this);
-                mvpPresenter.getSmokeSummary(userID,privilege+"","");
+                mvpPresenter.getSmokeSummary(userID,privilege+"","", "","8");//@@8.11
             }
         });
 

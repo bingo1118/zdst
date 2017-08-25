@@ -86,10 +86,10 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
     private EnviDevFragment enviDevFragment;//@@7.26
     private GPSFragment gpsFragment;//@@8.7
     private LiftFragment liftFragment;//@@8.7
-    public static final int FRAGMENT_ONE = 0;
-    public static final int FRAGMENT_TWO = 1;
-    public static final int FRAGMENT_THREE = 4;
-    public static final int FRAGMENT_FOUR = 5;
+    public static final int FRAGMENT_ALLSMOKE = 0;
+    public static final int FRAGMENT_ELECTRIC = 1;
+    public static final int FRAGMENT_CAMERA = 4;
+    public static final int FRAGMENT_LOSEDEV = 5;
     public static final int FRAGMENT_SECURITY = 2;//@@5.13安防设备
     public static final int FRAGMENT_ENVIDEV = 3;//@@环境探测器7.26
     public static final int FRAGMENT_GPS = 6;//@@车辆管理8.7
@@ -119,11 +119,11 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
                 SharedPreferencesManager.KEY_RECENTNAME);
         privilege = MyApp.app.getPrivilege();
         topIndicator.setOnTopIndicatorListener(this);
-        showFragment(FRAGMENT_ONE);
+        showFragment(FRAGMENT_ALLSMOKE);
         addFire.setVisibility(View.VISIBLE);
         addFire.setImageResource(R.drawable.search);
         smokeTotal.setVisibility(View.VISIBLE);
-        mShopInfoFragmentPresenter.getSmokeSummary(userID,privilege+"","");
+        mShopInfoFragmentPresenter.getSmokeSummary(userID,privilege+"",areaId, shopTypeId,"1");
     }
 
     @OnClick({R.id.add_fire, R.id.area_condition, R.id.shop_type_condition, R.id.search_fire})
@@ -195,25 +195,32 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
                     }
                     //判断当前在哪个子fragment。。
                     switch (position) {
-                        case FRAGMENT_ONE:
+                        case FRAGMENT_ALLSMOKE:
                             mvpPresenter.getNeedSmoke(userID, privilege + "", areaId, shopTypeId, allDevFragment);//显示设备。。
-                            mvpPresenter.getSmokeSummary(userID,privilege+"",areaId);//显示总数。。
+                            mvpPresenter.getSmokeSummary(userID,privilege+"",areaId, shopTypeId,"1");//显示总数。。
                             break;
-                        case FRAGMENT_TWO:
+                        case FRAGMENT_ELECTRIC:
                             mvpPresenter.getNeedElectricInfo(userID, privilege + "", areaId, shopTypeId,"",electricFragment);
+                            mvpPresenter.getSmokeSummary(userID,privilege+"",areaId, shopTypeId,"2");//显示总数。。
                             break;
-                        case FRAGMENT_THREE:
+                        case FRAGMENT_CAMERA:
                             break;
-                        case FRAGMENT_FOUR:
+                        case FRAGMENT_LOSEDEV:
                             mvpPresenter.getNeedLossSmoke(userID, privilege + "", areaId, shopTypeId, "",false,0,null,offLineDevFragment);
 //                            mvpPresenter.getNeedLossSmoke(userID, privilege + "", areaId, shopTypeId, "", false, offLineDevFragment);
-                            mvpPresenter.getSmokeSummary(userID,privilege+"",areaId);
+                            mvpPresenter.getSmokeSummary(userID,privilege+"",areaId, shopTypeId,"8");//显示总数。。
                             break;
                         case FRAGMENT_SECURITY://@@5.13安防
                             mvpPresenter.getNeedSecurity(userID, privilege + "", areaId, shopTypeId, securityFragment);//显示设备。。
+                            mvpPresenter.getSmokeSummary(userID,privilege+"",areaId, shopTypeId,"3");//显示总数。。
                             break;
                         case FRAGMENT_ENVIDEV://@@7.26
                             mvpPresenter.getNeedEnviDev(userID, privilege + "", areaId, shopTypeId, enviDevFragment);//显示设备。。
+                            mvpPresenter.getSmokeSummary(userID,privilege+"",areaId, shopTypeId,"4");//显示总数。。
+                            break;
+                        case FRAGMENT_GPS://@@7.26
+                            mvpPresenter.getNeedGPSDev(userID, privilege + "", areaId, shopTypeId, gpsFragment);//显示设备。。
+                            mvpPresenter.getSmokeSummary(userID,privilege+"",areaId, shopTypeId,"6");//显示总数。。
                             break;
                         default:
                             break;
@@ -242,7 +249,7 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
             shopTypeCondition.closePopWindow();
         }//@@5.5关闭下拉选项
         switch (index) {
-            case FRAGMENT_ONE:
+            case FRAGMENT_ALLSMOKE:
                 addFire.setVisibility(View.VISIBLE);//@@5.3
                 if (allDevFragment == null) {
                     allDevFragment = new AllDevFragment();
@@ -251,7 +258,7 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
                     ft.show(allDevFragment);
                 }
                 break;
-            case FRAGMENT_TWO:
+            case FRAGMENT_ELECTRIC:
                 addFire.setVisibility(View.VISIBLE);//@@5.3
                 if (electricFragment == null) {
                     electricFragment = new ElectricFragment();
@@ -260,7 +267,7 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
                     ft.show(electricFragment);
                 }
                 break;
-            case FRAGMENT_THREE:
+            case FRAGMENT_CAMERA:
                 addFire.setVisibility(View.GONE);//视频界面没有搜索功能@@5.3
                 if (cameraFragment == null) {
                     cameraFragment = new CameraFragment();
@@ -269,7 +276,7 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
                     ft.show(cameraFragment);
                 }
                 break;
-            case FRAGMENT_FOUR:
+            case FRAGMENT_LOSEDEV:
                 addFire.setVisibility(View.VISIBLE);//@@5.3
                 if (offLineDevFragment == null) {
                     offLineDevFragment = new OffLineDevFragment();
@@ -364,30 +371,30 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
                 mvpPresenter.unSubscribe("allSmoke");
                 break;
             case 1:
-                smokeTotal.setVisibility(View.GONE);
+                smokeTotal.setVisibility(View.VISIBLE);
                 mvpPresenter.unSubscribe("electric");
                 break;
             case 2://@@5.13安防设备
-                smokeTotal.setVisibility(View.GONE);
+                smokeTotal.setVisibility(View.VISIBLE);
                 mvpPresenter.unSubscribe("security");
                 break;
             case 4:
                 smokeTotal.setVisibility(View.GONE);
                 mvpPresenter.unSubscribe("allCamera");
                 break;
-            case 5:
+            case 7:
                 smokeTotal.setVisibility(View.VISIBLE);
                 mvpPresenter.unSubscribe("lostSmoke");
                 break;
             case 3:
-                smokeTotal.setVisibility(View.GONE);
+                smokeTotal.setVisibility(View.VISIBLE);
                 mvpPresenter.unSubscribe("enviDev");
                 break;
-            case 6:
-                smokeTotal.setVisibility(View.GONE);
+            case 5:
+                smokeTotal.setVisibility(View.VISIBLE);
                 mvpPresenter.unSubscribe("gps");
                 break;
-            case 7:
+            case 6:
                 smokeTotal.setVisibility(View.GONE);
                 mvpPresenter.unSubscribe("lift");
                 break;
@@ -501,50 +508,55 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
     public void unSubscribe(String type) {
         switch (type) {
             case "allSmoke":
-                mShopInfoFragmentPresenter.getSmokeSummary(userID,privilege+"","");
+                mShopInfoFragmentPresenter.getSmokeSummary(userID,privilege+"","", "","1");
                 lin1.setVisibility(View.GONE);
                 searchFire.setVisibility(View.GONE);
                 addFire.setVisibility(View.VISIBLE);
-                showFragment(FRAGMENT_ONE);
+                showFragment(FRAGMENT_ALLSMOKE);
                 break;
             case "allCamera":
                 lin1.setVisibility(View.GONE);
                 searchFire.setVisibility(View.GONE);
                 addFire.setVisibility(View.VISIBLE);
-                showFragment(FRAGMENT_THREE);
+                showFragment(FRAGMENT_CAMERA);
                 break;
             case "security"://@@5.13安防设备
+                mShopInfoFragmentPresenter.getSmokeSummary(userID,privilege+"","", "","3");//@@8.11
                 lin1.setVisibility(View.GONE);
                 searchFire.setVisibility(View.GONE);
                 addFire.setVisibility(View.VISIBLE);
                 showFragment(FRAGMENT_SECURITY);
                 break;
             case "lostSmoke":
-                mShopInfoFragmentPresenter.getSmokeSummary(userID,privilege+"","");
+                mShopInfoFragmentPresenter.getSmokeSummary(userID,privilege+"","", "","8");//@@8.11
                 lin1.setVisibility(View.GONE);
                 searchFire.setVisibility(View.GONE);
                 addFire.setVisibility(View.VISIBLE);
-                showFragment(FRAGMENT_FOUR);
+                showFragment(FRAGMENT_LOSEDEV);
                 break;
             case "electric":
+                mShopInfoFragmentPresenter.getSmokeSummary(userID,privilege+"","", "","2");//@@8.11
                 lin1.setVisibility(View.GONE);
                 searchFire.setVisibility(View.GONE);
                 addFire.setVisibility(View.VISIBLE);
-                showFragment(FRAGMENT_TWO);
+                showFragment(FRAGMENT_ELECTRIC);
                 break;
             case "enviDev":
+                mShopInfoFragmentPresenter.getSmokeSummary(userID,privilege+"","", "","4");//@@8.11
                 lin1.setVisibility(View.GONE);
                 searchFire.setVisibility(View.GONE);
                 addFire.setVisibility(View.VISIBLE);
                 showFragment(FRAGMENT_ENVIDEV);
                 break;
             case "gps":
+                mShopInfoFragmentPresenter.getSmokeSummary(userID,privilege+"","", "","6");//@@8.11
                 lin1.setVisibility(View.GONE);
                 searchFire.setVisibility(View.GONE);
                 addFire.setVisibility(View.VISIBLE);
                 showFragment(FRAGMENT_GPS);
                 break;
             case "lift":
+                mShopInfoFragmentPresenter.getSmokeSummary(userID,privilege+"","", "","7");//@@8.11
                 lin1.setVisibility(View.GONE);
                 searchFire.setVisibility(View.GONE);
                 addFire.setVisibility(View.VISIBLE);

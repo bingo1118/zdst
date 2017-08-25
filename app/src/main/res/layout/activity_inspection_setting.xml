@@ -37,7 +37,7 @@
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/ip_tv"
             android:layout_centerVertical="true"
-            android:hint="请输入系统IP地址"/>
+            android:hint="请输入系统IP地址和端口号"/>
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/userid_rela"

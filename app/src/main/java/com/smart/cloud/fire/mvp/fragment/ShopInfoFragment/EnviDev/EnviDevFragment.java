@@ -77,6 +77,7 @@ public class EnviDevFragment extends MvpFragment<ShopInfoFragmentPresenter> impl
         refreshListView();
 //        mvpPresenter.getAllSmoke(userID, privilege + "", page, list, 1,false);
         mvpPresenter.getEnviDev(userID, privilege + "", page, list, 1,false);//@@7.28
+        mvpPresenter.getSmokeSummary(userID,privilege+"","", "","4");//@@8.11
     }
 
     private void refreshListView() {
@@ -157,20 +158,6 @@ public class EnviDevFragment extends MvpFragment<ShopInfoFragmentPresenter> impl
         shopSmokeAdapter = new ShopSmokeAdapter(mContext, list, mShopInfoFragmentPresenter);
         recyclerView.setAdapter(shopSmokeAdapter);
         swipereFreshLayout.setRefreshing(false);
-//        shopSmokeAdapter.setOnItemClickListener(new ShopSmokeAdapter.OnItemClickListener() {//@@5.13
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                if(list.get(position).getNetState()==0){
-//                    Toast.makeText(mContext,"设备不在线",Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                Intent intent = new Intent(mContext, AirInfoActivity.class);
-//                intent.putExtra("Mac",list.get(position).getMac());
-//                intent.putExtra("Position",list.get(position).getAddress());
-//                startActivity(intent);
-//            }
-//        });
-//        shopSmokeAdapter.changeMoreStatus(ShopSmokeAdapter.NO_DATA);
     }
 
     @Override

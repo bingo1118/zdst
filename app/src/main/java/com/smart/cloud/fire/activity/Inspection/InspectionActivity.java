@@ -1,26 +1,22 @@
-package com.smart.cloud.fire.activity;
+package com.smart.cloud.fire.activity.Inspection;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.smart.cloud.fire.global.Area;
 import com.smart.cloud.fire.global.Department;
 import com.smart.cloud.fire.utils.SharedPreferencesManager;
 
@@ -28,11 +24,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -42,7 +36,6 @@ import fire.cloud.smart.com.smartcloudfire.R;
 import lecho.lib.hellocharts.listener.PieChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
-import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.PieChartView;
 
 public class InspectionActivity extends Activity {
@@ -96,7 +89,7 @@ public class InspectionActivity extends Activity {
             Toast.makeText(mContext,"请前往设置用户信息",Toast.LENGTH_SHORT).show();
             return;
         }
-        String url=inspc_ip+":8091/CloudPatrolStd/getDept?callback=json&userid="+inspc_userid+"&username=admin";
+        String url=inspc_ip+"/CloudPatrolStd/getDept?callback=json&userid="+inspc_userid+"&username=admin";
         StringRequest stringRequest = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -190,7 +183,7 @@ public class InspectionActivity extends Activity {
         SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
         String strDate= dateformat.format(date);
         RequestQueue mQueue = Volley.newRequestQueue(mContext);
-        String url=inspc_ip+":8091/CloudPatrolStd/chartTotalRate?deptid="+deptid+"&lineid=1&begintime="+strDate+"&endtime="+strDate+"&userid="+inspc_userid+"&callback=json";
+        String url=inspc_ip+"/CloudPatrolStd/chartTotalRate?deptid="+deptid+"&lineid=1&begintime="+strDate+"&endtime="+strDate+"&userid="+inspc_userid+"&callback=json";
         StringRequest stringRequest = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override

@@ -120,6 +120,13 @@ public interface ApiStores {
     @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
     Observable<HttpError> dealAlarm(@Query("userId") String userId, @Query("smokeMac") String smokeMac);
 
+    //根据条件查询用户所有设备（设备类型<11）
+    @GET("getNeedDevice")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<HttpError> getNeedDevice(@Query("userId") String userId, @Query("privilege") String privilege,
+                                        @Query("areaId") String areaId,@Query("page") String page,
+                                        @Query("placeTypeId") String placeTypeId);
+
     //获取单个烟感信息
     @GET("getOneSmoke")
     @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
@@ -206,7 +213,8 @@ public interface ApiStores {
     @GET("getSmokeSummary")
     @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
     Observable<SmokeSummary> getSmokeSummary(@Query("userId") String userId, @Query("privilege") String privilege,
-                                             @Query("areaId") String areaId,@Query("appId") String appId);
+                                             @Query("areaId") String areaId,@Query("appId") String appId,
+                                             @Query("placeTypeId") String placeTypeId,@Query("devType") String devType);
 
     @GET("getAllElectricInfo")
     @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")

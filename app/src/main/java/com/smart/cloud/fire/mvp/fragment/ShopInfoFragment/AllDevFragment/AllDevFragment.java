@@ -80,6 +80,7 @@ public class AllDevFragment extends MvpFragment<ShopInfoFragmentPresenter> imple
         mvpPresenter.getAllSmoke(userID, privilege + "", page, list, 1,false);
     }
 
+
     private void refreshListView() {
         //设置刷新时动画的颜色，可以设置4个
         swipereFreshLayout.setProgressBackgroundColorSchemeResource(android.R.color.white);
@@ -100,7 +101,7 @@ public class AllDevFragment extends MvpFragment<ShopInfoFragmentPresenter> imple
                 page = "1";
                 list.clear();
                 mvpPresenter.getAllSmoke(userID, privilege + "", page, list, 1,true);
-                mvpPresenter.getSmokeSummary(userID,privilege+"","");
+                mvpPresenter.getSmokeSummary(userID,privilege+"","", "","1");//@@8.11
             }
         });
 

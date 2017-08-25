@@ -1,17 +1,13 @@
-package com.smart.cloud.fire.activity;
+package com.smart.cloud.fire.activity.Inspection;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +20,6 @@ import com.android.volley.toolbox.Volley;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
-import com.baidu.mapapi.map.InfoWindow;
 import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
@@ -33,13 +28,10 @@ import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.Overlay;
 import com.baidu.mapapi.map.OverlayOptions;
-import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
 import com.baidu.mapapi.overlayutil.MyOverlayManager;
-import com.smart.cloud.fire.global.Department;
 import com.smart.cloud.fire.global.InspectionDev;
-import com.smart.cloud.fire.mvp.fragment.MapFragment.Smoke;
 import com.smart.cloud.fire.utils.SharedPreferencesManager;
 
 import org.json.JSONArray;
@@ -47,7 +39,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -97,8 +88,8 @@ public class MapPathActivity extends Activity {
             Toast.makeText(mContext,"请前往设置用户信息",Toast.LENGTH_SHORT).show();
             return;
         }
-        RequestQueue mQueue = Volley.newRequestQueue(mContext);
-        String url=inspc_ip+":8091/CloudPatrolStd/getDevice?userid="+inspc_userid+"&callback=json";
+        final RequestQueue mQueue = Volley.newRequestQueue(mContext);
+        String url=inspc_ip+"/CloudPatrolStd/getDevice?userid="+inspc_userid+"&callback=json";
         StringRequest stringRequest = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -120,6 +111,8 @@ public class MapPathActivity extends Activity {
                             }
                             if(smokeList!=null){
                                 getDataSuccess(smokeList);
+                            }else{
+                                Toast.makeText(mContext,"无数据",Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

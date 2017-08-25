@@ -1,4 +1,4 @@
-package com.smart.cloud.fire.activity;
+package com.smart.cloud.fire.activity.Inspection;
 
 import android.app.Activity;
 import android.content.Context;
@@ -26,24 +26,15 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
-import com.baidu.mapapi.map.Overlay;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.model.LatLngBounds;
-import com.baidu.mapapi.overlayutil.MyOverlayManager;
 import com.smart.cloud.fire.global.ConstantValues;
 import com.smart.cloud.fire.global.Contact;
 import com.smart.cloud.fire.global.GPSInfoBean;
-import com.smart.cloud.fire.global.InspectionDev;
 import com.smart.cloud.fire.ui.ApMonitorActivity;
-import com.smart.cloud.fire.utils.SharedPreferencesManager;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -72,7 +63,7 @@ public class GPSMapActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_path);
+        setContentView(R.layout.activity_gpsmap);
         mContext=this;
 
         mac=getIntent().getStringExtra("mac");
@@ -223,11 +214,15 @@ public class GPSMapActivity extends Activity {
         viewHolder.video_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(GPSMapActivity.this,ApMonitorActivity.class);
-                intent.putExtra("contact", contact);
-                intent.putExtra("connectType", ConstantValues.ConnectType.P2PCONNECT);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                if(contact.getContactId()==null||contact.getContactId()==""){
+                    Toast.makeText(mContext,"未关联摄像机",Toast.LENGTH_SHORT).show();
+                }else{
+                    Intent intent=new Intent(GPSMapActivity.this,ApMonitorActivity.class);
+                    intent.putExtra("contact", contact);
+                    intent.putExtra("connectType", ConstantValues.ConnectType.P2PCONNECT);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
             }
         });
     }

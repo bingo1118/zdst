@@ -136,6 +136,35 @@ public class MapFragmentPresenter extends BasePresenter<MapFragmentView> {
         }));
     }
 
+    public void getNeedDevice(String userId, String privilege,String areaId,String placeTypeId){
+        mvpView.showLoading();
+        Observable mObservable = apiStores1.getNeedDevice(userId,privilege,areaId,"",placeTypeId);
+        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<HttpError>() {
+            @Override
+            public void onSuccess(HttpError model) {
+                if(model!=null){
+                    int errorCode = model.getErrorCode();
+                    if(errorCode==0){
+                        List<Smoke> smokes = model.getSmoke();
+                        mvpView.getDataSuccess(smokes);
+                    }else {
+                        mvpView.getAreaTypeFail("无数据");
+                    }
+                }else{
+                    mvpView.getAreaTypeFail("无数据");
+                }
+            }
+            @Override
+            public void onFailure(int code, String msg) {
+                mvpView.getDataFail("网络错误");
+            }
+            @Override
+            public void onCompleted() {
+                mvpView.hideLoading();
+            }
+        }));
+    }
+
     /**
      * 根据查询内容显示坐标@@4.27
      * @param userId

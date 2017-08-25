@@ -118,6 +118,13 @@ public class CollectFragment extends MvpFragment<CollectFragmentPresenter> imple
     private RefreshRecyclerAdapter adapter;
     private int lastVisibleItem;
 
+    //startStr, endStr, areaId, placeTypeId
+    private int type=1;//@@是否是按条件查询 1 查询所有 2 条件查询
+    private String startStr;
+    private String endStr;
+    private String areaId;
+    private String placeTypeId;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_collect_fire, container,
@@ -158,6 +165,7 @@ public class CollectFragment extends MvpFragment<CollectFragmentPresenter> imple
                 research = false;
                 page = "1";
                 mvpPresenter.getAllAlarm(userID, privilege + "", page, 1, "", "", "", "");
+                type=1;//@@7.12
                 mProgressBar.setVisibility(View.GONE);
             }
         });
@@ -180,9 +188,14 @@ public class CollectFragment extends MvpFragment<CollectFragmentPresenter> imple
                     return;
                 }
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == adapter.getItemCount()) {
-                    if (loadMoreCount >= 20 && research == false) {
+//                    if (loadMoreCount >= 20 && research == false) {
+                    if (loadMoreCount >= 20 ) {//@@7.12
                         page = Integer.parseInt(page) + 1 + "";
-                        mvpPresenter.getAllAlarm(userID, privilege + "", page, 1, "", "", "", "");
+                        if(type==2){
+                            mvpPresenter.getAllAlarm(userID, privilege + "", page, 2,startStr, endStr, areaId, placeTypeId);
+                        }else{
+                            mvpPresenter.getAllAlarm(userID, privilege + "", page, 1, "", "", "", "");
+                        }//@@7.12 区分是否是条件查询 1 查询全部 2 条件查询
                         mProgressBar.setVisibility(View.GONE);
                     }else{
                         T.showShort(mContext,"已经没有更多数据了");
@@ -263,7 +276,16 @@ public class CollectFragment extends MvpFragment<CollectFragmentPresenter> imple
                         areaId = "";
                     }
                 }
+
+                this.research=false;//@@8.10再次查询
                 mvpPresenter.getAllAlarm(userID, privilege + "", page, 2, startStr, endStr, areaId, placeTypeId);
+                this.startStr=startStr;
+                this.endStr=endStr;
+                this.areaId=areaId;
+                this.placeTypeId=placeTypeId;
+                this.type=2;//@@7.12保存查询条件
+
+
                 hideDatePick();
                 mArea = null;
                 mShopType = null;
@@ -528,9 +550,15 @@ public class CollectFragment extends MvpFragment<CollectFragmentPresenter> imple
     public void dealAlarmMsgSuccess(List<AlarmMessageModel> alarmMessageModels) {
         messageModelList.clear();
         messageModelList.addAll(alarmMessageModels);
+        loadMoreCount=alarmMessageModels.size();//@@7.13
         adapter = new RefreshRecyclerAdapter(getActivity(), messageModelList, collectFragmentPresenter, userID, privilege + "");
         demoRecycler.setAdapter(adapter);
         adapter.changeMoreStatus(RefreshRecyclerAdapter.NO_DATA);
+    }
+
+    @Override
+    public void updateAlarmMsgSuccess(int index) {
+        adapter.setList(index);
     }
 
     @Override
@@ -539,11 +567,6 @@ public class CollectFragment extends MvpFragment<CollectFragmentPresenter> imple
         shangPuTypeChoice.showPopWindow();
         shangPuTypeChoice.setClickable(true);
         shangPuTypeChoice.closeLoading();
-    }
-
-    @Override
-    public void updateAlarmMsgSuccess(int index) {//@@5.18
-        adapter.setList(index);//@@5.19
     }
 
     @Override
@@ -570,17 +593,31 @@ public class CollectFragment extends MvpFragment<CollectFragmentPresenter> imple
 
     @Override
     public void getDataByCondition(List<AlarmMessageModel> alarmMessageModels) {
-        research = true;
-        messageModelList.clear();
-        messageModelList.addAll(alarmMessageModels);
-        adapter = new RefreshRecyclerAdapter(getActivity(), messageModelList, collectFragmentPresenter, userID, privilege + "");
-        demoRecycler.setAdapter(adapter);
-        adapter.changeMoreStatus(RefreshRecyclerAdapter.NO_DATA);
+        if(!research){
+            research = true;
+            messageModelList.clear();
+        }//@@7.13
+        int pageInt = Integer.parseInt(page);
+        if (messageModelList != null && messageModelList.size() >= 20 && pageInt > 1) {
+            loadMoreCount=alarmMessageModels.size();
+            messageModelList.addAll(alarmMessageModels);
+            adapter.changeMoreStatus(RefreshRecyclerAdapter.NO_DATA);
+        } else {
+            loadMoreCount=alarmMessageModels.size();
+            messageModelList.addAll(alarmMessageModels);
+            adapter.changeMoreStatus(RefreshRecyclerAdapter.NO_DATA);
+        }//@@7.13 添加条件查询分页
+
+//        messageModelList.clear();
+//        messageModelList.addAll(alarmMessageModels);
+//        adapter = new RefreshRecyclerAdapter(getActivity(), messageModelList, collectFragmentPresenter, userID, privilege + "");
+//        demoRecycler.setAdapter(adapter);
+//        adapter.changeMoreStatus(RefreshRecyclerAdapter.NO_DATA);
     }
 
     @Override
     public void getChoiceArea(Area area) {
-            mArea = area;
+        mArea = area;
     }
 
     @Override

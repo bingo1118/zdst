@@ -36,7 +36,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="15dp"
         android:layout_below="@id/add_fire_title">
         <LinearLayout
@@ -91,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="探测器"/>
+                    android:text="*探测器"/>
                 <EditText
                     android:id="@+id/add_fire_mac"
                     android:layout_width="match_parent"
@@ -164,7 +164,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="@string/add_fire_name"/>
+                    android:text="*名称"/>
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -180,7 +180,7 @@
                         android:layout_marginBottom="3dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:hint="@string/add_fire_name"
+                        android:hint="名称"
                         android:textColorHint="@color/hint_color_text"
                         android:textColor="@color/text_view_and_kuang"
                         />
@@ -197,7 +197,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="@string/add_fire_lat"/>
+                    android:text="*纬度"/>
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -239,7 +239,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="@string/add_fire_lon"/>
+                    android:text="*经度"/>
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -276,7 +276,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="@string/add_fire_address"/>
+                    android:text="*地址"/>
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -312,7 +312,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="区域"/>
+                    android:text="*区域"/>
                 <com.smart.cloud.fire.view.XCDropDownListView
                     android:id="@+id/add_fire_zjq"
                     android:layout_width="match_parent"
@@ -329,7 +329,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="类型"/>
+                    android:text="*类型"/>
                 <com.smart.cloud.fire.view.XCDropDownListView
                     android:id="@+id/add_fire_type"
                     android:layout_width="match_parent"
@@ -460,6 +460,9 @@
                         />
                 </RelativeLayout>
             </RelativeLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="80dp" />
         </LinearLayout>
     </ScrollView>
 
@@ -470,8 +473,7 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="15dp"
-        android:background="@drawable/login_button_selector"
-        >
+        android:background="@drawable/login_button_selector">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -1,21 +1,12 @@
 package com.smart.cloud.fire.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.smart.cloud.fire.activity.TestSafetyActivity;
-import com.smart.cloud.fire.global.ElectricValue;
-import com.smart.cloud.fire.mvp.fragment.MapFragment.Smoke;
-import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.ShopInfoFragmentPresenter;
 
 import java.util.List;
 
