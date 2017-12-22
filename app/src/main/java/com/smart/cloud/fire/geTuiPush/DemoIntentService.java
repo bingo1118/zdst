@@ -67,10 +67,20 @@ public class DemoIntentService extends GTIntentService {
         String msg = new String(gtTransmitMessage.getPayload());
             try {
                 JSONObject dataJson = new JSONObject(msg);
+                //@@9.26限制查看视频后1小时内不再接收同Mac的报警推送
+                PushAlarmMsg mMsg = jsJson(dataJson);
+                String mac_temp=mMsg.getMac();
+                long lasttime=Long.parseLong(SharedPreferencesManager.getInstance().getLongData(context,
+                        mac_temp));
+                if((System.currentTimeMillis()-lasttime)<60*60*1000){
+                    return;
+                }//@@9.26
+
                 int deviceType = dataJson.getInt("deviceType");
                 switch (deviceType){
                     case 1://烟感
                     case 2://燃气
+                    case 16://NB燃气
                     case 7://声光
                     case 10://水压@@4.28
                     case 8://手报
@@ -84,6 +94,7 @@ public class DemoIntentService extends GTIntentService {
                                     message="烟感电量低，请更换电池";
                                 }
                                 break;
+                            case 16:
                             case 2:
                                 message="燃气发生泄漏";
                                 break;
@@ -99,6 +110,10 @@ public class DemoIntentService extends GTIntentService {
                                     message="发生高水压报警 水压值："+alarmFamily+"kpa";
                                 }else if(alarmType==209){
                                     message="发生低水压报警 水压值："+alarmFamily+"kpa";
+                                }else if(alarmType==217){
+                                    message="发生水压升高报警 水压值："+alarmFamily+"kpa";
+                                }else if(alarmType==210){
+                                    message="发生水压降低报警 水压值："+alarmFamily+"kpa";
                                 }else{
                                     message="电量低，请更换电池";
                                 }
@@ -144,7 +159,7 @@ public class DemoIntentService extends GTIntentService {
                         String ifSecurityPush = SharedPreferencesManager.getInstance().getData(context,
                                 "setting",
                                 "ifSecurityPush");
-                        if(ifSecurityPush=="2"){
+                        if(ifSecurityPush.equals("2")){
                             break;
                         }
                         PushAlarmMsg mPushAlarmMsg1 = jsJson(dataJson);
@@ -168,39 +183,42 @@ public class DemoIntentService extends GTIntentService {
                                 }
                                 break;
                             case 36:
-                                int alarmType36 = pushAlarmMsg1.getAlarmType();
-                                switch (alarmType36){
-                                    case 1:
-                                        alarmMsg = "电气探测器发出：漏电流故障报警";
-                                        break;
-                                    case 2:
-                                        alarmMsg = "电气探测器发出：温度故障报警";
-                                        break;
-                                    case 3:
-                                        alarmMsg = "电气探测器发出：供电中断报警";
-                                        break;
-                                    case 4:
-                                        alarmMsg = "电气探测器发出：错相报警";
-                                        break;
-                                    case 5:
-                                        alarmMsg = "电气探测器发出：缺相报警";
-                                        break;
-                                    case 6:
-                                        alarmMsg = "电气探测器发出：电弧故障报警";
-                                        break;
-                                    case 7:
-                                        alarmMsg = "电气探测器发出：负载故障报警";
-                                        break;
-                                    case 8:
-                                        alarmMsg = "电气探测器发出：短路故障报警";
-                                        break;
-                                    case 9:
-                                        alarmMsg = "电气探测器发出：断路故障报警";
-                                        break;
-                                    case 10://@@6.28
-                                        alarmMsg = "电气探测器发出：故障报警";
-                                        break;
-                                }
+//                                int alarmType36 = pushAlarmMsg1.getAlarmType();
+//                                switch (alarmType36){
+//                                    case 1:
+//                                        alarmMsg = "电气探测器发出：漏电流故障报警";
+//                                        break;
+//                                    case 2:
+//                                        alarmMsg = "电气探测器发出：温度故障报警";
+//                                        break;
+//                                    case 3:
+//                                        alarmMsg = "电气探测器发出：供电中断报警";
+//                                        break;
+//                                    case 4:
+//                                        alarmMsg = "电气探测器发出：错相报警";
+//                                        break;
+//                                    case 5:
+//                                        alarmMsg = "电气探测器发出：缺相报警";
+//                                        break;
+//                                    case 6:
+//                                        alarmMsg = "电气探测器发出：电弧故障报警";
+//                                        break;
+//                                    case 7:
+//                                        alarmMsg = "电气探测器发出：负载故障报警";
+//                                        break;
+//                                    case 8:
+//                                        alarmMsg = "电气探测器发出：短路故障报警";
+//                                        break;
+//                                    case 9:
+//                                        alarmMsg = "电气探测器发出：断路故障报警";
+//                                        break;
+//                                    case 10://@@6.28
+//                                        alarmMsg = "电气探测器发出：485通信故障";
+//                                        break;
+//                                    case 0://@@6.28
+//                                        alarmMsg = "电气探测器发出：故障报警";
+//                                        break;
+//                                }//@@10.17 限制故障推送
                                 break;
                             case 45://电气报警
                                 int alarmType2 = pushAlarmMsg1.getAlarmType();
@@ -214,11 +232,18 @@ public class DemoIntentService extends GTIntentService {
                                     alarmMsg = "电气探测器发出：欠压报警";
                                 }
                                 break;
-                            case 46://电气报警
+                            case 46://漏电报警
                                 int alarmType4 = pushAlarmMsg1.getAlarmType();
                                 if(alarmType4!=0){
                                     alarmMsg = "电气探测器发出：漏电报警";
                                 }
+                                long lastTime=SharedPreferencesManager.getInstance().getLongData(context,
+                                        "loudianliu" ,pushAlarmMsg1.getMac());
+                                if((System.currentTimeMillis()-lastTime)<30*60*1000){
+                                    return;
+                                }else{
+                                    SharedPreferencesManager.getInstance().putData(context,"loudianliu",pushAlarmMsg1.getMac(),System.currentTimeMillis());
+                                }//@@10.11漏电报警间隔30分钟再次报警
                                 break;
                             case 47://电气报警
                                 int alarmType5 = pushAlarmMsg1.getAlarmType();
@@ -227,10 +252,10 @@ public class DemoIntentService extends GTIntentService {
                                 }
                                 break;
                             case 48://合闸报警@@6.28
-                                int alarmType6 = pushAlarmMsg1.getAlarmType();
-                                if(alarmType6!=0){
-                                    alarmMsg = "电气探测器发出：合闸报警";
-                                }
+//                                int alarmType6 = pushAlarmMsg1.getAlarmType();
+//                                if(alarmType6!=0){
+//                                    alarmMsg = "电气探测器发出：合闸报警";
+//                                }
                                 break;
                             case 143://@@电气报警（贵州电气报警）8.11
                                 int alarmType11 = pushAlarmMsg1.getAlarmType();
@@ -255,6 +280,13 @@ public class DemoIntentService extends GTIntentService {
                                 if(alarmType14!=0){
                                     alarmMsg = "电气探测器发出：漏电报警（线路已断开）";
                                 }
+                                long lastTime1=SharedPreferencesManager.getInstance().getLongData(context,
+                                        "loudianliu" ,pushAlarmMsg1.getMac());
+                                if((System.currentTimeMillis()-lastTime1)<30*60*1000){
+                                    return;
+                                }else{
+                                    SharedPreferencesManager.getInstance().putData(context,"loudianliu",pushAlarmMsg1.getMac(),System.currentTimeMillis());
+                                }//@@10.11漏电报警间隔30分钟再次报警
                                 break;
                             case 147://电气报警
                                 int alarmType15 = pushAlarmMsg1.getAlarmType();
@@ -262,9 +294,30 @@ public class DemoIntentService extends GTIntentService {
                                     alarmMsg = "电气探测器发出：温度报警（线路已断开）";
                                 }
                                 break;
+                            case 49://短路报警
+                                alarmMsg = "电气探测器发出：短路报警";
+                                break;
+                            case 50://过热报警
+                                alarmMsg = "电气探测器发出：过热报警";
+                                break;
+                            case 51:
+                                alarmMsg = "电气探测器发出：分闸报警";
+                                break;
+                            case 148://合闸报警
+//                                int alarmType16 = pushAlarmMsg1.getAlarmType();
+//                                if(alarmType16!=0){
+//                                    alarmMsg = "电气探测器发出：合闸报警";
+//                                }//@@10.9 合闸不显示
+                                break;
+                            case 136://贵州故障报警
+                                //不显示报警界面
+                                break;
                             default:
                                 break;
                         }
+                        if(alarmMsg==null){
+                            break;
+                        }//@@10.10
                         Random random = new Random();
                         showDownNotification(context,alarmMsg,pushAlarmMsg1,random.nextInt(),AlarmActivity.class);
                         Intent intent2 = new Intent(context, AlarmActivity.class);

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
 import com.baidu.mapapi.overlayutil.MyOverlayManager;
 import com.smart.cloud.fire.global.InspectionDev;
+import com.smart.cloud.fire.global.InspectionSiteBean;
 import com.smart.cloud.fire.utils.SharedPreferencesManager;
 
 import org.json.JSONArray;
@@ -49,6 +51,8 @@ public class MapPathActivity extends Activity {
 
 
     Context mContext;
+    @Bind(R.id.mProgressBar)
+    ProgressBar mProgressBar;
     @Bind(R.id.bmapView)
     MapView mMapView;
     @Bind(R.id.id_marker_info)
@@ -56,7 +60,7 @@ public class MapPathActivity extends Activity {
     @Bind(R.id.path_btn)
     Button path_btn;
     private BaiduMap mBaiduMap;
-    List<InspectionDev> smokeList;
+    List<InspectionSiteBean> smokeList;
     List<Marker> markerList;
 
     @Override
@@ -66,6 +70,7 @@ public class MapPathActivity extends Activity {
         mContext=this;
 
         ButterKnife.bind(this);
+        mProgressBar.setVisibility(View.VISIBLE);
         mBaiduMap = mMapView.getMap();// 获得MapView
 
         init();
@@ -74,6 +79,7 @@ public class MapPathActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mMapView.onDestroy();
         ButterKnife.unbind(this);
 
     }
@@ -89,7 +95,7 @@ public class MapPathActivity extends Activity {
             return;
         }
         final RequestQueue mQueue = Volley.newRequestQueue(mContext);
-        String url=inspc_ip+"/CloudPatrolStd/getDevice?userid="+inspc_userid+"&callback=json";
+        String url=inspc_ip+"/CloudPatrolStd/getMapData?userid="+inspc_userid+"&callback=json";
         StringRequest stringRequest = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -100,14 +106,19 @@ public class MapPathActivity extends Activity {
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject temp = (JSONObject) jsonArray.get(i);
                                 String deptname=temp.getString("deptname");
-                                String readercode=temp.getString("readercode");
-                                String lng=temp.getString("lng");
-                                String lat=temp.getString("lat");
-                                String lasttime=temp.getString("lasttime");
+                                String deptid=temp.getString("deptid");
+                                String siteid=temp.getString("siteid");
+                                String sitename=temp.getString("sitename");
+                                String begintime=temp.getString("begintime");
+                                String endtime=temp.getString("endtime");
+                                String happentime=temp.getString("happentime");
+                                String lng=temp.getString("longitude");
+                                String lat=temp.getString("latitude");
+                                String tourdataid=temp.getString("tourdataid");
                                 if(smokeList==null){
                                     smokeList=new ArrayList<>();
                                 }
-                                smokeList.add(new InspectionDev(deptname,readercode,lng,lat,lasttime));
+                                smokeList.add(new InspectionSiteBean(deptname,deptid,siteid,sitename,lng,lat,begintime,endtime,happentime,tourdataid));
                             }
                             if(smokeList!=null){
                                 getDataSuccess(smokeList);
@@ -116,24 +127,26 @@ public class MapPathActivity extends Activity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            mProgressBar.setVisibility(View.GONE);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("TAG", error.getMessage(), error);
+                mProgressBar.setVisibility(View.GONE);
             }
         });
         mQueue.add(stringRequest);
     }
 
     private MyOverlayManager mMyOverlayManager;
-    private void getDataSuccess(List<InspectionDev> smokeList) {
+    private void getDataSuccess(List<InspectionSiteBean> smokeList) {
         mBaiduMap.clear();
         LatLng latLng = null;
         OverlayOptions overlayOptions = null;
         Marker marker = null;
-        for (InspectionDev info : smokeList)
+        for (InspectionSiteBean info : smokeList)
         {
             if(markerList==null){
                 markerList=new ArrayList<>();
@@ -142,11 +155,20 @@ public class MapPathActivity extends Activity {
             latLng = new LatLng(Double.parseDouble(info.getLat()), Double.parseDouble(info.getLng()));
             // 图标
             View viewA = LayoutInflater.from(mContext).inflate(
-                    R.layout.image_mark, null);
+                    R.layout.image_gps_mark, null);//@@待检
             BitmapDescriptor mIconMaker= BitmapDescriptorFactory
                     .fromView(viewA);
-            overlayOptions = new MarkerOptions().position(latLng)
-                    .icon(mIconMaker).zIndex(5);
+            View viewB = LayoutInflater.from(mContext).inflate(
+                    R.layout.image_hjtcq_mark, null);//@@已检
+            BitmapDescriptor mIconMaker2= BitmapDescriptorFactory
+                    .fromView(viewB);
+            if(info.getHappentime().equals("")){
+                overlayOptions = new MarkerOptions().position(latLng)
+                        .icon(mIconMaker).zIndex(5);
+            }else{
+                overlayOptions = new MarkerOptions().position(latLng)
+                        .icon(mIconMaker2).zIndex(5);
+            }
             marker = (Marker) (mBaiduMap.addOverlay(overlayOptions));
             Bundle bundle = new Bundle();
             bundle.putSerializable("info", info);
@@ -154,20 +176,26 @@ public class MapPathActivity extends Activity {
             markerList.add(marker);
         }
 
-        if (markerList.size() > 0) {
-            LatLngBounds.Builder builder = new LatLngBounds.Builder();
-            for (Overlay overlay : markerList) {
-                // polyline 中的点可能太多，只按marker 缩放
-                if (overlay instanceof Marker) {
-                    builder.include(((Marker) overlay).getPosition());
-                }
+        mBaiduMap.setOnMapLoadedCallback(new BaiduMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                mBaiduMap.animateMapStatus(setLatLngBounds(markerList,mMapView));
             }
-            MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.newLatLngBounds(builder.build());
-            mBaiduMap.setMapStatus(mapStatusUpdate);
-        }
-        if(markerList.size()==1){
-            mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(20.0f));
-        }
+        });//@@10.16
+//        if (markerList.size() > 0) {
+//            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+//            for (Overlay overlay : markerList) {
+//                // polyline 中的点可能太多，只按marker 缩放
+//                if (overlay instanceof Marker) {
+//                    builder.include(((Marker) overlay).getPosition());
+//                }
+//            }
+//            MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.newLatLngBounds(builder.build());
+//            mBaiduMap.setMapStatus(mapStatusUpdate);
+//        }
+//        if(markerList.size()==1){
+//            mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(20.0f));
+//        }
 
         mBaiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener()
         {
@@ -190,7 +218,7 @@ public class MapPathActivity extends Activity {
             public boolean onMarkerClick(final Marker marker)
             {
                 //获得marker中的数据
-                InspectionDev info = (InspectionDev) marker.getExtraInfo().get("info");
+                InspectionSiteBean info = (InspectionSiteBean) marker.getExtraInfo().get("info");
 
                 //设置详细信息布局为可见
                 mMarkerInfoLy.setVisibility(View.VISIBLE);
@@ -199,53 +227,61 @@ public class MapPathActivity extends Activity {
                 return true;
             }
         });
-
+        mProgressBar.setVisibility(View.GONE);
 
     }
 
-    protected void popupInfo(RelativeLayout mMarkerLy, final InspectionDev info)
+    protected void popupInfo(RelativeLayout mMarkerLy, final InspectionSiteBean info)
     {
         ViewHolder viewHolder = null;
         if (mMarkerLy.getTag() == null)
         {
             viewHolder = new ViewHolder();
-            viewHolder.dev_id_text = (TextView) mMarkerLy
-                    .findViewById(R.id.dev_id_text);
             viewHolder.dev_depart_text = (TextView) mMarkerLy
                     .findViewById(R.id.dev_depart_text);
-            viewHolder.dev_time_text = (TextView) mMarkerLy
-                .findViewById(R.id.dev_time_text);
             viewHolder.dev_location_text = (TextView) mMarkerLy
                     .findViewById(R.id.dev_location_text);
+            viewHolder.dev_state_text = (TextView) mMarkerLy
+                .findViewById(R.id.dev_state_text);
+            viewHolder.dev_begintime_text = (TextView) mMarkerLy
+                    .findViewById(R.id.dev_begintime_text);
+            viewHolder.dev_endtime_text = (TextView) mMarkerLy
+                    .findViewById(R.id.dev_endtime_text);
             viewHolder.path_btn = (Button) mMarkerLy
                     .findViewById(R.id.path_btn);
 
             mMarkerLy.setTag(viewHolder);
         }
         viewHolder = (ViewHolder) mMarkerLy.getTag();
-        viewHolder.dev_id_text.setText("设备ID："+info.getReadercode());
-        viewHolder.dev_depart_text.setText("部门："+info.getDeptname());
-        viewHolder.dev_time_text.setText("时间："+info.getLasttime());
-        viewHolder.dev_location_text.setText("纬度:"+info.getLat()+"    经度:"+info.getLng());
-        viewHolder.path_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(MapPathActivity.this,ChooseConditionActivity.class);
-                intent.putExtra("dev_id",info.getReadercode());
-                intent.putExtra("type","3");
-                startActivity(intent);
-            }
-        });
+        viewHolder.dev_depart_text.setText("部门:"+info.getDeptname());
+        viewHolder.dev_location_text.setText("点位:"+info.getSitename());
+        if(info.getHappentime().equals("")){
+            viewHolder.dev_state_text.setText("状态:未检");
+        }else{
+            viewHolder.dev_state_text.setText("状态:已检 检查时间:"+info.getHappentime());
+        }
+        viewHolder.dev_begintime_text.setText("班次开始时间:"+info.getBegintime());
+        viewHolder.dev_endtime_text.setText("班次结束时间:"+info.getEndtime());
+//        viewHolder.path_btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent=new Intent(MapPathActivity.this,ChooseConditionActivity.class);
+//                intent.putExtra("dev_id",info.getReadercode());
+//                intent.putExtra("type","3");
+//                startActivity(intent);
+//            }
+//        });
     }
 
 
     private class ViewHolder
     {
         Button path_btn;
-        TextView dev_id_text;
         TextView dev_depart_text;
-        TextView dev_time_text;
         TextView dev_location_text;
+        TextView dev_state_text;
+        TextView dev_begintime_text;
+        TextView dev_endtime_text;
     }
 
     @Override
@@ -260,5 +296,16 @@ public class MapPathActivity extends Activity {
         mMapView.setVisibility(View.INVISIBLE);
         mMapView.onPause();
         super.onPause();
+    }
+
+    //@@10.16 所有marker都能合理显示在视图范围内
+    public MapStatusUpdate setLatLngBounds(List<Marker> points, MapView mMapView) {
+        LatLngBounds.Builder builder2 = new LatLngBounds.Builder();
+        for (Marker p : points) {
+            builder2 = builder2.include(p.getPosition());
+        }
+        LatLngBounds latlngBounds = builder2.build();
+        MapStatusUpdate u = MapStatusUpdateFactory.newLatLngBounds(latlngBounds, mMapView.getWidth(), mMapView.getHeight());
+        return u;
     }
 }

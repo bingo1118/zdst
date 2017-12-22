@@ -41,7 +41,7 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
         if(!refresh){
             mvpView.showLoading();
         }
-        Observable mObservable = apiStores1.getAllCamera(userId,privilege,page);
+        Observable mObservable = apiStores1.getAllCamera(userId,privilege,page,15);
         addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<HttpError>() {
             @Override
             public void onSuccess(HttpError model) {
@@ -50,7 +50,7 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
                     List<Camera> cameraList = model.getCamera();
                     if(list==null||list.size()==0){
                         mvpView.getDataSuccess(cameraList,false);
-                    }else if(list!=null&&list.size()>=20){
+                    }else if(list!=null&&list.size()>=15){//@@11.07
                         mvpView.onLoadingMore(cameraList);
                     }
                 }else{

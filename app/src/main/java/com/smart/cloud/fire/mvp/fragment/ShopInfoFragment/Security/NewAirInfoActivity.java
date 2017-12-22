@@ -38,6 +38,7 @@ public class NewAirInfoActivity extends FragmentActivity {
     private TextView tv_humidity;
     private TextView tv_temperature;
     private TextView tv_position;
+    private TextView tv_time;
     private LinearLayout air_info_linearLayout;
     private LinearLayout btn_methanal,btn_pm25,btn_temperature,btn_humidity;
 
@@ -119,6 +120,7 @@ public class NewAirInfoActivity extends FragmentActivity {
         tv_humidity=(TextView)findViewById(R.id.tv_info_humidity);
         tv_temperature=(TextView)findViewById(R.id.tv_info_temperature);
         tv_position=(TextView)findViewById(R.id.tv_info_devname);
+        tv_time=(TextView)findViewById(R.id.tv_info_time);
 
         String url= ConstantValues.SERVER_IP_NEW+"getEnvironmentInfo?userId=&privilege=&page=&airMac="+devMac;
         RequestQueue mQueue = Volley.newRequestQueue(this);
@@ -143,6 +145,7 @@ public class NewAirInfoActivity extends FragmentActivity {
                                     case 3:
                                         quality="中";
                                         air_info_linearLayout.setBackground(getResources().getDrawable(R.drawable.bj_zhong));
+                                        tv_environmentQuality.setTextColor(Color.parseColor("#e7963f"));
                                         break;
                                     case 4:
                                         quality="差";
@@ -155,9 +158,44 @@ public class NewAirInfoActivity extends FragmentActivity {
                                         quality="-";
                                 }
                                 tv_environmentQuality.setText(quality);
+                                switch (response.getInt("priority2")) {
+                                    case 1:
+                                        tv_pm25.setTextColor(Color.parseColor("#ffffff"));
+                                        break;
+                                    case 2:
+                                        tv_pm25.setTextColor(Color.parseColor("#ffffff"));
+                                        break;
+                                    case 3:
+                                        tv_pm25.setTextColor(Color.parseColor("#e7963f"));
+                                        break;
+                                    case 4:
+                                        tv_pm25.setTextColor(Color.parseColor("#ff0700"));
+                                        break;
+                                    default:
+                                        tv_pm25.setTextColor(Color.parseColor("#ffffff"));
+                                        break;
+                                }
                                 tv_pm25.setText(response.getString("pm25"));
+                                switch (response.getInt("priority1")) {
+                                    case 1:
+                                        tv_methanal.setTextColor(Color.parseColor("#ffffff"));
+                                        break;
+                                    case 2:
+                                        tv_methanal.setTextColor(Color.parseColor("#ffffff"));
+                                        break;
+                                    case 3:
+                                        tv_methanal.setTextColor(Color.parseColor("#e7963f"));
+                                        break;
+                                    case 4:
+                                        tv_methanal.setTextColor(Color.parseColor("#ff0700"));
+                                        break;
+                                    default:
+                                        tv_methanal.setTextColor(Color.parseColor("#ffffff"));
+                                        break;
+                                }
                                 tv_methanal.setText(response.getString("methanal"));
                                 tv_humidity.setText(response.getString("humidity"));
+                                tv_time.setText("更新时间:"+response.getString("dataTimes"));
                             }else{
                                 Toast.makeText(mContext,response.getString("error"),Toast.LENGTH_SHORT).show();
                             }

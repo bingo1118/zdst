@@ -161,11 +161,11 @@ public class AlarmActivity extends MvpActivity<AlarmPresenter> implements AlarmV
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.phone_lin_one:
-                String phoneOne = alarmSmokeMarkPhoneTv.getText().toString().trim();
+                String phoneOne = smokeMarkPhoneTv.getText().toString().trim();
                 mvpPresenter.telPhone(mContext, phoneOne);
                 break;
             case R.id.alarm_phone_lin_one:
-                String phoneOne2 = smokeMarkPhoneTv.getText().toString().trim();
+                String phoneOne2 = alarmSmokeMarkPhoneTv.getText().toString().trim();
                 mvpPresenter.telPhone(mContext, phoneOne2);
                 break;
             case R.id.alarm_tc_image:
@@ -187,6 +187,10 @@ public class AlarmActivity extends MvpActivity<AlarmPresenter> implements AlarmV
                 }
                 break;
             case R.id.alarm_do_it_btn:
+                String mac_dev=mPushAlarmMsg.getMac();//@@9.26
+                SharedPreferencesManager.getInstance().putData(mContext,
+                        mac_dev,
+                        System.currentTimeMillis()+"");//@@9.26查看视频的时候限制再次报警达一个小时
                 Contact contact = new Contact();
                 contact.contactPassword = cameraBean.getCameraPwd();
                 contact.contactId = cameraBean.getCameraId();

@@ -1,12 +1,16 @@
 package com.smart.cloud.fire.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.smart.cloud.fire.activity.Inspection.LostHintSiteDetailActivity;
+import com.smart.cloud.fire.activity.Inspection.LostHintSitesActivity;
 import com.smart.cloud.fire.global.Attendance;
 import com.smart.cloud.fire.global.LostHint;
 
@@ -63,6 +67,16 @@ public class LostHintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ((ItemViewHolder) holder).time_text.setText("时间:"+item.getLostdate());
         ((ItemViewHolder) holder).deptname_text.setText("区域："+item.getDeptname());
         ((ItemViewHolder) holder).lostrate_text.setText("漏检数："+item.getLostrate());
+        ((ItemViewHolder) holder).rela_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(mContext, LostHintSitesActivity.class);
+                intent.putExtra("lineid",item.getDeptid());
+                intent.putExtra("lineName",item.getDeptname());
+                intent.putExtra("time",item.getLostdate());
+                mContext.startActivity(intent);
+            }
+        });
         holder.itemView.setTag(position);
     }
 
@@ -78,6 +92,8 @@ public class LostHintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView deptname_text;
         @Bind(R.id.lostrate_text)
         TextView lostrate_text;
+        @Bind(R.id.rela_item)
+        RelativeLayout rela_item;
         public ItemViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);

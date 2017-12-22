@@ -5,21 +5,27 @@ package com.smart.cloud.fire.global;
  */
 public class ConstantValues {
     //测试IP:
-    public static final String SERVER_IP_NEW ="http://119.29.224.28:51091/fireSystem/";
+//    public static final String SERVER_IP_NEW ="http://119.29.224.28:51091/fireSystem/";
+    //测试IP:
+//    public static final String SERVER_IP_NEW ="http://139.159.209.212:51091/fireSystem/";
+    //测试IP:
+//    public static final String SERVER_IP_NEW ="http://139.159.220.138:51091/fireSystem/";
     //中电数通安全培训（测试）:
-    public static final String SAFETY ="http://119.29.224.28:51091/safety/";
+//    public static final String SAFETY ="http://119.29.224.28:51091/safety/";
     //中电数通安全培训（测试）:
-    public static final String RULE ="http://119.29.224.28:51091/rule/";
+//    public static final String RULE ="http://119.29.224.28:51091/rule/";
 
     //中电数通安全培训（正式）:
-//    public static final String SAFETY ="http://119.29.155.148:51091/safety/";
+    public static final String SAFETY ="http://119.29.155.148:51091/safety/";
     //中电数通安全培训（正式）:
-//    public static final String RULE ="http://119.29.155.148:51091/rule/";
+    public static final String RULE ="http://119.29.155.148:51091/rule/";
 
+    //测试IP:
+//    public static final String SERVER_IP_NEW ="http://139.159.220.138:51091/fireSystem/";
     //测试IP:
     public static final String SERVER_IP_NEW_TEST="http://119.29.224.28:51090/fireSystem/";
     //正式IP:
-//    public static final String SERVER_IP_NEW ="http://119.29.155.148:51091/fireSystem/";
+    public static final String SERVER_IP_NEW ="http://119.29.155.148:51091/fireSystem/";
 //    public static final String SERVER_IP_NEW ="http://192.168.4.120:8080/fireSystem/";
 //    public static final String SERVER_IP_NEW ="http://192.168.0.188:8080/fireSystem/";
 
@@ -42,6 +48,9 @@ public class ConstantValues {
         public static final int ADMINISTATOR = 3;
         public static final int POLICEMAEN = 5;
         public static final int SUPER_ADMIN = 4;
+
+
+
     }
 
     public static class Update{

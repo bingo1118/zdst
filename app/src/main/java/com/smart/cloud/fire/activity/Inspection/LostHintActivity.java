@@ -68,9 +68,9 @@ public class LostHintActivity extends Activity {
         String endtime=sdf.format(now);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
-        calendar.add(Calendar.DAY_OF_MONTH, -30);
+        calendar.add(Calendar.DAY_OF_MONTH, -0);
         now = calendar.getTime();
-        String begintime=sdf.format(now);
+        String begintime=sdf.format(now).toString();
 
         RequestQueue mQueue = Volley.newRequestQueue(mContext);
         String url=inspc_ip+"/CloudPatrolStd/lostHint?callback=json&userid="+inspc_userid+"&begintime="+begintime+"&endtime="+endtime;
@@ -90,7 +90,10 @@ public class LostHintActivity extends Activity {
                                         jsonObject.getString("lostdate"),jsonObject.getString("lostrate"));
                                 list.add(lostHint);
                             }
-                            if(list!=null||list.size()!=0){
+                            if(list!=null){
+                                if(list.size()==0){
+                                    Toast.makeText(mContext, "无数据", Toast.LENGTH_SHORT).show();
+                                }
                                 linearLayoutManager=new LinearLayoutManager(mContext);
                                 linearLayoutManager.setOrientation(OrientationHelper.VERTICAL);
                                 recyclerView.setLayoutManager(linearLayoutManager);

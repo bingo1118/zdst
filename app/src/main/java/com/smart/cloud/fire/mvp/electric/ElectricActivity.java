@@ -10,19 +10,23 @@ import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.smart.cloud.fire.adapter.ElectricActivityAdapterTest;
 import com.smart.cloud.fire.base.ui.MvpActivity;
 import com.smart.cloud.fire.global.ElectricValue;
 import com.smart.cloud.fire.global.MyApp;
 import com.smart.cloud.fire.mvp.LineChart.LineChartActivity;
+import com.smart.cloud.fire.mvp.electric_change_history.ElectricChangeHistoryActivity;
 import com.smart.cloud.fire.utils.SharedPreferencesManager;
 import com.smart.cloud.fire.utils.T;
+import com.smart.cloud.fire.utils.Utils;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import fire.cloud.smart.com.smartcloudfire.R;
 
 /**
@@ -35,6 +39,8 @@ public class ElectricActivity extends MvpActivity<ElectricPresenter> implements 
     SwipeRefreshLayout swipeFreshLayout;
     @Bind(R.id.mProgressBar)
     ProgressBar mProgressBar;
+    @Bind(R.id.power_change_history_text)
+    TextView power_change_history_text;//@@8.28电源切换记录
     private ElectricPresenter electricPresenter;
     private ElectricActivityAdapterTest electricActivityAdapter;
     private Context mContext;
@@ -53,6 +59,7 @@ public class ElectricActivity extends MvpActivity<ElectricPresenter> implements 
                 SharedPreferencesManager.SP_FILE_GWELL,
                 SharedPreferencesManager.KEY_RECENTNAME);
         privilege = MyApp.app.getPrivilege();
+        power_change_history_text.setVisibility(View.VISIBLE);//@@8.28
         ButterKnife.bind(this);
         refreshListView();
         electricPresenter.getOneElectricInfo(userID,privilege+"",electricMac,false);
@@ -77,6 +84,19 @@ public class ElectricActivity extends MvpActivity<ElectricPresenter> implements 
                 electricPresenter.getOneElectricInfo(userID,privilege+"",electricMac,true);
             }
         });
+    }
+
+    @OnClick({R.id.power_change_history_text})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.power_change_history_text:
+                Intent intent=new Intent(mContext, ElectricChangeHistoryActivity.class);
+                intent.putExtra("mac",electricMac);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

@@ -5,11 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.OrientationHelper;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -17,7 +20,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.smart.cloud.fire.adapter.LostHintAdapter;
 import com.smart.cloud.fire.global.Department;
+import com.smart.cloud.fire.global.LostHint;
 import com.smart.cloud.fire.utils.SharedPreferencesManager;
 
 import org.json.JSONArray;
@@ -26,6 +31,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -44,6 +50,8 @@ public class InspectionActivity extends Activity {
     PieChartView chart;
     @Bind(R.id.spinner)
     Spinner spinner;
+    @Bind(R.id.sum_textview)
+    TextView sum_textview;
     Context mContext;
 
     private PieChartData data;
@@ -68,15 +76,81 @@ public class InspectionActivity extends Activity {
         ButterKnife.bind(this);
         mContext=this;
 
-//        initSpinner();
+        childrenList=null;
+        childrenNameList=null;
+        initSpinner();
+        initLostSum();
+    }
+
+    private void initLostSum() {
+        String inspc_ip= SharedPreferencesManager.getInstance().getData(mContext,
+                "inspction","inspc_ip");
+        String inspc_userid=SharedPreferencesManager.getInstance().getData(mContext,
+                "inspction","inspc_userid");
+        if(inspc_ip==null||inspc_ip.length()==0||inspc_userid==null||inspc_userid.length()==0){
+//            Toast.makeText(mContext,"请前往设置用户信息",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String endtime=sdf.format(now);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now);
+        calendar.add(Calendar.DAY_OF_MONTH, -0);
+        now = calendar.getTime();
+        String begintime=sdf.format(now).toString();
+
+        RequestQueue mQueue = Volley.newRequestQueue(mContext);
+        String url=inspc_ip+"/CloudPatrolStd/lostHint?callback=json&userid="+inspc_userid+"&begintime="+begintime+"&endtime="+endtime;
+        StringRequest stringRequest = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        response=response.replace("json(","").replace(")","");
+                        try {
+                            JSONArray jsonArray=new JSONArray(response);
+                            if(jsonArray.length()==0){
+                                sum_textview.setVisibility(View.GONE);
+                            }else{
+                                sum_textview.setVisibility(View.VISIBLE);
+                                sum_textview.setText(jsonArray.length()+"");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            sum_textview.setVisibility(View.GONE);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                sum_textview.setVisibility(View.GONE);
+                Log.e("TAG", error.getMessage(), error);
+            }
+        });
+        mQueue.add(stringRequest);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(data!=null){
+            String result = data.getExtras().getString("result");
+            if(result.equals("1")){
+                SharedPreferencesManager.getInstance().putData(mContext,
+                        "inspction_area_choosed",0);//@@9.15
+                childrenList=null;
+                childrenNameList=null;
+                initSpinner();
+                initLostSum();//@@9.15
+            }
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        childrenList=null;
-        childrenNameList=null;
-        initSpinner();
+//        childrenList=null;
+//        childrenNameList=null;
+//        initSpinner();
     }
 
     private void initSpinner() {
@@ -122,11 +196,17 @@ public class InspectionActivity extends Activity {
                                     @Override
                                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                         initChart(childrenList.get(position).getDepartId());
+                                        SharedPreferencesManager.getInstance().putData(mContext,
+                                                "inspction_area_choosed",position);//@@9.15
                                     }
                                     @Override
                                     public void onNothingSelected(AdapterView<?> parent) {
                                     }
                                 });
+                                int have_choose=SharedPreferencesManager.getInstance().getIntData(mContext,"inspction_area_choosed");//@@9.15
+                                if(have_choose<childrenList.size()){
+                                    spinner.setSelection(have_choose);//@@9.15
+                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -164,7 +244,7 @@ public class InspectionActivity extends Activity {
                 break;
             case R.id.sz_img:
                 Intent intent_sz=new Intent(mContext,InspectionSettingActivity.class);
-                startActivity(intent_sz);
+                startActivityForResult(intent_sz,1);
                 break;
         }
     }
@@ -215,6 +295,8 @@ public class InspectionActivity extends Activity {
                             chart.setOnValueTouchListener(new ValueTouchListener());
 
                         } catch (JSONException e) {
+                            chart.setPieChartData(null);
+                            Toast.makeText(mContext,"图表无数据",Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                         }
                     }

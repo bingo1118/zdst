@@ -3,6 +3,7 @@ package com.smart.cloud.fire.mvp.fragment.SettingFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,7 +95,8 @@ public class SettingFragment extends MvpFragment<SettingFragmentPresenter> imple
         String ifSecurityPush = SharedPreferencesManager.getInstance().getData(mContext,
                 "setting",
                 "ifSecurityPush");
-        if(ifSecurityPush=="2"){
+        Log.e("ifSecurityPush",ifSecurityPush);
+        if(ifSecurityPush.equals("2")){
             safety_push_switch.setChecked(false);
         }else{
             safety_push_switch.setChecked(true);

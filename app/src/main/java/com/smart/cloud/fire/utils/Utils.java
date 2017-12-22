@@ -58,6 +58,15 @@ import javax.crypto.spec.DESKeySpec;
 
 public class Utils {
 
+    //@@11.14
+    public static boolean isNumOrEng(String str) {
+        if (null == str || "".equals(str)) {
+            return false;
+        }
+        boolean hasSymble = str.matches("^[\\da-zA-Z]*$");
+        return hasSymble;
+    }
+
     /**
      * 验证是否是手机号码
      * @param input 手机号

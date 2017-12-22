@@ -41,6 +41,7 @@ public class ChooseAreaActivity extends Activity {
     Context mContext;
 
     List<Department> list=null;
+    private MyAdapter adapter=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +83,7 @@ public class ChooseAreaActivity extends Activity {
                                 String departName = temp.getString("DeptName");
                                 String departId = temp.getString("DeptID");
                                 String departParentId = temp.getString("ParentDeptID");
-                                if(departParentId=="0"){
+                                if(departParentId.equals("0")||departParentId=="0"){
                                     if(parent==null){
                                         parent=new ArrayList<Department>();
                                     }
@@ -108,7 +109,8 @@ public class ChooseAreaActivity extends Activity {
                                     }
                                 }
                             }
-                            mainlistview.setAdapter(new MyAdapter());
+                            adapter=new MyAdapter();
+                            mainlistview.setAdapter(adapter);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -154,7 +156,7 @@ public class ChooseAreaActivity extends Activity {
             tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(ChooseAreaActivity.this,info.getDepartName(),Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(ChooseAreaActivity.this,info.getDepartName(),Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
                     //把返回数据存入Intent
                     intent.putExtra("result",info.getDepartName() );
@@ -172,8 +174,12 @@ public class ChooseAreaActivity extends Activity {
         @Override
         public int getChildrenCount(int groupPosition) {
             String key = parent.get(groupPosition).getDepartName();
-            int size=map.get(key).size();
-            return size;
+            if(map.get(key)==null){
+                return 0;
+            }else{
+                int size=map.get(key).size();
+                return size;
+            }
         }
         //获取当前父item的数据
         @Override
@@ -205,20 +211,25 @@ public class ChooseAreaActivity extends Activity {
                     .findViewById(R.id.all_cheak);
             final Department info=parent.get(groupPosition);
             tv.setText(info.getDepartName());
-            iv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(ChooseAreaActivity.this,info.getDepartName(),Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent();
-                    //把返回数据存入Intent
-                    intent.putExtra("result",info.getDepartName() );
-                    intent.putExtra("result_id",info.getDepartId() );
-                    //设置返回数据
-                    setResult(RESULT_OK, intent);
-                    //关闭Activity
-                    finish();
-                }
-            });
+            if(isExpanded){
+                iv.setVisibility(View.VISIBLE);
+                iv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(ChooseAreaActivity.this,info.getDepartName(),Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent();
+                        //把返回数据存入Intent
+                        intent.putExtra("result",info.getDepartName() );
+                        intent.putExtra("result_id",info.getDepartId() );
+                        //设置返回数据
+                        setResult(RESULT_OK, intent);
+                        //关闭Activity
+                        finish();
+                    }
+                });
+            }else{
+                iv.setVisibility(View.GONE);
+            }
             return convertView;
         }
 

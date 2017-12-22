@@ -40,7 +40,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
-        android:background="@anim/corner_tiao_single_bg" >
+        android:background="@drawable/corner_tiao_single_bg" >
 
         <EditText
             android:id="@+id/contactName"
@@ -66,7 +66,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
-        android:background="@anim/corner_tiao_single_bg" >
+        android:background="@drawable/corner_tiao_single_bg" >
 
         <EditText
             android:id="@+id/contactPwdOld"
@@ -92,7 +92,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
-        android:background="@anim/corner_tiao_single_bg" >
+        android:background="@drawable/corner_tiao_single_bg" >
 
         <EditText
             android:id="@+id/contactPwdNewA"
@@ -117,7 +117,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
-        android:background="@anim/corner_tiao_single_bg" >
+        android:background="@drawable/corner_tiao_single_bg" >
 
         <EditText
             android:id="@+id/contactPwdNewB"

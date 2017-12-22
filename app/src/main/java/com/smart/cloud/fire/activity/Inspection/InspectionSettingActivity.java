@@ -2,6 +2,7 @@ package com.smart.cloud.fire.activity.Inspection;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -75,6 +76,9 @@ public class InspectionSettingActivity extends Activity {
                 String temp_ip=ip_edit.getText().toString();
                 String temp_id=userid_edit.getText().toString();
                 cheak(temp_ip,temp_id);
+                Intent intent = new Intent();//@@设置后提示首页更新8.25
+                intent.putExtra("result", "1");
+                setResult(RESULT_OK, intent);
             }
         });
     }

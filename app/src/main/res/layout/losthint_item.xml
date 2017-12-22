@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
+    android:id="@+id/rela_item"
     android:background="#e6e6e6">
     <TextView
         android:id="@+id/time_text"

@@ -7,16 +7,16 @@
     <TextView
         android:id="@+id/parent_textview"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="30dp"
         android:textSize="20sp"
         android:layout_margin="10dp"
         android:gravity="center_vertical"
         android:paddingLeft="30dp"/>
     <ImageView
         android:id="@+id/all_cheak"
-        android:layout_width="30dp"
+        android:layout_width="40dp"
         android:layout_height="30dp"
-        android:background="@drawable/check_on"
+        android:background="@drawable/select_all"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"/>

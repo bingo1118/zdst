@@ -11,6 +11,7 @@ import com.smart.cloud.fire.mvp.fragment.MapFragment.HttpError;
 import com.smart.cloud.fire.rxjava.ApiCallback;
 import com.smart.cloud.fire.rxjava.SubscriberCallBack;
 import com.smart.cloud.fire.service.LocationService;
+import com.smart.cloud.fire.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -169,6 +170,7 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
     public void addSmoke(String userID,String privilege,String smokeName,String smokeMac,String address,String longitude,
                          String latitude,String placeAddress,String placeTypeId,String principal1,String principal1Phone,String principal2,
                          String principal2Phone,String areaId,String repeater,String camera){
+        int electrState=0;//@@8.26电气开关
         if(longitude.length()==0||latitude.length()==0){
             mvpView.addSmokeResult("请获取经纬度",1);
             return;
@@ -193,15 +195,24 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
         String deviceType="1";//烟感。。
 
         String macStr = (String) smokeMac.subSequence(0, 1);
-        if(macStr.length()==15){//@@8.8
+        if(smokeMac.length()==15){//@@8.8
             deviceType="14";
+        }else if(smokeMac.equals(repeater)){
+            deviceType="126";
         }else{
             switch (macStr){
                 case "R":
+                    if((smokeMac.charAt(smokeMac.length()-1)+"").equals("R")){
+                        deviceType="16";//@@ NB燃气
+                    }else{
+                        deviceType="2";
+                    }
                     smokeMac = smokeMac.replace("R","");//燃气
-                    deviceType="2";
                     break;
                 case "Q":
+                    if((smokeMac.charAt(smokeMac.length()-1)+"").equals("Q")){
+                        electrState=1;
+                    }//@@8.26
                     smokeMac = smokeMac.replace("Q","");//电气火灾
                     deviceType="5";
                     break;
@@ -238,13 +249,21 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
                     deviceType="15";
                     break;
             }
+            if(smokeMac.length()!=8){
+                mvpView.addSmokeResult("设备MAC号长度不正确",1);
+                return;
+            }//@@11.06限制MAC长度
+            if(!Utils.isNumOrEng(smokeMac)){
+                mvpView.addSmokeResult("设备MAC仅能含有数字或字母",1);
+                return;
+            }
         }
 
 
         mvpView.showLoading();
         Observable mObservable = apiStores1.addSmoke(userID,smokeName,privilege,smokeMac,address,
                 longitude,latitude,placeAddress,placeTypeId,principal1,principal1Phone,principal2,
-                principal2Phone,areaId,repeater,camera,deviceType);
+                principal2Phone,areaId,repeater,camera,deviceType,electrState+"");
         addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<ConfireFireModel>() {
             @Override
             public void onSuccess(ConfireFireModel model) {

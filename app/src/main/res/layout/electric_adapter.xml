@@ -24,6 +24,14 @@
                 android:layout_marginTop="10dp"
                 android:src="@drawable/dq_ygtubiao_sxj"/>
 
+            <ImageView
+                android:id="@+id/power_button"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="0dp"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/sblb_qddy"/>
+
             <RelativeLayout
                 android:layout_toRightOf="@id/group_image"
                 android:layout_width="wrap_content"
@@ -38,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="#000000"
                     android:textSize="16sp"
-                    android:text="送达回复哈哈对付韩"
+                    android:text="NAME"
                     />
                 <LinearLayout
                     android:layout_below="@id/group_tv"
@@ -49,7 +57,7 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1">
+                        android:layout_weight="2">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -65,7 +73,7 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1">
+                        android:layout_weight="3">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -83,29 +91,62 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
-            <TextView
-                android:id="@+id/state_tv"
-                android:layout_width="wrap_content"
+            android:orientation="horizontal">
+            <RelativeLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:textColor="#404040"
-                android:text="状态："
-                android:textSize="14sp"
-                />
-            <TextView
-                android:id="@+id/state"
-                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="15dp">
+                <TextView
+                    android:id="@+id/state_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:textColor="#404040"
+                    android:text="状态:"
+                    android:textSize="14sp"
+                    />
+                <TextView
+                    android:id="@+id/state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/state_tv"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="#ff0000"
+                    android:textSize="14sp"
+                    />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/state_tv"
-                android:layout_marginLeft="5dp"
-                android:textColor="#ff0000"
-                android:textSize="14sp"
-                />
-        </RelativeLayout>
+                android:layout_weight="1"
+                android:layout_marginTop="15dp"
+                android:id="@+id/bhq_state_rela"
+                android:visibility="gone">
+                <TextView
+                    android:id="@+id/bhq_state_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:textColor="#404040"
+                    android:text="保护器状态:"
+                    android:textSize="14sp"
+                    />
+                <ImageView
+                    android:id="@+id/bhq_state"
+                    android:layout_width="30dp"
+                    android:layout_height="15dp"
+                    android:layout_toRightOf="@id/bhq_state_tv"
+                    android:layout_marginLeft="5dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/fenzha"
+                    />
+            </RelativeLayout>
+        </LinearLayout>
+
         <RelativeLayout
             android:id="@+id/repeater_rela"
             android:layout_width="match_parent"

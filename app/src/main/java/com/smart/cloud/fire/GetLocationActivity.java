@@ -227,6 +227,24 @@ public class GetLocationActivity extends Activity implements View.OnClickListene
 
     }
 
+    @Override
+    public void onResume() {
+        mMapView.onResume();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        mMapView.onPause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
+    }
+
 }
 
 

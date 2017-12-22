@@ -158,6 +158,12 @@ public class SharedPreferencesManager {
         SharedPreferences sf = context.getSharedPreferences(FILE_NAME, context.MODE_PRIVATE);
         return sf.getString(key, "");
     }
+
+    //@@9.26
+    public String getLongData(Context context,String key){
+        SharedPreferences sf = context.getSharedPreferences(FILE_NAME, context.MODE_PRIVATE);
+        return sf.getString(key, "0");
+    }
     //@@
     public int getIntData(Context context,String key){
         SharedPreferences sf = context.getSharedPreferences(FILE_NAME, context.MODE_PRIVATE);

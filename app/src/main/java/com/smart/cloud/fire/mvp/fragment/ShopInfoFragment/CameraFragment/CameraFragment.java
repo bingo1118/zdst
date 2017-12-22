@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
@@ -107,13 +109,51 @@ public class CameraFragment extends MvpFragment<ShopInfoFragmentPresenter> imple
             }
             //@@5.18获取摄像机状态
             if(intent.getAction().equals(ConstantValues.Action.GET_FRIENDS_STATE)){
-                SerializableMap map= (SerializableMap) intent.getSerializableExtra("contactList");
-                Map<String,Integer> cameraList=map.getIntMap();
-                for(int i=0;i<list.size();i++){
+//                SerializableMap map= (SerializableMap) intent.getSerializableExtra("contactList");
+//                Map<String,Integer> cameraList=map.getIntMap();
+//                for(int i=0;i<list.size();i++){
+//                    if(cameraList.containsKey(list.get(i).getCameraId())){//@@10.17
+//                        list.get(i).setIsOnline(cameraList.get(list.get(i).getCameraId()));
+//                    }
+//                }
+//                shopCameraAdapter.notifyDataSetChanged();
+                new StateThread(intent).start();
+            }
+        }
+    };
+
+    class StateThread extends Thread{
+        public void setIntent(Intent intent) {
+            this.intent = intent;
+        }
+
+        Intent intent;
+
+        StateThread(Intent intent){
+            this.intent=intent;
+        }
+
+        @Override
+        public void run() {
+            super.run();
+            SerializableMap map= (SerializableMap) intent.getSerializableExtra("contactList");
+            Map<String,Integer> cameraList=map.getIntMap();
+            for(int i=0;i<list.size();i++){
+                if(cameraList.containsKey(list.get(i).getCameraId())){//@@10.17
                     list.get(i).setIsOnline(cameraList.get(list.get(i).getCameraId()));
                 }
-                shopCameraAdapter.notifyDataSetChanged();
             }
+            handler.sendMessage(new Message());
+        }
+
+
+    }
+
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            shopCameraAdapter.notifyDataSetChanged();
+            super.handleMessage(msg);
         }
     };
 
@@ -150,7 +190,7 @@ public class CameraFragment extends MvpFragment<ShopInfoFragmentPresenter> imple
                     return;
                 }
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == shopCameraAdapter.getItemCount()) {
-                    if (list != null &&loadMoreCount >= 20 && research == false) {
+                    if (list != null &&loadMoreCount >= 15 && research == false) {//@@11.07
                         page = Integer.parseInt(page) + 1 + "";
                         mvpPresenter.getAllCamera(userID, privilege + "", page, list,true);
                     }else{
@@ -219,6 +259,12 @@ public class CameraFragment extends MvpFragment<ShopInfoFragmentPresenter> imple
         loadMoreCount = smokeList.size();
         list.addAll((List<Camera>)smokeList);
         shopCameraAdapter.changeMoreStatus(ShopCameraAdapter.LOADING_MORE);
+
+        String[] cameralist=new String[smokeList.size()];//@@10.17
+        for(int i=0;i<smokeList.size();i++){
+            cameralist[i]=((List<Camera>)smokeList).get(i).getCameraId();
+        }//@@5.18
+        P2PHandler.getInstance().getFriendStatus(cameralist);//@@10.17
     }
 
     @Override

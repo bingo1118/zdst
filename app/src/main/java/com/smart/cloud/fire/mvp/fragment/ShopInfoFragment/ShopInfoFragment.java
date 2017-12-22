@@ -264,7 +264,10 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
                     electricFragment = new ElectricFragment();
                     ft.add(R.id.fragment_content, electricFragment);
                 } else {
-                    ft.show(electricFragment);
+//                    ft.show(electricFragment);
+                    ft.remove(electricFragment);//@@10.10 切换刷新
+                    electricFragment = new ElectricFragment();//@@10.10 切换刷新
+                    ft.add(R.id.fragment_content, electricFragment);//@@10.10 切换刷新
                 }
                 break;
             case FRAGMENT_CAMERA:

@@ -42,6 +42,8 @@ public class Electric {
     private String principal2;
     private String principal2Phone;
     private String repeater;
+    private int eleState;//@@电源开关8.25
+    private String ifFault;//@@10.9是否故障
 
     public String getAddSmokeTime() {
         return addSmokeTime;
@@ -177,5 +179,21 @@ public class Electric {
 
     public void setRepeater(String repeater) {
         this.repeater = repeater;
+    }
+
+    public int getEleState() {
+        return eleState;
+    }
+
+    public void setEleState(int eleState) {
+        this.eleState = eleState;
+    }
+
+    public String getIsFault() {
+        return ifFault;
+    }
+
+    public void setIsFault(String ifFault) {
+        this.ifFault = ifFault;
     }
 }

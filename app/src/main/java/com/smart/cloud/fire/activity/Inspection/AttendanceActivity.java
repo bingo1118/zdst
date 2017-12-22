@@ -117,12 +117,14 @@ public class AttendanceActivity extends Activity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Toast.makeText(mContext,"无数据",Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("TAG", error.getMessage(), error);
+                Toast.makeText(mContext,"无数据",Toast.LENGTH_SHORT).show();
             }
         });
         mQueue.add(stringRequest);

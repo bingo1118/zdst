@@ -181,12 +181,28 @@
 
         <TextView
             android:layout_toRightOf="@id/ljtx_image"
+            android:id="@+id/losthint_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="漏检提醒"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:textColor="@color/camera_list_tv"
+            />
+        <TextView
+            android:layout_toRightOf="@id/losthint_text"
+            android:id="@+id/sum_textview"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:text="0"
+            android:visibility="gone"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/simple_corner"
+            android:textColor="#fff"
+            android:padding="2dp"
+            android:gravity="center"
+            android:textSize="8sp"
             />
         <ImageView
             android:layout_width="25dp"

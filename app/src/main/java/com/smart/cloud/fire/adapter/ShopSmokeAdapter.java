@@ -100,6 +100,7 @@ public class ShopSmokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.yg_yg_zx);
                     }
                     break;
+                case 16://@@9.29
                 case 2://燃气。。
                     if (netStates == 0) {
                         ((ItemViewHolder) holder).categoryGroupLin.setBackgroundResource(R.drawable.alarm_rela_lx_bg);
@@ -253,9 +254,6 @@ public class ShopSmokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             }
                             Intent intent = new Intent(mContext, NewAirInfoActivity.class);
                             intent.putExtra("Mac",normalSmoke.getMac());
-
-
-
                             intent.putExtra("Position",normalSmoke.getName());
                             mContext.startActivity(intent);
                         }

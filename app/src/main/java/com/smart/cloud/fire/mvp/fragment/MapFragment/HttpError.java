@@ -2,6 +2,7 @@ package com.smart.cloud.fire.mvp.fragment.MapFragment;
 
 import com.smart.cloud.fire.global.ElectricInfo;
 import com.smart.cloud.fire.global.ShopType;
+import com.smart.cloud.fire.mvp.electric_change_history.HistoryBean;
 import com.smart.cloud.fire.mvp.fragment.CollectFragment.AlarmMessageModel;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class HttpError<T> {
     private ArrayList<ShopType> placeType;
     private List<AlarmMessageModel> Alarm;
     private List<ElectricInfo> Electric;
+    private List<HistoryBean> eleList;//@@8.28
 
     private List<String> safetyItems;//@@7.25
 
@@ -98,5 +100,13 @@ public class HttpError<T> {
 
     public void setSafetyItems(List<String> safetyItems) {
         this.safetyItems = safetyItems;
+    }
+
+    public List<HistoryBean> getEleList() {
+        return eleList;
+    }
+
+    public void setEleList(List<HistoryBean> eleList) {
+        this.eleList = eleList;
     }
 }

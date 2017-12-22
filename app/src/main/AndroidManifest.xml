@@ -196,7 +196,10 @@
         <activity android:name="com.smart.cloud.fire.activity.Inspection.InspectionSettingActivity" />
         <activity android:name="com.smart.cloud.fire.activity.Inspection.DevTraceActivity" />
         <activity android:name="com.smart.cloud.fire.activity.Inspection.GPSMapActivity" />
-        <activity android:name="com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Security.NewAirInfoActivity"></activity>
+        <activity android:name="com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Security.NewAirInfoActivity" />
+        <activity android:name="com.smart.cloud.fire.mvp.electric_change_history.ElectricChangeHistoryActivity" />
+        <activity android:name="com.smart.cloud.fire.activity.Inspection.LostHintSiteDetailActivity" />
+        <activity android:name="com.smart.cloud.fire.activity.Inspection.LostHintSitesActivity"></activity>
     </application>
 
 </manifest>

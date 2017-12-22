@@ -46,7 +46,7 @@
                 android:layout_toRightOf="@+id/nowTime"
                 android:layout_toLeftOf="@+id/totalTime"
                 android:layout_centerVertical="true"
-                android:progressDrawable="@anim/seekbar_bg"
+                android:progressDrawable="@drawable/seekbar_bg"
                 android:thumb="@drawable/seek_btn"
                 android:maxHeight="5dp"
                 android:paddingTop="3dp"
