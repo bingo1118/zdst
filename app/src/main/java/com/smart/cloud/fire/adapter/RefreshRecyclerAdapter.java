@@ -107,6 +107,7 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             int devType= mNormalAlarmMessage.getDeviceType();
             ((ItemViewHolder) holder).alarmMarkImage.setVisibility(View.VISIBLE);//@@5.24区分开探测器和安防设备
             switch (devType){
+                case 41:
                 case 1:
                     ((ItemViewHolder) holder).smokeMac.setText("烟感:");
                     if (alarmType == 202) {
@@ -164,7 +165,7 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 case 5:
                     ((ItemViewHolder) holder).smokeMac.setText("电气:");
                     int alarmFamily = mNormalAlarmMessage.getAlarmFamily();
-                    switch (alarmFamily){
+                    switch (alarmType){
                         case 36:
                             ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.xx_gz);
                             break;
@@ -216,6 +217,9 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         case 136:
                             ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.xx_gz);
                             break;
+                        case 52:
+                            ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.duanlu1);//@@12.26
+                            break;
                         default:
                             ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.xx_huojing);
                             break;
@@ -237,7 +241,7 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     break;
                 case 11://@@5.24
                     ((ItemViewHolder) holder).smokeMac.setText("红外:");
-                    if (alarmType == 202) {
+                    if (alarmType == 202||alarmType==206) {
                         ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.baojing);//@@8.10
                         ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
                         ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
@@ -249,7 +253,7 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     break;
                 case 12://@@5.24
                     ((ItemViewHolder) holder).smokeMac.setText("门磁:");
-                    if (alarmType == 202) {
+                    if (alarmType == 202||alarmType==205) {
                         ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.baojing);//@@8.10
                         ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
                         ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
@@ -261,7 +265,7 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     break;
                 case 15://@@5.24
                     ((ItemViewHolder) holder).smokeMac.setText("水浸:");
-                    if (alarmType == 202) {
+                    if (alarmType == 202||alarmType==221) {
                         ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.baojing);//@@8.10
                         ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
                         ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));

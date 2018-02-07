@@ -60,6 +60,7 @@ public class DemoIntentService extends GTIntentService {
                 "CID",cid);//@@
         PushManager.getInstance().bindAlias(this.getApplicationContext(),userID);
         goToServer(cid,userID);
+
     }
 
     @Override
@@ -79,6 +80,7 @@ public class DemoIntentService extends GTIntentService {
                 int deviceType = dataJson.getInt("deviceType");
                 switch (deviceType){
                     case 1://烟感
+                    case 41://@@NB烟感
                     case 2://燃气
                     case 16://NB燃气
                     case 7://声光
@@ -87,6 +89,7 @@ public class DemoIntentService extends GTIntentService {
                         String message = null;
                         int alarmType = dataJson.getInt("alarmType");
                         switch (deviceType){
+                            case 41:
                             case 1:
                                 if(alarmType==202) {
                                     message="发生烟雾报警";
@@ -135,21 +138,21 @@ public class DemoIntentService extends GTIntentService {
                         int alarmType7 = dataJson.getInt("alarmType");
                         switch (deviceType){
                             case 11:
-                                if(alarmType7==202) {
+                                if(alarmType7==202||alarmType7==206) {
                                     message7="发生报警";
                                 }else{
                                     message7="红外电量低，请更换电池";
                                 }
                                 break;
                             case 12:
-                                if(alarmType7==202) {
+                                if(alarmType7==202||alarmType7==205) {
                                     message7="发生报警";
                                 }else{
                                     message7="门磁电量低，请更换电池";
                                 }
                                 break;
                             case 15://@@8.3
-                                if(alarmType7==202) {
+                                if(alarmType7==202||alarmType7==221) {
                                     message7="发生报警";
                                 }else{
                                     message7="水浸电量低，请更换电池";
@@ -302,6 +305,9 @@ public class DemoIntentService extends GTIntentService {
                                 break;
                             case 51:
                                 alarmMsg = "电气探测器发出：分闸报警";
+                                break;
+                            case 52:
+                                alarmMsg = "电气探测器发出：断路报警";
                                 break;
                             case 148://合闸报警
 //                                int alarmType16 = pushAlarmMsg1.getAlarmType();

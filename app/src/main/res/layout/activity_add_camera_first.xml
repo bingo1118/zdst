@@ -4,6 +4,15 @@
     android:orientation="vertical"
     >
 
+    <TextView
+        android:id="@+id/text_pass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="点击跳过WiFi设置"
+        android:textSize="16sp"
+        android:layout_margin="10dp"/>
+
     <ImageView
         android:id="@+id/add_camera_one_image"
         android:layout_width="240dp"

@@ -72,12 +72,16 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
                 break;
             case "Q":
                 smokeMac = smokeMac.replace("Q","");
+                smokeMac = smokeMac.replace("S","");
                 break;
             case "G":
                 smokeMac = smokeMac.replace("G","");
                 break;
             case "S":
                 smokeMac = smokeMac.replace("S","");
+                break;
+            case "N"://@@NB烟感
+                smokeMac = smokeMac.replace("N","");
                 break;
             case "J":
                 smokeMac = smokeMac.replace("J","");
@@ -213,12 +217,20 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
                     if((smokeMac.charAt(smokeMac.length()-1)+"").equals("Q")){
                         electrState=1;
                     }//@@8.26
+                    if((smokeMac.charAt(smokeMac.length()-1)+"").equals("S")){
+                        electrState=3;
+                    }//@@2018.01.18 三相设备
                     smokeMac = smokeMac.replace("Q","");//电气火灾
+                    smokeMac = smokeMac.replace("S","");
                     deviceType="5";
                     break;
                 case "G":
                     smokeMac = smokeMac.replace("G","");//声光报警器 6
                     deviceType="7";
+                    break;
+                case "N":
+                    smokeMac = smokeMac.replace("N","");//NB烟感设备
+                    deviceType="41";
                     break;
                 case "S":
                     smokeMac = smokeMac.replace("S","");//手动报警，显示 7

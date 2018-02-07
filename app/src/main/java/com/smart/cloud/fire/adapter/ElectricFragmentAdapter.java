@@ -152,7 +152,7 @@ public class ElectricFragmentAdapter extends RecyclerView.Adapter<RecyclerView.V
                     }else{
                         ((ItemViewHolder) holder).state.setText("离线");
                     }
-                    ((ItemViewHolder) holder).bhq_state.setBackgroundResource(R.drawable.fenzha);//@@12.14
+                    ((ItemViewHolder) holder).bhq_state.setBackgroundResource(R.drawable.fenzha_gray);//@@12.14
                     break;
                 case 1:
                     if(normalSmoke.getIsFault()!=null){

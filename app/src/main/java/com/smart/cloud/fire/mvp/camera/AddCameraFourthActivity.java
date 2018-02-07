@@ -85,7 +85,9 @@ public class AddCameraFourthActivity extends MvpActivity<AddCameraFourthPresente
         setContentView(R.layout.activity_add_fire);
         ButterKnife.bind(this);
         mContext = this;
-        contactId = getIntent().getExtras().getString("contactId");
+        if(getIntent().getExtras()!=null){
+            contactId = getIntent().getExtras().getString("contactId");
+        }
         userID = SharedPreferencesManager.getInstance().getData(mContext,
                 SharedPreferencesManager.SP_FILE_GWELL,
                 SharedPreferencesManager.KEY_RECENTNAME);
@@ -101,7 +103,11 @@ public class AddCameraFourthActivity extends MvpActivity<AddCameraFourthPresente
         cameraId.setText("*设备ID");
         addRepeaterMac.setHint("ID");
         addRepeaterMac.setEnabled(false);
-        addRepeaterMac.setText(contactId);
+        if(contactId!=null){
+            addRepeaterMac.setText(contactId);
+        }else{
+            addRepeaterMac.setEnabled(true);
+        }
         addFireZjq.setEditTextHint("*区域");
         addFireType.setEditTextHint("*类型");
         scanErWeiMa.setVisibility(View.GONE);
@@ -126,6 +132,9 @@ public class AddCameraFourthActivity extends MvpActivity<AddCameraFourthPresente
                 String principal2 = addFireManTwo.getText().toString().trim();
                 String principal1Phone = addFireManPhone.getText().toString().trim();
                 String principal2Phone = addFireManPhoneTwo.getText().toString().trim();
+                if(contactId==null||contactId.equals("")){
+                    contactId=addRepeaterMac.getText().toString();
+                }
                 mvpPresenter.addCamera(contactId,smokeName,smokeMac,address,
                         longitude,latitude,principal1,principal1Phone,principal2,principal2Phone,areaId,placeTypeId);
             }

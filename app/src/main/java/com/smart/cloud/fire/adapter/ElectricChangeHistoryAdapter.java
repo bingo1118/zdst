@@ -94,11 +94,28 @@ public class ElectricChangeHistoryAdapter extends RecyclerView.Adapter<RecyclerV
             HistoryBean electric = electricList.get(position);
             ((ItemViewHolder) holder).electricLin.setVisibility(View.VISIBLE);
             ((ItemViewHolder) holder).electric_mac.setText(electric.getMac());
-            ((ItemViewHolder) holder).electric_userid.setText(electric.getUserId());
+            switch (electric.getUserId()){
+                case "6601":
+                    ((ItemViewHolder) holder).electric_userid.setText("线路已闭合");
+                    break;
+                case "6602":
+                    ((ItemViewHolder) holder).electric_userid.setText("线路已切断");
+                    break;
+                case "6603":
+                    ((ItemViewHolder) holder).electric_userid.setText("线路已闭合");
+                    break;
+                case "6604":
+                    ((ItemViewHolder) holder).electric_userid.setText("线路已切断");
+                    break;
+                default:
+                    ((ItemViewHolder) holder).electric_userid.setText(electric.getUserId());
+                    break;
+            }
+
             if(electric.getState().equals("1")){
-                ((ItemViewHolder) holder).electric_state.setText("开启");
+                ((ItemViewHolder) holder).electric_state.setText("合闸");
             }else{
-                ((ItemViewHolder) holder).electric_state.setText("关闭");
+                ((ItemViewHolder) holder).electric_state.setText("分闸");
             }
             ((ItemViewHolder) holder).electric_time.setText("时间:"+electric.getChangetime());
             ((ItemViewHolder) holder).electric_username.setText(electric.getUserName());

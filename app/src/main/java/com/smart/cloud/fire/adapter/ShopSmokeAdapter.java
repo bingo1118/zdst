@@ -91,6 +91,7 @@ public class ShopSmokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             int devType = normalSmoke.getDeviceType();
             int netStates = normalSmoke.getNetState();
             switch (devType){
+                case 41://@@NB烟感
                 case 1://烟感。。
                     if (netStates == 0) {//设备不在线。。
                         ((ItemViewHolder) holder).categoryGroupLin.setBackgroundResource(R.drawable.alarm_rela_lx_bg);

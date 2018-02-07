@@ -23,7 +23,7 @@ public class ElectricChangeHistoryPresenter extends BasePresenter<ElectricChange
         attachView(view);
     }
 
-    public void getEleNeedHis(String smokeMac, String page, final List<HistoryBean> list, final int type, boolean refresh){
+    public void getEleNeedHis(String smokeMac, final String page, final List<HistoryBean> list, final int type, boolean refresh){
         if(!refresh){
             mvpView.showLoading();
         }
@@ -43,8 +43,11 @@ public class ElectricChangeHistoryPresenter extends BasePresenter<ElectricChange
                     }
                 }else{
                     List<HistoryBean> mSmokeList = new ArrayList<>();
-                    mvpView.getDataSuccess(mSmokeList,false);
-                    mvpView.getDataFail("无数据");
+                    if(!page.equals("1")){
+                        mvpView.onLoadingMore(mSmokeList);
+                    }else{
+                        mvpView.getDataFail("无数据");
+                    }
                 }
             }
 

@@ -113,6 +113,7 @@ public class MyOverlayManager extends OverlayManager {
                     bundle.putSerializable("mNormalSmoke",smoke);
                     int devType = smoke.getDeviceType();
                     switch (devType){
+                        case 41:
                         case 1:
                             markMap(latLng,overlayOptionses,alarmState,giflist,viewList.get(0),bundle);
                             break;
