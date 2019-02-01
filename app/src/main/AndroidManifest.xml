@@ -151,10 +151,6 @@
             android:label="@string/line_chart_activity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="com.smart.cloud.fire.mvp.LineChart.LineChartActivityTest"
-            android:label="@string/line_chart_activity"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name="com.smart.cloud.fire.mvp.electric.ElectricActivity"
             android:label="@string/line_chart_activity"
             android:theme="@style/AppTheme" />
@@ -200,6 +196,7 @@
         <activity android:name="com.smart.cloud.fire.mvp.electric_change_history.ElectricChangeHistoryActivity" />
         <activity android:name="com.smart.cloud.fire.activity.Inspection.LostHintSiteDetailActivity" />
         <activity android:name="com.smart.cloud.fire.activity.Inspection.LostHintSitesActivity"></activity>
+        <activity android:name="com.smart.cloud.fire.activity.THDevice.OneTHDevInfoActivity"></activity>
     </application>
 
 </manifest>

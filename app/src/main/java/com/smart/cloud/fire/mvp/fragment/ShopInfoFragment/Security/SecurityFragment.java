@@ -127,7 +127,7 @@ public class SecurityFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem+1 == count) {
                     if(loadMoreCount>=20){
                         page = Integer.parseInt(page) + 1 + "";
-                        mvpPresenter.getAllSmoke(userID, privilege + "", page, list, 1,true);
+                        mvpPresenter.getSecurityInfo(userID, privilege + "", page, list, 1,true);
                     }else{
                         T.showShort(mContext,"已经没有更多数据了");
                     }

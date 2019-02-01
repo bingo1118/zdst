@@ -174,7 +174,7 @@ public class ChooseAreaActivity extends Activity {
         @Override
         public int getChildrenCount(int groupPosition) {
             String key = parent.get(groupPosition).getDepartName();
-            if(map.get(key)==null){
+            if(map==null||map.get(key)==null){
                 return 0;
             }else{
                 int size=map.get(key).size();

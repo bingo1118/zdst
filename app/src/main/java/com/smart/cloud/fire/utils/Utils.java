@@ -88,6 +88,16 @@ public class Utils {
         return flag;
     }
 
+    //@@2018.01.03同上方法
+    public static float getMaxFloat(List<TemperatureTime.ElectricBean> electricBeen){
+        float max =  Float.parseFloat(electricBeen.get(0).getElectricValue());
+        for(TemperatureTime.ElectricBean electricBean : electricBeen){
+            float value =Float.parseFloat(electricBean.getElectricValue());
+            if (max < value) max = value;
+        }
+        return max;
+    }
+
     // yyyy-MM-dd HH:mm:ss ->>>>>>> yyyy-MM-dd HH:mm
     public static String ConvertTimeByString(String time) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

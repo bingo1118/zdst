@@ -218,6 +218,13 @@ public interface ApiStores {
                                              @Query("areaId") String areaId,@Query("appId") String appId,
                                              @Query("placeTypeId") String placeTypeId,@Query("devType") String devType);
 
+    //根据条件查询用户设备
+    @GET("getNeedDev")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<HttpError> getNeedDev(@Query("userId") String userId, @Query("privilege") String privilege,
+                                     @Query("areaId") String areaId,@Query("page") String page,
+                                     @Query("placeTypeId") String placeTypeId,@Query("devType") String devType);
+
     @GET("getAllElectricInfo")
     @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
     Observable<ElectricInfo<Electric>> getAllElectricInfo(@Query("userId") String userId, @Query("privilege") String privilege,
@@ -226,14 +233,14 @@ public interface ApiStores {
     @GET("getOneElectricInfo")
     @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
     Observable<ElectricInfo<ElectricValue>> getOneElectricInfo(@Query("userId") String userId, @Query("privilege") String privilege,
-                                                               @Query("smokeMac") String smokeMac);
+                                                               @Query("smokeMac") String smokeMac,@Query("devType") String devType);
 
 //    getElectricTypeInfo?userId=13428282520&privilege=2&smokeMac=32110533&electricType=6&electricNum=1&page=
-    @GET("getElectricTypeInfo")
-    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
-    Observable<TemperatureTime> getElectricTypeInfo(@Query("userId") String userId, @Query("privilege") String privilege,
-                                                    @Query("smokeMac") String smokeMac, @Query("electricType") String electricType,
-                                                    @Query("electricNum") String electricNum, @Query("page") String page);
+@GET("getElectricTypeInfo")
+@Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+Observable<TemperatureTime> getElectricTypeInfo(@Query("userId") String userId, @Query("privilege") String privilege,
+                                                @Query("smokeMac") String smokeMac, @Query("electricType") String electricType,
+                                                @Query("electricNum") String electricNum, @Query("page") String page, @Query("devType") int devType);
 //    getNeedElectricInfo?userId=13622215085&privilege=2&areaId=14&placeTypeId=2&page
     @GET("getNeedElectricInfo")
     @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
@@ -266,4 +273,13 @@ public interface ApiStores {
     @GET("getEleNeedHis")
     @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
     Observable<HttpError> getEleNeedHis(@Query("smokeMac") String smokeMac,@Query("page") String page);
+
+    @GET("getWaterHistoryInfo")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<TemperatureTime> getWaterHistoryInfo(@Query("userId") String userId, @Query("privilege") String privilege,
+                                                    @Query("smokeMac") String smokeMac, @Query("page") String page);
+
+    @GET("getTHDevInfoHistoryInfo")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<TemperatureTime> getTHDevInfoHistoryInfo(@Query("mac") String smokeMac, @Query("page") String page, @Query("type") String tepe);
 }

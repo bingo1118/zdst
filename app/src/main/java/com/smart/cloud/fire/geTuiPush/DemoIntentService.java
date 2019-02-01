@@ -10,6 +10,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
+import com.google.zxing.common.StringUtils;
 import com.igexin.sdk.GTIntentService;
 import com.igexin.sdk.PushManager;
 import com.igexin.sdk.message.GTCmdMessage;
@@ -18,6 +19,7 @@ import com.smart.cloud.fire.global.ConstantValues;
 import com.smart.cloud.fire.global.MyApp;
 import com.smart.cloud.fire.mvp.Alarm.AlarmActivity;
 import com.smart.cloud.fire.mvp.Alarm.UserAlarmActivity;
+import com.smart.cloud.fire.mvp.LineChart.LineChartActivity;
 import com.smart.cloud.fire.mvp.fragment.MapFragment.HttpError;
 import com.smart.cloud.fire.pushmessage.DisposeAlarm;
 import com.smart.cloud.fire.pushmessage.GetUserAlarm;
@@ -27,6 +29,7 @@ import com.smart.cloud.fire.retrofit.AppClient;
 import com.smart.cloud.fire.rxjava.ApiCallback;
 import com.smart.cloud.fire.rxjava.SubscriberCallBack;
 import com.smart.cloud.fire.utils.SharedPreferencesManager;
+import com.smart.cloud.fire.utils.TimeFormat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,71 +60,272 @@ public class DemoIntentService extends GTIntentService {
                 SharedPreferencesManager.SP_FILE_GWELL,
                 SharedPreferencesManager.KEY_RECENTNAME);
         SharedPreferencesManager.getInstance().putData(context,SharedPreferencesManager.SP_FILE_GWELL,
-                "CID",cid);//@@
+                "CID",cid);//@@5.27存储个推cid
         PushManager.getInstance().bindAlias(this.getApplicationContext(),userID);
         goToServer(cid,userID);
-
     }
 
     @Override
     public void onReceiveMessageData(Context context, GTTransmitMessage gtTransmitMessage) {
         String msg = new String(gtTransmitMessage.getPayload());
-            try {
-                JSONObject dataJson = new JSONObject(msg);
-                //@@9.26限制查看视频后1小时内不再接收同Mac的报警推送
-                PushAlarmMsg mMsg = jsJson(dataJson);
-                String mac_temp=mMsg.getMac();
-                long lasttime=Long.parseLong(SharedPreferencesManager.getInstance().getLongData(context,
-                        mac_temp));
-                if((System.currentTimeMillis()-lasttime)<60*60*1000){
-                    return;
-                }//@@9.26
+        boolean showDateChange=false;
+        try {
+            JSONObject dataJson = new JSONObject(msg);
+            String alarmTime=dataJson.getString("alarmTime");
+            //过滤30分钟前的报警
+            if(null!=alarmTime&&(System.currentTimeMillis()-TimeFormat.date2TimeStamp(alarmTime))>30*60*1000){
+                return;
+            }
 
-                int deviceType = dataJson.getInt("deviceType");
-                switch (deviceType){
-                    case 1://烟感
-                    case 41://@@NB烟感
-                    case 2://燃气
-                    case 16://NB燃气
-                    case 7://声光
-                    case 10://水压@@4.28
-                    case 8://手报
-                        String message = null;
-                        int alarmType = dataJson.getInt("alarmType");
-                        switch (deviceType){
-                            case 41:
-                            case 1:
-                                if(alarmType==202) {
-                                    message="发生烟雾报警";
-                                }else{
-                                    message="烟感电量低，请更换电池";
-                                }
-                                break;
-                            case 16:
-                            case 2:
-                                message="燃气发生泄漏";
-                                break;
-                            case 7:
-                                message="声光发出报警";
-                                break;
-                            case 8:
-                                message="手动报警";
-                                break;
-                            case 10://@@4.28
-                                int alarmFamily = dataJson.getInt("alarmFamily");
-                                if(alarmType==218) {
-                                    message="发生高水压报警 水压值："+alarmFamily+"kpa";
-                                }else if(alarmType==209){
-                                    message="发生低水压报警 水压值："+alarmFamily+"kpa";
-                                }else if(alarmType==217){
-                                    message="发生水压升高报警 水压值："+alarmFamily+"kpa";
-                                }else if(alarmType==210){
-                                    message="发生水压降低报警 水压值："+alarmFamily+"kpa";
-                                }else{
-                                    message="电量低，请更换电池";
-                                }
-                                break;
-                        }
+            int alarm = dataJson.getInt("alarmType");
+            int deviceType = dataJson.getInt("deviceType");
+            switch (deviceType){
+                case 1://烟感
+                case 2://燃气
+                case 7://声光
+                case 8://手报
+                case 10://水压@@4.28
+                case 11://红外
+                case 12://门磁
+                case 15://水禁
+                case 16://NB燃气
+                case 18://喷淋
+                case 19://水位
+                case 21://LoraOne烟感
+                case 22://南京平台燃气
+                case 25://@@温湿度传感器
+                case 31://三江iot烟感
+                case 35://NB电弧
+                case 36://联通NB电弧
+                case 41://NB烟感
+                case 42://@@NB水压2018.02.23
+                case 43:
+                case 45://海曼NB气感
+                case 51://@@创安燃气
+                case 55:
+                case 56://NBiot烟感
+                case 57://onet烟感
+                case 58://嘉德移动烟感
+                case 61://嘉德南京烟感
+                case 69://恒星水位
+                case 70://恒星水压
+                case 111://@@小主机，终端
+                case 119://联动烟感
+                case 124://@@外接水位
+                case 125://@@外接水压
+                    String message = null;
+                    int alarmType = dataJson.getInt("alarmType");
+                    switch (deviceType){
+                        case 36:
+                        case 35:
+                            if(alarmType==53) {
+                                message="发生报警";
+                            }else if(alarmType==36){
+                                message="发生485故障";
+                            }else if(alarmType==54){
+                                message="发生探测器故障";
+                            }
+                            break;
+                        case 111:
+                            message="主机处于备电状态";
+                            break;
+                        case 25:
+                            if(alarmType==307) {
+                                message="发生低温报警";
+                            }else if(alarmType==308){
+                                message="发生高温报警";
+                            }else if(alarmType==407){
+                                message="湿度过低";
+                            }else if(alarmType==408){
+                                message="湿度过高";
+                            }else if(alarmType==193){
+                                message="烟感电量低，请更换电池";
+                            }else{
+                                message="发生未知类型报警";
+                            }
+                            break;
+                        case 31:
+                            if(alarmType==202) {
+                                message="发生烟雾报警";
+                            }else if(alarmType==67){
+                                message="发生自检报警";
+                            }else if(alarmType==193){
+                                message="电量低，请更换电池";
+                            }else{
+                                message="发生未知类型报警";
+                            }
+                            break;
+                        case 119:
+                        case 41:
+                        case 61:
+                        case 58:
+                        case 57:
+                        case 56:
+                        case 55:
+                        case 1:
+                            if(alarmType==202) {
+                                message="发生烟雾报警";
+                            }else if(alarmType==103){
+                                message="发生温度报警";
+                            }else if(alarmType==104){
+                                message="发生温度报警恢复";
+                            }else if(alarmType==105){
+                                message="发生烟雾低电量报警";
+                            }else if(alarmType==106){
+                                message="发生烟雾低电量报警恢复";
+                            }else if(alarmType==107){
+                                message="发生低电量报警";
+                            }else if(alarmType==108){
+                                message="发生低电量报警恢复";
+                            }else if(alarmType==109){
+                                message="发生烟雾故障报警";
+                            }else if(alarmType==110){
+                                message="发生烟雾故障报警恢复";
+                            }else if(alarmType==111){
+                                message="发生温湿度故障报警";
+                            }else if(alarmType==112){
+                                message="发生温湿度故障报警恢复";
+                            }else if(alarmType==113){
+                                message="发生手动报警";
+                            }else if(alarmType==67){
+                                message="发生自检报警";
+                            }else if(alarmType==193){
+                                message="电量低，请更换电池";
+                            }else if(alarmType==14){
+                                message="该设备已被拆除";
+                            }else if(alarmType==15){
+                                message="发生防拆恢复报警";
+                            }else{
+                                message="发生未知类型报警";
+                            }
+                            break;
+                        case 124:
+                        case 69:
+                        case 19:
+                            if(alarmType==207) {
+                                message="发生低水位报警";
+                            }else if(alarmType==208){
+                                message="发生高水位报警";
+                            }else if(alarmType==193){
+                                message="电量低，请更换电池";
+                            }else if(alarmType==136){
+                                message="发生通信故障";
+                            }else if(alarmType==36){
+                                message="发生故障";
+                            }else{
+                                message="发生未知类型报警";
+                            }
+                            break;
+                        case 21:
+                            if(alarmType==202) {
+                                message="发生烟雾报警";
+                            }else if(alarmType==193){
+                                message="电量低，请更换电池";
+                            }else{
+                                message="发生未知类型报警";
+                            }
+                            break;
+                        case 18://@@10.31 喷淋
+                            if(alarmType==202||alarmType==66||alarmType==203) {
+                                message="发生报警";
+                            }else if(alarmType==201){
+                                message="阀门已关闭";
+                            } else if(alarmType==193){
+                                message="电量低，请更换电池";
+                            }else{
+                                message="发生未知类型报警";
+                            }
+                            break;
+                        case 45://@@海曼气感
+                            if(alarmType==71) {
+                                message="发生轻度泄露";
+                            }else if(alarmType==72){
+                                message="发生重度泄露";
+                            }else if(alarmType==73){
+                                message="发生短路报警";
+                            }else if(alarmType==74){
+                                message="发生开路报警";
+                            }else if(alarmType==75){
+                                message="发生机械手故障";
+                            } else if(alarmType==193){
+                                message="电量低，请更换电池";
+                            }else if(alarmType==70){
+                                message="发生报警恢复";
+                            }else{
+                                message="发生未知类型报警";
+                            }
+                            break;
+                        case 51:
+                        case 22:
+                        case 16:
+                        case 2:
+                            message="燃气发生泄漏";
+                            break;
+                        case 7:
+                            message="声光发出报警";
+                            break;
+                        case 8:
+                            message="手动报警";
+                            break;
+                        case 11:
+                            if(alarmType==202||alarmType==206) {
+                                message="发生报警";
+                            }else if(alarmType==193){
+                                message="电量低，请更换电池";
+                            }else{
+                                message="发生未知类型报警";
+                            }
+                            break;
+                        case 12:
+                            if(alarmType==202||alarmType==205) {
+                                message="发生报警";
+                            }else if(alarmType==193){
+                                message="电量低，请更换电池";
+                            }else{
+                                message="发生未知类型报警";
+                            }
+                            break;
+                        case 15://@@8.3
+                            if(alarmType==202||alarmType==221) {
+                                message="发生报警";
+                            }else if(alarmType==193){
+                                message="电量低，请更换电池";
+                            }else{
+                                message="发生未知类型报警";
+                            }
+                            break;
+                        case 125:
+                        case 70:
+                        case 42:
+                        case 43:
+                        case 10://@@4.28
+                            int alarmFamily = dataJson.getInt("alarmFamily");
+                            if(alarmType==218) {
+                                message="发生高水压报警 水压值："+alarmFamily+"kpa";
+                            }else if(alarmType==209){
+                                message="发生低水压报警 水压值："+alarmFamily+"kpa";
+                            }else if(alarmType==217){
+                                message="发生水压升高,水压值："+alarmFamily+"kpa";
+                                showDateChange=true;
+                            }else if(alarmType==210){
+                                message="发生水压降低,水压值："+alarmFamily+"kpa";
+                                showDateChange=true;
+                            }else if(alarmType==136){
+                                message="发生通信故障";
+                            }else if(alarmType==36){
+                                message="发生故障";
+                            }else if(alarmType==193){
+                                message="电量低，请更换电池";
+                            }else{
+                                message="发生未知类型报警";
+                            }
+                            break;
+                    }
+                    if(showDateChange==true){
+                        PushAlarmMsg mPushAlarmMsg = jsJson(dataJson);
+                        Random random1 = new Random();
+                        showDataChangeNotification(context,message,mPushAlarmMsg,random1.nextInt(),LineChartActivity.class);
+                    }else{
                         PushAlarmMsg mPushAlarmMsg = jsJson(dataJson);
                         Random random1 = new Random();
                         showDownNotification(context,message,mPushAlarmMsg,random1.nextInt(),AlarmActivity.class);
@@ -130,243 +334,217 @@ public class DemoIntentService extends GTIntentService {
                         intent1.putExtra("mPushAlarmMsg",mPushAlarmMsg);
                         intent1.putExtra("alarmMsg",message);
                         context.startActivity(intent1);
-                        break;
-                    case 11://红外
-                    case 12://门磁
-                    case 15://水禁
-                        String message7 = null;
-                        int alarmType7 = dataJson.getInt("alarmType");
-                        switch (deviceType){
-                            case 11:
-                                if(alarmType7==202||alarmType7==206) {
-                                    message7="发生报警";
-                                }else{
-                                    message7="红外电量低，请更换电池";
-                                }
-                                break;
-                            case 12:
-                                if(alarmType7==202||alarmType7==205) {
-                                    message7="发生报警";
-                                }else{
-                                    message7="门磁电量低，请更换电池";
-                                }
-                                break;
-                            case 15://@@8.3
-                                if(alarmType7==202||alarmType7==221) {
-                                    message7="发生报警";
-                                }else{
-                                    message7="水浸电量低，请更换电池";
-                                }
-                                break;
-                        }
-                        String ifSecurityPush = SharedPreferencesManager.getInstance().getData(context,
-                                "setting",
-                                "ifSecurityPush");
-                        if(ifSecurityPush.equals("2")){
+                    }
+                    break;
+                case 77:
+                case 76:
+                case 75://南京电气
+                case 59:
+                case 53:
+                case 52:
+                case 5://电气
+                    PushAlarmMsg pushAlarmMsg1 = jsJson(dataJson);
+                    int alarmFamily = pushAlarmMsg1.getAlarmFamily();
+                    String alarmMsg = null;
+                    switch (alarmFamily){
+                        case 161:
+                            alarmMsg = "电气探测器发出：手动分闸";
                             break;
-                        }
-                        PushAlarmMsg mPushAlarmMsg1 = jsJson(dataJson);
-                        Random random2 = new Random();
-                        showDownNotification(context,message7,mPushAlarmMsg1,random2.nextInt(),AlarmActivity.class);
-                        Intent intent4 = new Intent(context, AlarmActivity.class);
-                        intent4.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent4.putExtra("mPushAlarmMsg",mPushAlarmMsg1);
-                        intent4.putExtra("alarmMsg",message7);
-                        context.startActivity(intent4);
-                        break;
-                    case 5://电气
-                        PushAlarmMsg pushAlarmMsg1 = jsJson(dataJson);
-                        int alarmFamily = pushAlarmMsg1.getAlarmFamily();
-                        String alarmMsg = null;
-                        switch (alarmFamily){
-                            case 43://电气报警
-                                int alarmType1 = pushAlarmMsg1.getAlarmType();
-                                if(alarmType1!=0){
-                                    alarmMsg = "电气探测器发出：过压报警";
-                                }
-                                break;
-                            case 36:
-//                                int alarmType36 = pushAlarmMsg1.getAlarmType();
-//                                switch (alarmType36){
-//                                    case 1:
-//                                        alarmMsg = "电气探测器发出：漏电流故障报警";
-//                                        break;
-//                                    case 2:
-//                                        alarmMsg = "电气探测器发出：温度故障报警";
-//                                        break;
-//                                    case 3:
-//                                        alarmMsg = "电气探测器发出：供电中断报警";
-//                                        break;
-//                                    case 4:
-//                                        alarmMsg = "电气探测器发出：错相报警";
-//                                        break;
-//                                    case 5:
-//                                        alarmMsg = "电气探测器发出：缺相报警";
-//                                        break;
-//                                    case 6:
-//                                        alarmMsg = "电气探测器发出：电弧故障报警";
-//                                        break;
-//                                    case 7:
-//                                        alarmMsg = "电气探测器发出：负载故障报警";
-//                                        break;
-//                                    case 8:
-//                                        alarmMsg = "电气探测器发出：短路故障报警";
-//                                        break;
-//                                    case 9:
-//                                        alarmMsg = "电气探测器发出：断路故障报警";
-//                                        break;
-//                                    case 10://@@6.28
-//                                        alarmMsg = "电气探测器发出：485通信故障";
-//                                        break;
-//                                    case 0://@@6.28
-//                                        alarmMsg = "电气探测器发出：故障报警";
-//                                        break;
-//                                }//@@10.17 限制故障推送
-                                break;
-                            case 45://电气报警
-                                int alarmType2 = pushAlarmMsg1.getAlarmType();
-                                if(alarmType2!=0){
-                                    alarmMsg = "电气探测器发出：过流报警";
-                                }
-                                break;
-                            case 44://欠压报警
-                                int alarmType3 = pushAlarmMsg1.getAlarmType();
-                                if(alarmType3!=0){
-                                    alarmMsg = "电气探测器发出：欠压报警";
-                                }
-                                break;
-                            case 46://漏电报警
-                                int alarmType4 = pushAlarmMsg1.getAlarmType();
-                                if(alarmType4!=0){
-                                    alarmMsg = "电气探测器发出：漏电报警";
-                                }
-                                long lastTime=SharedPreferencesManager.getInstance().getLongData(context,
-                                        "loudianliu" ,pushAlarmMsg1.getMac());
-                                if((System.currentTimeMillis()-lastTime)<30*60*1000){
-                                    return;
-                                }else{
-                                    SharedPreferencesManager.getInstance().putData(context,"loudianliu",pushAlarmMsg1.getMac(),System.currentTimeMillis());
-                                }//@@10.11漏电报警间隔30分钟再次报警
-                                break;
-                            case 47://电气报警
-                                int alarmType5 = pushAlarmMsg1.getAlarmType();
-                                if(alarmType5!=0){
-                                    alarmMsg = "电气探测器发出：温度报警";
-                                }
-                                break;
-                            case 48://合闸报警@@6.28
-//                                int alarmType6 = pushAlarmMsg1.getAlarmType();
-//                                if(alarmType6!=0){
-//                                    alarmMsg = "电气探测器发出：合闸报警";
-//                                }
-                                break;
-                            case 143://@@电气报警（贵州电气报警）8.11
-                                int alarmType11 = pushAlarmMsg1.getAlarmType();
-                                if(alarmType11!=0){
-                                    alarmMsg = "电气探测器发出：过压报警（线路已断开）";
-                                }
-                                break;
-                            case 145://电气报警
-                                int alarmType12 = pushAlarmMsg1.getAlarmType();
-                                if(alarmType12!=0){
-                                    alarmMsg = "电气探测器发出：过流报警（线路已断开）";
-                                }
-                                break;
-                            case 144://欠压报警
-                                int alarmType13 = pushAlarmMsg1.getAlarmType();
-                                if(alarmType13!=0){
-                                    alarmMsg = "电气探测器发出：欠压报警（线路已断开）";
-                                }
-                                break;
-                            case 146://电气报警
-                                int alarmType14 = pushAlarmMsg1.getAlarmType();
-                                if(alarmType14!=0){
-                                    alarmMsg = "电气探测器发出：漏电报警（线路已断开）";
-                                }
-                                long lastTime1=SharedPreferencesManager.getInstance().getLongData(context,
-                                        "loudianliu" ,pushAlarmMsg1.getMac());
-                                if((System.currentTimeMillis()-lastTime1)<30*60*1000){
-                                    return;
-                                }else{
-                                    SharedPreferencesManager.getInstance().putData(context,"loudianliu",pushAlarmMsg1.getMac(),System.currentTimeMillis());
-                                }//@@10.11漏电报警间隔30分钟再次报警
-                                break;
-                            case 147://电气报警
-                                int alarmType15 = pushAlarmMsg1.getAlarmType();
-                                if(alarmType15!=0){
-                                    alarmMsg = "电气探测器发出：温度报警（线路已断开）";
-                                }
-                                break;
-                            case 49://短路报警
-                                alarmMsg = "电气探测器发出：短路报警";
-                                break;
-                            case 50://过热报警
-                                alarmMsg = "电气探测器发出：过热报警";
-                                break;
-                            case 51:
-                                alarmMsg = "电气探测器发出：分闸报警";
-                                break;
-                            case 52:
-                                alarmMsg = "电气探测器发出：断路报警";
-                                break;
-                            case 148://合闸报警
-//                                int alarmType16 = pushAlarmMsg1.getAlarmType();
-//                                if(alarmType16!=0){
-//                                    alarmMsg = "电气探测器发出：合闸报警";
-//                                }//@@10.9 合闸不显示
-                                break;
-                            case 136://贵州故障报警
-                                //不显示报警界面
-                                break;
-                            default:
-                                break;
-                        }
-                        if(alarmMsg==null){
+                        case 160:
+                            alarmMsg = "电气探测器发出：设备属性更改";
                             break;
-                        }//@@10.10
-                        Random random = new Random();
-                        showDownNotification(context,alarmMsg,pushAlarmMsg1,random.nextInt(),AlarmActivity.class);
-                        Intent intent2 = new Intent(context, AlarmActivity.class);
-                        intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent2.putExtra("mPushAlarmMsg",pushAlarmMsg1);
-                        intent2.putExtra("alarmMsg",alarmMsg);
-                        context.startActivity(intent2);
-                        break;
-                    case 6://一键报警和报警回复
-                        int alarmType1 = dataJson.getInt("alarmType");
-                        if(alarmType1==3){
-                            GetUserAlarm getUserAlarm = new GetUserAlarm();
-                            getUserAlarm.setAddress(dataJson.getString("address"));
-                            getUserAlarm.setAlarmSerialNumber(dataJson.getString("alarmSerialNumber"));
-                            getUserAlarm.setAlarmTime(dataJson.getString("alarmTime"));
-                            getUserAlarm.setAreaName(dataJson.getString("areaName"));
-                            getUserAlarm.setCallerId(dataJson.getString("callerId"));
-                            getUserAlarm.setInfo(dataJson.getString("info"));
-                            getUserAlarm.setLatitude(dataJson.getString("latitude"));
-                            getUserAlarm.setLongitude(dataJson.getString("longitude"));
-                            getUserAlarm.setSmoke(dataJson.getString("smoke"));
-                            getUserAlarm.setCallerName(dataJson.getString("callerName"));
-                            Random random3 = new Random();
-                            showDownNotification(context,"您收到一条紧急报警消息",getUserAlarm,random3.nextInt(),UserAlarmActivity.class);
-                            Intent intent3 = new Intent(context, UserAlarmActivity.class);
-                            intent3.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent3.putExtra("mPushAlarmMsg",getUserAlarm);
-                            context.startActivity(intent3);
-                        }else{
-                            DisposeAlarm disposeAlarm = new DisposeAlarm();
-                            disposeAlarm.setAlarmType(alarmType1);
-                            disposeAlarm.setPolice(dataJson.getString("police"));
-                            disposeAlarm.setTime(dataJson.getString("time"));
-                            disposeAlarm.setPoliceName(dataJson.getString("policeName"));
-                            Random random4 = new Random();
-                            showDownNotification(context,disposeAlarm.getPoliceName()+"警员已处理您的消息",null,random4.nextInt(),null);
-                        }
-                        break;
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
+                        case 159:
+                            alarmMsg = "电气探测器发出：按键测试";
+                            break;
+                        case 158:
+                            alarmMsg = "电气探测器发出：远程";
+                            break;
+                        case 43://电气报警
+                            int alarmType1 = pushAlarmMsg1.getAlarmType();
+                            if(alarmType1!=0){
+                                alarmMsg = "电气探测器发出：过压报警";
+                            }else{
+                                alarmMsg = "电气探测器发出：过压报警（测试）";
+                            }
+                            break;
+                        case 136:
+                        case 36:
+                            int alarmType36 = pushAlarmMsg1.getAlarmType();
+                            switch (alarmType36){
+                                case 1:
+                                    alarmMsg = "电气探测器发出：漏电流故障报警";
+                                    break;
+                                case 2:
+                                    alarmMsg = "电气探测器发出：温度故障报警";
+                                    break;
+                                case 3:
+                                    alarmMsg = "电气探测器发出：供电中断报警";
+                                    break;
+                                case 4:
+                                    alarmMsg = "电气探测器发出：错相报警";
+                                    break;
+                                case 5:
+                                    alarmMsg = "电气探测器发出：缺相报警";
+                                    break;
+                                case 6:
+                                    alarmMsg = "电气探测器发出：电弧故障报警";
+                                    break;
+                                case 7:
+                                    alarmMsg = "电气探测器发出：负载故障报警";
+                                    break;
+                                case 8:
+                                    alarmMsg = "电气探测器发出：短路故障报警";
+                                    break;
+                                case 9:
+                                    alarmMsg = "电气探测器发出：断路故障报警";
+                                    break;
+                                case 10://@@6.28
+                                    alarmMsg = "电气探测器发出：485通信故障";
+                                    break;
+                                case 0://@@6.28
+                                    alarmMsg = "电气探测器发出：故障报警";
+                                    break;
+                                default:
+                                    alarmMsg = "电气探测器发出：故障报警";
+                                    break;
+                            }
+                            return;//过滤故障报警弹出
+//                            break;
+                        case 45://电气报警
+                            int alarmType2 = pushAlarmMsg1.getAlarmType();
+                            if(alarmType2!=0){
+                                alarmMsg = "电气探测器发出：过流报警";
+                            }else{
+                                alarmMsg = "电气探测器发出：过流报警（测试）";
+                            }
+                            break;
+                        case 44://欠压报警
+                            int alarmType3 = pushAlarmMsg1.getAlarmType();
+                            if(alarmType3!=0){
+                                alarmMsg = "电气探测器发出：欠压报警";
+                            }else{
+                                alarmMsg = "电气探测器发出：欠压报警（测试）";
+                            }
+                            break;
+                        case 46://电气报警
+                            int alarmType4 = pushAlarmMsg1.getAlarmType();
+                            if(alarmType4!=0){
+                                alarmMsg = "电气探测器发出：漏电报警";
+                            }else{
+                                alarmMsg = "电气探测器发出：漏电报警（测试）";
+                            }
+                            break;
+                        case 47://电气报警
+                            int alarmType5 = pushAlarmMsg1.getAlarmType();
+                            if(alarmType5!=0){
+                                alarmMsg = "电气探测器发出：温度报警";
+                            }else{
+                                alarmMsg = "电气探测器发出：温度报警（测试）";
+                            }
+                            break;
+                        case 48://分闸报警@@6.28
+                            int alarmType6 = pushAlarmMsg1.getAlarmType();
+                            if(alarmType6!=0){
+                                alarmMsg = "电气探测器发出：合闸报警";
+                            }else{
+                                alarmMsg = "电气探测器发出：合闸报警（测试）";
+                            }
+                            break;
+                        case 143://@@电气报警（贵州电气报警）8.11
+                            int alarmType11 = pushAlarmMsg1.getAlarmType();
+                            if(alarmType11!=0){
+                                alarmMsg = "电气探测器发出：过压报警（线路已断开）";
+                            }
+                            break;
+                        case 145://电气报警
+                            int alarmType12 = pushAlarmMsg1.getAlarmType();
+                            if(alarmType12!=0){
+                                alarmMsg = "电气探测器发出：过流报警（线路已断开）";
+                            }
+                            break;
+                        case 144://欠压报警
+                            int alarmType13 = pushAlarmMsg1.getAlarmType();
+                            if(alarmType13!=0){
+                                alarmMsg = "电气探测器发出：欠压报警（线路已断开）";
+                            }
+                            break;
+                        case 146://电气报警
+                            int alarmType14 = pushAlarmMsg1.getAlarmType();
+                            if(alarmType14!=0){
+                                alarmMsg = "电气探测器发出：漏电报警（线路已断开）";
+                            }
+                            break;
+                        case 147://电气报警
+                            int alarmType15 = pushAlarmMsg1.getAlarmType();
+                            if(alarmType15!=0){
+                                alarmMsg = "电气探测器发出：温度报警（线路已断开）";
+                            }
+                            break;
+                        case 148://合闸报警
+                            int alarmType16 = pushAlarmMsg1.getAlarmType();
+                            if(alarmType16!=0){
+                                alarmMsg = "电气探测器发出：合闸报警";
+                            }
+                            break;
+                        case 49://短路报警
+                            alarmMsg = "电气探测器发出：短路报警";
+                            break;
+                        case 50://过热报警
+                            alarmMsg = "电气探测器发出：过热报警";
+                            break;
+                        case 51:
+                            alarmMsg = "电气探测器发出：分闸报警";
+                            break;
+                        case 52:
+                            alarmMsg = "电气探测器发出：断路报警";
+                            break;
+                        default:
+                            alarmMsg = "电气探测器发出：无该报警类型（测试）";
+                            break;
+                    }
+                    Random random = new Random();
+                    showDownNotification(context,alarmMsg,pushAlarmMsg1,random.nextInt(),AlarmActivity.class);
+                    Intent intent2 = new Intent(context, AlarmActivity.class);
+                    intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent2.putExtra("mPushAlarmMsg",pushAlarmMsg1);
+                    intent2.putExtra("alarmMsg",alarmMsg);
+                    context.startActivity(intent2);
+                    break;
+                case 6://一键报警和报警回复
+                    int alarmType1 = dataJson.getInt("alarmType");
+                    if(alarmType1==3){
+                        GetUserAlarm getUserAlarm = new GetUserAlarm();
+                        getUserAlarm.setAddress(dataJson.getString("address"));
+                        getUserAlarm.setAlarmSerialNumber(dataJson.getString("alarmSerialNumber"));
+                        getUserAlarm.setAlarmTime(dataJson.getString("alarmTime"));
+                        getUserAlarm.setAreaName(dataJson.getString("areaName"));
+                        getUserAlarm.setCallerId(dataJson.getString("callerId"));
+                        getUserAlarm.setInfo(dataJson.getString("info"));
+                        getUserAlarm.setLatitude(dataJson.getString("latitude"));
+                        getUserAlarm.setLongitude(dataJson.getString("longitude"));
+                        getUserAlarm.setSmoke(dataJson.getString("smoke"));
+                        getUserAlarm.setCallerName(dataJson.getString("callerName"));
+                        Random random3 = new Random();
+                        showDownNotification(context,"您收到一条紧急报警消息",getUserAlarm,random3.nextInt(),UserAlarmActivity.class);
+                        Intent intent3 = new Intent(context, UserAlarmActivity.class);
+                        intent3.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent3.putExtra("mPushAlarmMsg",getUserAlarm);
+                        context.startActivity(intent3);
+                    }else{
+                        DisposeAlarm disposeAlarm = new DisposeAlarm();
+                        disposeAlarm.setAlarmType(alarmType1);
+                        disposeAlarm.setPolice(dataJson.getString("police"));
+                        disposeAlarm.setTime(dataJson.getString("time"));
+                        disposeAlarm.setPoliceName(dataJson.getString("policeName"));
+                        Random random4 = new Random();
+                        showDownNotification(context,disposeAlarm.getPoliceName()+"警员已处理您的消息",null,random4.nextInt(),null);
+                    }
+                    break;
             }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private PushAlarmMsg jsJson(JSONObject dataJson) throws JSONException {
@@ -400,6 +578,8 @@ public class DemoIntentService extends GTIntentService {
         mPushAlarmMsg.setMac(dataJson.getString("mac"));
         return mPushAlarmMsg;
     }
+
+
 
     @Override
     public void onReceiveOnlineState(Context context, boolean b) {
@@ -468,6 +648,37 @@ public class DemoIntentService extends GTIntentService {
             Intent it=new Intent(context,clazz);
             it.putExtra("mPushAlarmMsg",mPushAlarmMsg);
             it.putExtra("alarmMsg",message);
+            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent contentIntent=PendingIntent.getActivity(context, id, it, PendingIntent.FLAG_CANCEL_CURRENT);
+            m_builder.setContentIntent(contentIntent);
+        }
+        //执行通知
+        nm.notify(id, m_builder.build());
+    }
+
+    //@@2018.02.24水压变化通知
+    private void showDataChangeNotification(Context context, String message, Serializable mPushAlarmMsg, int id, Class clazz){
+        NotificationCompat.Builder m_builder = new NotificationCompat.Builder(context);
+        m_builder.setContentTitle(((PushAlarmMsg)mPushAlarmMsg).getName()+message); // 主标题
+
+        //从系统服务中获得通知管理器
+        NotificationManager nm=(NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        //具体的通知内容
+
+        Bitmap icon = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher); // 将PNG图片转
+        m_builder.setLargeIcon(icon);
+
+        m_builder.setSmallIcon(R.mipmap.ic_launcher); //设置小图标
+        m_builder.setWhen(System.currentTimeMillis());
+        m_builder.setAutoCancel(true);
+        long[] vibrates = {0, 1000, 1000, 1000};
+        m_builder.mNotification.vibrate = vibrates;
+        if(clazz!=null){
+            m_builder.setContentText("点击查看详情"); //设置主要内容
+            //通知消息与Intent关联
+            Intent it=new Intent(context,clazz);
+            it.putExtra("electricMac",((PushAlarmMsg)mPushAlarmMsg).getMac());
+            it.putExtra("isWater","1");//@@是否为水压
             it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent contentIntent=PendingIntent.getActivity(context, id, it, PendingIntent.FLAG_CANCEL_CURRENT);
             m_builder.setContentIntent(contentIntent);

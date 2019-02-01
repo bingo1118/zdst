@@ -107,26 +107,162 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             int devType= mNormalAlarmMessage.getDeviceType();
             ((ItemViewHolder) holder).alarmMarkImage.setVisibility(View.VISIBLE);//@@5.24区分开探测器和安防设备
             switch (devType){
+                case 61:
+                case 58:
+                case 56:
+                case 57:
+                case 55:
                 case 41:
+                case 31:
+                case 21:
                 case 1:
                     ((ItemViewHolder) holder).smokeMac.setText("烟感:");
                     if (alarmType == 202) {
                         ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.yanwu);
                         ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
                         ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
-                    } else {
+                    } else if(alarmType==14){
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.chaichu);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                    }else if(alarmType==15||alarmType==20){
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.fchf);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                    }else if(alarmType==67){
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.zijian);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                    }else if(alarmType==69){
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.huifu);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                    }else if(alarmType==103){
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.gaowen);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                    }else if(alarmType==102){
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.huifu);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                    }else if(alarmType==106){
+
+                    }else if(alarmType==109){
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.xx_gz);
+                    }else if(alarmType==110){
+//                        message="发生烟雾故障报警恢复";
+                    }else if(alarmType==111){
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.xx_gz);
+                    }else if(alarmType==112){
+//                        message="发生温湿度故障报警恢复";
+                    }else if(alarmType==113){
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.yanwu);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                    }else if(alarmType == 193){
                         ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.xx_ddy);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                    }else if(alarmType == 194){
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.didianyahuifu);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                    }else{
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.weizhi);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                    }
+                    break;
+                case 25:
+                    ((ItemViewHolder) holder).smokeMac.setText("温湿度设备:");
+                    if (alarmType == 308) {
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.gaowen);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                    }else if(alarmType == 307){
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.diwen);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                    }else if(alarmType == 407){
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.dishidu);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                    }else if(alarmType == 408){
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.gaoshidu);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                    }else if(alarmType == 193){
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.xx_ddy);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                    }else{
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.weizhi);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                    }
+                    break;
+                case 36:
+                case 35:
+                    ((ItemViewHolder) holder).smokeMac.setText("NB电弧:");
+                    if (alarmType == 53) {
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.baojing);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                    } else if(alarmType == 36){
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.xx_gz);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                    }else if(alarmType == 54){
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.xx_gz);
                         ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
                         ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
                     }
                     break;
-                case 16://@@9.29
+                case 124:
+                case 69:
+                case 46:
+                case 19:
+                    ((ItemViewHolder) holder).smokeMac.setText("水位:");
+                    if (alarmType == 207) {
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.dishuiwei);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                    } else if(alarmType == 208){
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.gaoshuiwei);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                    }else if(alarmType == 193){
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.xx_ddy);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                    }else if(alarmType == 136){
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.xx_gz);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                    }else if(alarmType == 36){
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.xx_gz);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                    }else{
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.weizhi);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                    }
+                    break;
+                case 72:
+                case 16:
+                case 22:
+                case 23:
                 case 2:
                     ((ItemViewHolder) holder).smokeMac.setText("燃气:");
                     ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.ranqi);
                     ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
                     ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
                     break;
+                case 125:
+                case 70:
+                case 43:
+                case 42:
                 case 10://@@4.28
                     int alarmFamily10 = mNormalAlarmMessage.getAlarmFamily();//@@水压值8.31
                     ((ItemViewHolder) holder).smokeMac.setText("水压:");
@@ -162,12 +298,21 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                             break;
                     }
                     break;
+                case 77:
+                case 76:
+                case 75://南京电气
+                case 59:
+                case 52:
+                case 53:
                 case 5:
                     ((ItemViewHolder) holder).smokeMac.setText("电气:");
                     int alarmFamily = mNormalAlarmMessage.getAlarmFamily();
                     switch (alarmType){
+                        case 161:
+                            ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.shoudongfenzha);
+                            break;
                         case 36:
-                            ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.xx_gz);
+                            ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.tongxinzhongduan);
                             break;
                         case 43:
                             ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.xx_gy);
@@ -215,7 +360,7 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                             ((ItemViewHolder) holder).smokeMacTv.setText(mNormalAlarmMessage.getName()+" (线路已断开)");
                             break;
                         case 136:
-                            ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.xx_gz);
+                            ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.tongxinzhongduan);
                             break;
                         case 52:
                             ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.duanlu1);//@@12.26
@@ -263,16 +408,20 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
                     }
                     break;
-                case 15://@@5.24
-                    ((ItemViewHolder) holder).smokeMac.setText("水浸:");
-                    if (alarmType == 202||alarmType==221) {
+                case 15://@@8.3
+                    ((ItemViewHolder) holder).smokeMac.setText("水浸探测器:");
+                    if (alarmType == 202||alarmType == 221) {
                         ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.baojing);//@@8.10
                         ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
                         ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
-                    } else {
+                    } else if(alarmType == 193){
                         ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.xx_ddy);
                         ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
                         ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
+                    }else{
+                        ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.weizhi);
+                        ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+                        ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
                     }
                     break;
                 case 13://@@5.24

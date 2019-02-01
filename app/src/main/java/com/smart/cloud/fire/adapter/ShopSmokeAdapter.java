@@ -14,7 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.smart.cloud.fire.activity.Inspection.GPSMapActivity;
+import com.smart.cloud.fire.activity.THDevice.OneTHDevInfoActivity;
 import com.smart.cloud.fire.global.Contact;
+import com.smart.cloud.fire.mvp.LineChart.LineChartActivity;
 import com.smart.cloud.fire.mvp.fragment.MapFragment.Smoke;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Security.AirInfoActivity;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Security.NewAirInfoActivity;
@@ -90,8 +92,16 @@ public class ShopSmokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             final Smoke normalSmoke = listNormalSmoke.get(position);
             int devType = normalSmoke.getDeviceType();
             int netStates = normalSmoke.getNetState();
+            ((ItemViewHolder) holder).categoryGroupLin.setOnClickListener(null
+            );
             switch (devType){
+                case 57://@@
+                case 55://@@嘉德烟感
+                case 61://@@嘉德南京烟感
+                case 58://@@嘉德移动烟感
+                case 56://@@NBIot烟感
                 case 41://@@NB烟感
+                case 21://@@12.01 Lora烟感
                 case 1://烟感。。
                     if (netStates == 0) {//设备不在线。。
                         ((ItemViewHolder) holder).categoryGroupLin.setBackgroundResource(R.drawable.alarm_rela_lx_bg);
@@ -101,6 +111,8 @@ public class ShopSmokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.yg_yg_zx);
                     }
                     break;
+                case 22:
+                case 23:
                 case 16://@@9.29
                 case 2://燃气。。
                     if (netStates == 0) {
@@ -111,6 +123,8 @@ public class ShopSmokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.rq_ygtubiao_sxj);
                     }
                     break;
+                case 53://NB电气
+                case 52://@@Lara电气设备
                 case 5://电气。。
                     if (netStates == 0) {
                         ((ItemViewHolder) holder).categoryGroupLin.setBackgroundResource(R.drawable.alarm_rela_lx_bg);
@@ -147,7 +161,48 @@ public class ShopSmokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.sjsb_ygtubiao);
                     }
                     break;
+                case 125:
+                case 70:
+                case 42:
                 case 10://水压设备@@5.11。。
+                    if (netStates == 0) {
+                        ((ItemViewHolder) holder).categoryGroupLin.setBackgroundResource(R.drawable.alarm_rela_lx_bg);
+                        ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.shuiya_ygtubiao_sxj_lx);
+                    } else {
+                        ((ItemViewHolder) holder).categoryGroupLin.setBackgroundResource(R.drawable.alarm_rela_zx_bg);
+                        ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.shuiya_ygtubiao_sxj);
+                    }
+                    ((ItemViewHolder) holder).categoryGroupLin.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(mContext, LineChartActivity.class);
+                            intent.putExtra("electricMac",normalSmoke.getMac());
+                            intent.putExtra("isWater","1");//@@是否为水压
+                            mContext.startActivity(intent);
+                        }
+                    });
+                    break;
+                case 124:
+                case 69:
+                case 19://水位设备@@2018.01.02
+                    if (netStates == 0) {
+                        ((ItemViewHolder) holder).categoryGroupLin.setBackgroundResource(R.drawable.alarm_rela_lx_bg);
+                        ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.shuiwei_ygtubiao_sxj_lx);
+                    } else {
+                        ((ItemViewHolder) holder).categoryGroupLin.setBackgroundResource(R.drawable.alarm_rela_zx_bg);
+                        ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.shuiwei_ygtubiao_sxj);
+                    }
+                    ((ItemViewHolder) holder).categoryGroupLin.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(mContext, LineChartActivity.class);
+                            intent.putExtra("electricMac",normalSmoke.getMac());
+                            intent.putExtra("isWater","2");//@@是否为水压
+                            mContext.startActivity(intent);
+                        }
+                    });
+                    break;
+                case 25://温湿度传感器
                     if (netStates == 0) {
                         ((ItemViewHolder) holder).categoryGroupLin.setBackgroundResource(R.drawable.alarm_rela_lx_bg);
                         ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.sy_ygtubiao_sxj_lx);
@@ -155,6 +210,15 @@ public class ShopSmokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         ((ItemViewHolder) holder).categoryGroupLin.setBackgroundResource(R.drawable.alarm_rela_zx_bg);
                         ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.sy_ygtubiao_sxj);
                     }
+                    ((ItemViewHolder) holder).categoryGroupLin.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(mContext, OneTHDevInfoActivity.class);
+                            intent.putExtra("Mac",normalSmoke.getMac());
+                            intent.putExtra("Position",normalSmoke.getName());
+                            mContext.startActivity(intent);
+                        }
+                    });
                     break;
                 case 11://红外设备@@5.15。。
                     if (netStates == 0) {

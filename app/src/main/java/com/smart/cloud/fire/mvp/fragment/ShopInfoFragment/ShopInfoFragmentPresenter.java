@@ -593,7 +593,7 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
                 int resultCode = model.getErrorCode();
                 if(resultCode==0){
                     List<Electric> electricList = model.getElectric();
-                    electricFragment.getDataSuccess(electricList,false);
+                    electricFragment.getDataSuccess(electricList,true);
                 }else{
                     List<Electric> electricList = new ArrayList<>();
                     electricFragment.getDataSuccess(electricList,false);

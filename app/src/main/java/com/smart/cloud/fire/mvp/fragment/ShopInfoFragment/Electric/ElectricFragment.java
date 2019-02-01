@@ -101,6 +101,7 @@ public class ElectricFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
             public void onRefresh() {
                 page = "1";
                 list.clear();
+                research=false;
                 mvpPresenter.getAllElectricInfo(userID, privilege + "", page,list,1,true);
                 mvpPresenter.getSmokeSummary(userID,privilege+"","", "","2");//@@8.11
             }
@@ -110,14 +111,19 @@ public class ElectricFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+                int count = electricFragmentAdapter.getItemCount();
+                int itemCount = lastVisibleItem+1;
                 if (research) {
                     if(electricFragmentAdapter!=null){
                         electricFragmentAdapter.changeMoreStatus(ShopCameraAdapter.NO_DATA);
                     }
+                    if(itemCount == count){
+                        T.showShort(mContext,"已经没有更多数据了");
+                    }
                     return;
                 }
-                int count = electricFragmentAdapter.getItemCount();
-                int itemCount = lastVisibleItem+1;
+//                int count = electricFragmentAdapter.getItemCount();
+//                int itemCount = lastVisibleItem+1;
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && itemCount == count) {
                     if(loadMoreCount>=20){
                         page = Integer.parseInt(page) + 1 + "";
@@ -151,6 +157,7 @@ public class ElectricFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
 
     @Override
     public void getDataSuccess(List<?> smokeList,boolean search) {
+        research=search;
         loadMoreCount = smokeList.size();
         list.clear();
         list.addAll((List<Electric>)smokeList);
@@ -163,6 +170,7 @@ public class ElectricFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
             public void onItemClick(View view, Electric data){
                 Intent intent = new Intent(mContext, ElectricActivity.class);
                 intent.putExtra("ElectricMac",data.getMac());
+                intent.putExtra("devType",data.getDeviceType());
                 startActivity(intent);
             }
         });

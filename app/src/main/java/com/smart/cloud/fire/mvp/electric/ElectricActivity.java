@@ -49,6 +49,8 @@ public class ElectricActivity extends MvpActivity<ElectricPresenter> implements 
     private String userID;
     private int privilege;
 
+    private int devType;//@@2018.05.15设备类型
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,10 +61,11 @@ public class ElectricActivity extends MvpActivity<ElectricPresenter> implements 
                 SharedPreferencesManager.SP_FILE_GWELL,
                 SharedPreferencesManager.KEY_RECENTNAME);
         privilege = MyApp.app.getPrivilege();
+        devType = getIntent().getExtras().getInt("devType");
         power_change_history_text.setVisibility(View.VISIBLE);//@@8.28
         ButterKnife.bind(this);
         refreshListView();
-        electricPresenter.getOneElectricInfo(userID,privilege+"",electricMac,false);
+        electricPresenter.getOneElectricInfo(userID,privilege+"",devType+"",electricMac,false);
     }
 
     private void refreshListView() {
@@ -81,7 +84,7 @@ public class ElectricActivity extends MvpActivity<ElectricPresenter> implements 
         swipeFreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                electricPresenter.getOneElectricInfo(userID,privilege+"",electricMac,true);
+                electricPresenter.getOneElectricInfo(userID,privilege+"",devType+"",electricMac,true);
             }
         });
     }
@@ -117,6 +120,7 @@ public class ElectricActivity extends MvpActivity<ElectricPresenter> implements 
                 intent.putExtra("electricMac",electricMac);
                 intent.putExtra("electricType",data.getElectricType());
                 intent.putExtra("electricNum",data.getId());
+                intent.putExtra("devType",devType);
                 startActivity(intent);
             }
         });

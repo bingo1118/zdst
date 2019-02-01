@@ -1,5 +1,6 @@
 package com.smart.cloud.fire.adapter;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
@@ -133,6 +134,10 @@ public class ElectricFragmentAdapter extends RecyclerView.Adapter<RecyclerView.V
                         ((ItemViewHolder) holder).bhq_state_rela.setVisibility(View.VISIBLE);//@@10.9
                         ((ItemViewHolder) holder).bhq_state.setBackgroundResource(R.drawable.fenzha);//@@10.9
                         break;
+                    case 3:
+                        ((ItemViewHolder) holder).power_button.setVisibility(View.VISIBLE);
+                        ((ItemViewHolder) holder).power_button.setImageResource(R.drawable.sblb_szz);
+                        break;
                     default:
                         ((ItemViewHolder) holder).power_button.setVisibility(View.GONE);
                         ((ItemViewHolder) holder).bhq_state_rela.setVisibility(View.INVISIBLE);//@@10.9
@@ -145,7 +150,7 @@ public class ElectricFragmentAdapter extends RecyclerView.Adapter<RecyclerView.V
 //                    ((ItemViewHolder) holder).state.setText("离线");
                     if(normalSmoke.getIsFault()!=null){
                         if(normalSmoke.getIsFault().equals("1")){
-                            ((ItemViewHolder) holder).state.setText("离线(故障)");
+                            ((ItemViewHolder) holder).state.setText("离线(通讯故障)");
                         }else{
                             ((ItemViewHolder) holder).state.setText("离线");
                         }
@@ -157,7 +162,7 @@ public class ElectricFragmentAdapter extends RecyclerView.Adapter<RecyclerView.V
                 case 1:
                     if(normalSmoke.getIsFault()!=null){
                         if(normalSmoke.getIsFault().equals("1")){
-                            ((ItemViewHolder) holder).state.setText("在线(故障)");
+                            ((ItemViewHolder) holder).state.setText("在线(通讯故障)");
                             ((ItemViewHolder) holder).bhq_state.setBackgroundResource(R.drawable.fenzha);//@@12.14
                         }else{
                             ((ItemViewHolder) holder).state.setText("在线");
@@ -278,12 +283,34 @@ public class ElectricFragmentAdapter extends RecyclerView.Adapter<RecyclerView.V
                         SharedPreferencesManager.KEY_RECENTNAME);
                 RequestQueue mQueue = Volley.newRequestQueue(mContext);
                 String url="";
-                if(eleState==1){
-                    url= ConstantValues.SERVER_IP_NEW+"fireSystem/ackControl?smokeMac="+normalSmoke.getMac()+"&eleState=2&userId="+userID;
+                if(normalSmoke.getDeviceType()==53){
+                    if(eleState==1){
+                        url= ConstantValues.SERVER_IP_NEW+"EasyIot_Switch_control?devSerial="+normalSmoke.getMac()+"&eleState=2&appId=1&userId="+userID;
+                    }else{
+                        url=ConstantValues.SERVER_IP_NEW+"EasyIot_Switch_control?devSerial="+normalSmoke.getMac()+"&eleState=1&appId=1&userId="+userID;
+                    }
+                }else if(normalSmoke.getDeviceType()==75||normalSmoke.getDeviceType()==77){
+                    String userid= SharedPreferencesManager.getInstance().getData(mContext,
+                            SharedPreferencesManager.SP_FILE_GWELL,
+                            SharedPreferencesManager.KEY_RECENTNAME);
+                    if(eleState==1){
+                        url= ConstantValues.SERVER_IP_NEW+"Telegraphy_Uool_control?imei="+normalSmoke.getMac()+"&deviceType="+normalSmoke.getDeviceType()+"&devCmd=12&userid="+userid;
+                    }else{
+                        url=ConstantValues.SERVER_IP_NEW+"Telegraphy_Uool_control?imei="+normalSmoke.getMac()+"&deviceType="+normalSmoke.getDeviceType()+"&devCmd=13&userid="+userid;
+                    }
                 }else{
-                    url=ConstantValues.SERVER_IP_NEW+"fireSystem/ackControl?smokeMac="+normalSmoke.getMac()+"&eleState=1&userId="+userID;
+                    if(eleState==1){
+                        url= ConstantValues.SERVER_IP_NEW+"ackControl?smokeMac="+normalSmoke.getMac()+"&eleState=2&userId="+userID;
+                    }else{
+                        url=ConstantValues.SERVER_IP_NEW+"ackControl?smokeMac="+normalSmoke.getMac()+"&eleState=1&userId="+userID;
+                    }
                 }
-                Toast.makeText(mContext,"设置中，请稍候",Toast.LENGTH_SHORT).show();
+                final ProgressDialog dialog1 = new ProgressDialog(mContext);
+                dialog1.setTitle("提示");
+                dialog1.setMessage("设置中，请稍候");
+                dialog1.setCanceledOnTouchOutside(false);
+                dialog1.show();
+//                Toast.makeText(mContext,"设置中，请稍候",Toast.LENGTH_SHORT).show();
                 StringRequest stringRequest = new StringRequest(url,
                         new Response.Listener<String>() {
                             @Override
@@ -308,17 +335,21 @@ public class ElectricFragmentAdapter extends RecyclerView.Adapter<RecyclerView.V
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-
+                                dialog1.dismiss();
                             }
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(mContext,"设置超时",Toast.LENGTH_SHORT).show();
+                        dialog1.dismiss();
                     }
                 });
-                stringRequest.setRetryPolicy(new DefaultRetryPolicy(20000,
+                stringRequest.setRetryPolicy(new DefaultRetryPolicy(300000,
                         DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//                stringRequest.setRetryPolicy(new DefaultRetryPolicy(30000,
+//                        0,
+//                        0.0f));
                 mQueue.add(stringRequest);
                 dialog.dismiss();
             }
