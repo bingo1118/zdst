@@ -14,6 +14,7 @@ import com.google.zxing.common.StringUtils;
 import com.igexin.sdk.GTIntentService;
 import com.igexin.sdk.PushManager;
 import com.igexin.sdk.message.GTCmdMessage;
+import com.igexin.sdk.message.GTNotificationMessage;
 import com.igexin.sdk.message.GTTransmitMessage;
 import com.smart.cloud.fire.global.ConstantValues;
 import com.smart.cloud.fire.global.MyApp;
@@ -593,6 +594,16 @@ public class DemoIntentService extends GTIntentService {
     @Override
     public void onReceiveCommandResult(Context context, GTCmdMessage gtCmdMessage) {
         System.out.print(gtCmdMessage);
+    }
+
+    @Override
+    public void onNotificationMessageArrived(Context context, GTNotificationMessage gtNotificationMessage) {
+
+    }
+
+    @Override
+    public void onNotificationMessageClicked(Context context, GTNotificationMessage gtNotificationMessage) {
+
     }
 
     private void goToServer(String cid,String userId){
