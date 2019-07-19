@@ -107,6 +107,10 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             int devType= mNormalAlarmMessage.getDeviceType();
             ((ItemViewHolder) holder).alarmMarkImage.setVisibility(View.VISIBLE);//@@5.24区分开探测器和安防设备
             switch (devType){
+                case 92:
+                case 89:
+                case 87:
+                case 86:
                 case 61:
                 case 58:
                 case 56:
@@ -173,6 +177,8 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
                     }
                     break;
+                case 79://南京温湿度
+                case 26://万科温湿度
                 case 25:
                     ((ItemViewHolder) holder).smokeMac.setText("温湿度设备:");
                     if (alarmType == 308) {
@@ -219,8 +225,12 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     }
                     break;
                 case 124:
+                case 95:
+                case 85:
                 case 69:
+                case 48:
                 case 46:
+                case 44:
                 case 19:
                     ((ItemViewHolder) holder).smokeMac.setText("水位:");
                     if (alarmType == 207) {
@@ -249,6 +259,7 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
                     }
                     break;
+                case 73:
                 case 72:
                 case 16:
                 case 22:
@@ -298,6 +309,11 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                             break;
                     }
                     break;
+                case 91:
+                case 88:
+                case 83://南京中电电气
+                case 81:
+                case 80://南京优特电气
                 case 77:
                 case 76:
                 case 75://南京电气
@@ -408,6 +424,7 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.ddy_color_text));
                     }
                     break;
+                case 27:
                 case 15://@@8.3
                     ((ItemViewHolder) holder).smokeMac.setText("水浸探测器:");
                     if (alarmType == 202||alarmType == 221) {

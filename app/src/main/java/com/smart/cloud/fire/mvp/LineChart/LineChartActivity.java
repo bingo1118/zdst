@@ -1,15 +1,20 @@
 package com.smart.cloud.fire.mvp.LineChart;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -116,6 +121,11 @@ public class LineChartActivity extends MvpActivity<LineChartPresenter> implement
 
     private int devType;
 
+    String threshold_h;
+    String threshold_l;
+    String getdatatime;
+    String uploaddatatime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,8 +148,14 @@ public class LineChartActivity extends MvpActivity<LineChartPresenter> implement
             mvpPresenter.getTHDevInfoHistoryInfo(electricMac,page+"", "1",false);
         }else if(isWater.equals("hum")){
             mvpPresenter.getTHDevInfoHistoryInfo(electricMac,page+"", "2",false);
+        }else if(isWater.equals("gas")){
+            mvpPresenter.getGasHistoryInfo(userID, privilege + "",electricMac,page+"",false);
         }else{
-            if(isWater.equals("2")||electricMac.length()>10){
+            if(isWater.equals("19")||isWater.equals("124")||electricMac.length()>10){
+                water_threshold.setVisibility(View.VISIBLE);//@@2018.01.03
+                yuzhi_line.setVisibility(View.VISIBLE);
+                getYuzhi();
+            }else if(isWater.equals("10")){
                 water_threshold.setVisibility(View.VISIBLE);//@@2018.01.03
                 yuzhi_line.setVisibility(View.VISIBLE);
                 getYuzhi();
@@ -284,6 +300,9 @@ public class LineChartActivity extends MvpActivity<LineChartPresenter> implement
                     }else if(isWater.equals("hum")){
                         axisY.setName("湿度值（%）");
                         titleTv.setText("历史湿度折线图");
+                    }else if(isWater.equals("gas")){
+                        axisY.setName("燃气值");
+                        titleTv.setText("历史燃气值折线图");
                     }else{
                         axisY.setName("水位值(m)");
                         titleTv.setText("历史水位值折线图");
@@ -455,6 +474,10 @@ public class LineChartActivity extends MvpActivity<LineChartPresenter> implement
                             Toast.makeText(LineChartActivity.this, "温度值为: " + value.getY() + "℃", Toast.LENGTH_SHORT).show();
                         }else if(isWater.equals("hum")){
                             Toast.makeText(LineChartActivity.this, "湿度值为: " + value.getY() + "%", Toast.LENGTH_SHORT).show();
+                        }else if(isWater.equals("chuangan")){
+                            Toast.makeText(LineChartActivity.this, "燃气值为: " + value.getY() + "%", Toast.LENGTH_SHORT).show();
+                        }else if(isWater.equals("gas")){
+                            Toast.makeText(LineChartActivity.this, "燃气值为: " + value.getY() , Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(LineChartActivity.this, "水位值为: " + value.getY() + "m", Toast.LENGTH_SHORT).show();
                         }
@@ -489,6 +512,8 @@ public class LineChartActivity extends MvpActivity<LineChartPresenter> implement
                     mvpPresenter.getTHDevInfoHistoryInfo(electricMac,page+"", "1",false);
                 }else if(isWater.equals("hum")){
                     mvpPresenter.getTHDevInfoHistoryInfo(electricMac,page+"", "2",false);
+                }else if(isWater.equals("gas")){
+                    mvpPresenter.getGasHistoryInfo(userID, privilege + "",electricMac,page+"",false);
                 }else{
                     mvpPresenter.getWaterHistoryInfo(userID, privilege + "", electricMac, page + "", false);
                 }
@@ -506,6 +531,8 @@ public class LineChartActivity extends MvpActivity<LineChartPresenter> implement
                         mvpPresenter.getTHDevInfoHistoryInfo(electricMac,page+"", "1",false);
                     }else if(isWater.equals("hum")){
                         mvpPresenter.getTHDevInfoHistoryInfo(electricMac,page+"", "2",false);
+                    }else if(isWater.equals("gas")){
+                        mvpPresenter.getGasHistoryInfo(userID, privilege + "",electricMac,page+"",false);
                     }else{
                         mvpPresenter.getWaterHistoryInfo(userID, privilege + "", electricMac, page + "", false);
                     }
@@ -523,6 +550,8 @@ public class LineChartActivity extends MvpActivity<LineChartPresenter> implement
                     mvpPresenter.getTHDevInfoHistoryInfo(electricMac,page+"", "1",false);
                 }else if(isWater.equals("hum")){
                     mvpPresenter.getTHDevInfoHistoryInfo(electricMac,page+"", "2",false);
+                }else if(isWater.equals("gas")){
+                    mvpPresenter.getGasHistoryInfo(userID, privilege + "",electricMac,page+"",false);
                 }else{
                     mvpPresenter.getWaterHistoryInfo(userID, privilege + "", electricMac, page + "", false);
                 }

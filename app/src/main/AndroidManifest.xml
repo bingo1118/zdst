@@ -197,6 +197,9 @@
         <activity android:name="com.smart.cloud.fire.activity.Inspection.LostHintSiteDetailActivity" />
         <activity android:name="com.smart.cloud.fire.activity.Inspection.LostHintSitesActivity"></activity>
         <activity android:name="com.smart.cloud.fire.activity.THDevice.OneTHDevInfoActivity"></activity>
+        <activity android:name="com.smart.cloud.fire.activity.GasDevice.OneGasInfoActivity"></activity>
+        <activity android:name="com.smart.cloud.fire.mvp.electric.AutoTimeSettingActivity" />
+        <activity android:name="com.smart.cloud.fire.mvp.ElectrTimerTask.ElectrTimerTaskActivity"></activity>
     </application>
 
 </manifest>

@@ -69,11 +69,14 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
         switch (macStr){
             case "T":
                 smokeMac = smokeMac.replace("T","");
+                smokeMac = smokeMac.replace("N","");
                 break;
             case "R":
                 smokeMac = smokeMac.replace("R","");
                 smokeMac = smokeMac.replace("N","");
                 smokeMac = smokeMac.replace("H","");
+                smokeMac = smokeMac.replace("P","");
+                smokeMac = smokeMac.replace("J","");
                 break;
             case "Q":
                 smokeMac = smokeMac.replace("Q","");
@@ -83,22 +86,41 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
                 smokeMac = smokeMac.replace("G","");
                 smokeMac = smokeMac.replace("Z","");
                 smokeMac = smokeMac.replace("Y","");
+                smokeMac = smokeMac.replace("Z","");
+                smokeMac = smokeMac.replace("U","");
+                smokeMac = smokeMac.replace("T","");
+                smokeMac = smokeMac.replace("H","");
+                smokeMac = smokeMac.replace("V","");
                 break;
             case "G":
                 smokeMac = smokeMac.replace("G","");
                 break;
             case "S":
                 smokeMac = smokeMac.replace("S","");
+                smokeMac = smokeMac.replace("N","");
                 break;
             case "J":
                 smokeMac = smokeMac.replace("J","");
+                smokeMac = smokeMac.replace("V","");
+                smokeMac = smokeMac.replace("S","");
+                smokeMac = smokeMac.replace("R","");
+                smokeMac = smokeMac.replace("W","");
+                smokeMac = smokeMac.replace("Y","");
                 break;
             case "W"://@@5.5水压
                 smokeMac = smokeMac.replace("W","");
-                smokeMac = smokeMac.replace("A","");
-                smokeMac = smokeMac.replace("B","");
-                smokeMac = smokeMac.replace("C","");
-                smokeMac = smokeMac.replace("L","");
+                if(smokeMac.length()!=9){
+                    smokeMac = smokeMac.replace("A","");
+                    smokeMac = smokeMac.replace("B","");
+                    smokeMac = smokeMac.replace("C","");
+                    smokeMac = smokeMac.replace("L","");
+                    smokeMac = smokeMac.replace("Y","");
+                    smokeMac = smokeMac.replace("Z","");
+                    smokeMac = smokeMac.replace("N","");
+                    smokeMac = smokeMac.replace("G","");
+                    smokeMac = smokeMac.replace("H","");
+                    smokeMac = smokeMac.replace("J","");
+                }
                 break;
             case "N"://@@NB烟感
                 smokeMac = smokeMac.replace("N","");
@@ -109,6 +131,9 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
                 smokeMac = smokeMac.replace("I","");
                 smokeMac = smokeMac.replace("J","");
                 smokeMac = smokeMac.replace("Q","");
+                smokeMac = smokeMac.replace("S","");
+                smokeMac = smokeMac.replace("L","");
+                smokeMac = smokeMac.replace("K","");
                 break;
             case "L"://@@5.13红外
                 smokeMac = smokeMac.replace("L","");
@@ -124,12 +149,20 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
                 break;
             case "P"://@@10.31喷淋
                 smokeMac = smokeMac.replace("P","");
+                smokeMac = smokeMac.replace("N","");
+                smokeMac = smokeMac.replace("J","");
                 break;
             case "K"://@@无线输入输出模块
                 smokeMac = smokeMac.replace("K","");
                 break;
             case "Z"://@@无线输入输出模块
                 smokeMac = smokeMac.replace("Z","");
+                break;
+            case "V":
+                smokeMac = smokeMac.replace("V","");//水压设备
+                smokeMac = smokeMac.replace("Z","");//水压设备
+                smokeMac = smokeMac.replace("X","");//水压设备
+                smokeMac = smokeMac.replace("T","");//水压设备
                 break;
 //            case "C"://@@创安
 //                smokeMac = smokeMac.replace("C","");
@@ -248,6 +281,14 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
             deviceType="51";//创安
         }else if(smokeMac.length()==16||smokeMac.length()==18){
             switch(macStr){
+                case "S":
+                    smokeMac = smokeMac.substring(1, smokeMac.length());//直连手报
+                    deviceType="8";
+                    break;
+                case "N":
+                    smokeMac = smokeMac.substring(1, smokeMac.length());//直连设备
+                    deviceType="41";
+                    break;
                 case "A":
                     smokeMac = smokeMac.substring(1, smokeMac.length());//三江无线传输设备
                     deviceType="119";
@@ -287,12 +328,18 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
                         deviceType="22";
                     }else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("H")){
                         deviceType="23";
+                    } else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("P")){
+                        deviceType="72";
+                    }else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("J")){
+                        deviceType="73";
                     }else{
                         deviceType="2";//@@燃气
                     }
                     smokeMac = smokeMac.replace("R","");//燃气
                     smokeMac = smokeMac.replace("N","");//燃气
                     smokeMac = smokeMac.replace("H","");//燃气
+                    smokeMac = smokeMac.replace("P","");
+                    smokeMac = smokeMac.replace("J","");
                     break;
                 case "Q":
                     deviceType="5";
@@ -322,6 +369,22 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
                         electrState=1;;
                         deviceType="77";
                     }//@@NB南京三相电气设备
+                    if((smokeMac.charAt(smokeMac.length()-1)+"").equals("U")){
+                        electrState=1;;
+                        deviceType="80";
+                    }//@@NB南京优特电气设备
+                    if((smokeMac.charAt(smokeMac.length()-1)+"").equals("T")){
+                        electrState=1;;
+                        deviceType="81";
+                    }//@@lora优特电气设备
+                    if((smokeMac.charAt(smokeMac.length()-1)+"").equals("H")){
+                        electrState=1;;
+                        deviceType="83";
+                    }//@@南京中电电气设备
+                    if((smokeMac.charAt(smokeMac.length()-1)+"").equals("V")){
+                        electrState=0;
+                        deviceType="88";
+                    }//@@南京中电电气设备
                     smokeMac = smokeMac.replace("Q","");//电气火灾
                     smokeMac = smokeMac.replace("S","");//电气火灾
                     smokeMac = smokeMac.replace("L","");//电气火灾
@@ -329,10 +392,19 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
                     smokeMac = smokeMac.replace("G","");//电气火灾
                     smokeMac = smokeMac.replace("Z","");//电气火灾
                     smokeMac = smokeMac.replace("Y","");//电气火灾
+                    smokeMac = smokeMac.replace("U","");//电气火灾
+                    smokeMac = smokeMac.replace("T","");//电气火灾
+                    smokeMac = smokeMac.replace("H","");//电气火灾
+                    smokeMac = smokeMac.replace("V","");//电气火灾
                     break;
                 case "T":
+                    if((smokeMac.charAt(smokeMac.length()-1)+"").equals("N")){
+                        deviceType="79";
+                    }else{
+                        deviceType="25";
+                    }
                     smokeMac = smokeMac.replace("T","");//温湿度设备
-                    deviceType="25";
+                    smokeMac = smokeMac.replace("N","");//温湿度设备
                     break;
                 case "A":
                     smokeMac = smokeMac.substring(1, smokeMac.length());
@@ -347,12 +419,34 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
                     deviceType="20";
                     break;
                 case "S":
+                    if((smokeMac.charAt(smokeMac.length()-1)+"").equals("N")){
+                        deviceType="84";
+                    }else{
+                        deviceType="8";
+                    }
                     smokeMac = smokeMac.replace("S","");//手动报警，显示 7
-                    deviceType="8";
+                    smokeMac = smokeMac.replace("N","");//手动报警，显示 7
                     break;
                 case "J":
-                    smokeMac = smokeMac.replace("J","");//三江设备
-                    deviceType="9";
+                    if((smokeMac.charAt(smokeMac.length()-1)+"").equals("V")){
+                        deviceType="91";//@@金特莱电气
+                        smokeMac =smokeMac.substring(1,smokeMac.length()-1);
+                    }else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("S")){
+                        deviceType="92";//@@金特莱烟感
+                        smokeMac =smokeMac.substring(1,smokeMac.length()-1);
+                    }else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("R")){
+                        deviceType="93";//@@金特莱燃气
+                        smokeMac =smokeMac.substring(1,smokeMac.length()-1);
+                    }else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("W")){
+                        deviceType="94";//@@金特莱水压
+                        smokeMac =smokeMac.substring(1,smokeMac.length()-1);
+                    }else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("Y")){
+                        deviceType="95";//@@金特莱水位
+                        smokeMac =smokeMac.substring(1,smokeMac.length()-1);
+                    }else{
+                        smokeMac = smokeMac.replace("J","");//三江设备
+                        deviceType="9";
+                    }
                     break;
                 case "W":
                     if((smokeMac.charAt(smokeMac.length()-1)+"").equals("W")){
@@ -363,11 +457,31 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
                     }else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("L")){
                         deviceType="43";//@@Lara水压
                         smokeMac =smokeMac.substring(0,smokeMac.length()-1);
+                    }else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("Y")){
+                        deviceType="46";//@@NB防爆直连水位
+                        smokeMac =smokeMac.substring(0,smokeMac.length()-1);
+                    }else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("Z")){
+                        deviceType="44";//@@NB防爆直连水位（万科）
+                        smokeMac =smokeMac.substring(0,smokeMac.length()-1);
+                    }else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("N")){
+                        deviceType="78";//@@南京NB普通水压
+                        smokeMac =smokeMac.substring(0,smokeMac.length()-1);
+                    }else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("G")){
+                        deviceType="47";//@@南京NB普通水压
+                        smokeMac =smokeMac.substring(0,smokeMac.length()-1);
+                    } else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("H")){
+                        deviceType="48";//@@南京NB普通水压
+                        smokeMac =smokeMac.substring(0,smokeMac.length()-1);
+                    }else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("J")){
+                        deviceType="85";//@@南京NB普通水压
+                        smokeMac =smokeMac.substring(0,smokeMac.length()-1);
                     }else{
                         deviceType="10";//@@水压
                     }
                     smokeMac = smokeMac.replace("W","");//水压设备
                     smokeMac = smokeMac.replace("L","");//水压设备
+                    smokeMac = smokeMac.replace("Y","");//水压设备
+                    smokeMac = smokeMac.replace("Z","");//水位设备
                     break;
                 case "L":
                     smokeMac = smokeMac.replace("L","");//红外设备
@@ -395,6 +509,12 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
                     }else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("Q")){
                         deviceType="75";//@@嘉德南京平台烟感
                         electrState=1;
+                    }else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("S")){
+                        deviceType="86";//@@塞特维尔南京平台烟感
+                    }else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("L")){
+                        deviceType="87";//@@三江HN388南京平台烟感
+                    }else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("K")){
+                        deviceType="89";//@@塞特维尔移动烟感
                     }else{
                         deviceType="41";
                     }
@@ -406,6 +526,10 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
                     smokeMac = smokeMac.replace("I","");
                     smokeMac = smokeMac.replace("J","");
                     smokeMac = smokeMac.replace("Q","");
+                    smokeMac = smokeMac.replace("P","");
+                    smokeMac = smokeMac.replace("S","");
+                    smokeMac = smokeMac.replace("L","");
+                    smokeMac = smokeMac.replace("K","");
                     break;
                 case "H":
                     smokeMac = smokeMac.replace("H","");//空气探测器
@@ -416,14 +540,37 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
                     deviceType="15";
                     break;
                 case "P":
+                    if((smokeMac.charAt(smokeMac.length()-1)+"").equals("N")){
+                        deviceType="82";//2019.03.08NB直连喷淋
+                    }else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("J")){
+                        deviceType="90";//南京喷淋
+                    }else{
+                        deviceType="18";
+                    }
                     smokeMac = smokeMac.replace("P","");//10.31喷淋
-                    deviceType="18";
+                    smokeMac = smokeMac.replace("N","");
+                    smokeMac = smokeMac.replace("J","");
                     electrState=2;//@@11.01 1开2关
                     break;
 //                case "C"://@@创安
 //                    smokeMac = smokeMac.substring(1, smokeMac.length());
 //                    deviceType="51";
 //                    break;
+                case "V":
+                    if((smokeMac.charAt(smokeMac.length()-1)+"").equals("X")){
+                        deviceType="27";//@@万科水浸
+                    }else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("Z")){
+                        deviceType="44";//@@万科水位
+                        smokeMac =smokeMac.substring(0,smokeMac.length()-1);
+                    }else if((smokeMac.charAt(smokeMac.length()-1)+"").equals("T")){
+                        deviceType="26";//@@万科温湿度
+                        smokeMac =smokeMac.substring(0,smokeMac.length()-1);
+                    }
+                    smokeMac = smokeMac.replace("V","");//水压设备
+                    smokeMac = smokeMac.replace("Z","");//水压设备
+                    smokeMac = smokeMac.replace("X","");//水压设备
+                    smokeMac = smokeMac.replace("T","");//水压设备
+                    break;
             }
             if(smokeMac.length()<8){
                 mvpView.addSmokeResult("设备MAC号长度不正确",1);

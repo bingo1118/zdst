@@ -2,6 +2,7 @@ package com.smart.cloud.fire.mvp.fragment.MapFragment;
 
 import com.smart.cloud.fire.global.ElectricInfo;
 import com.smart.cloud.fire.global.ShopType;
+import com.smart.cloud.fire.mvp.ElectrTimerTask.TimerTaskEntity;
 import com.smart.cloud.fire.mvp.electric_change_history.HistoryBean;
 import com.smart.cloud.fire.mvp.fragment.CollectFragment.AlarmMessageModel;
 
@@ -29,6 +30,8 @@ public class HttpError<T> {
     private List<HistoryBean> eleList;//@@8.28
 
     private List<String> safetyItems;//@@7.25
+
+    private ArrayList<TimerTaskEntity> tasks;//@@定时任务
 
     public String getError() {
         return error;
@@ -108,5 +111,13 @@ public class HttpError<T> {
 
     public void setEleList(List<HistoryBean> eleList) {
         this.eleList = eleList;
+    }
+
+    public ArrayList<TimerTaskEntity> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(ArrayList<TimerTaskEntity> tasks) {
+        this.tasks = tasks;
     }
 }

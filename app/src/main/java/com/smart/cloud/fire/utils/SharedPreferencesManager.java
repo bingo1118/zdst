@@ -184,6 +184,13 @@ public class SharedPreferencesManager {
         editor.commit();
     }
 
+    public void putLongData(Context context,String fileName,String key,long value){
+        SharedPreferences sf = context.getSharedPreferences(fileName, context.MODE_PRIVATE);
+        Editor editor = sf.edit();
+        editor.putLong(key, value);
+        editor.commit();
+    }
+
     public long getLastAutoCheckUpdateTime(Context context){
         SharedPreferences sf = context.getSharedPreferences(FILE_NAME, context.MODE_PRIVATE);
         return sf.getLong(LAST_AUTO_CHECK_UPDATE_TIME, 0);

@@ -41,6 +41,8 @@ public class ElectricActivity extends MvpActivity<ElectricPresenter> implements 
     ProgressBar mProgressBar;
     @Bind(R.id.power_change_history_text)
     TextView power_change_history_text;//@@8.28电源切换记录
+    @Bind(R.id.timer_tv)
+    TextView timer_tv;//定时任务
     private ElectricPresenter electricPresenter;
     private ElectricActivityAdapterTest electricActivityAdapter;
     private Context mContext;
@@ -62,6 +64,11 @@ public class ElectricActivity extends MvpActivity<ElectricPresenter> implements 
                 SharedPreferencesManager.KEY_RECENTNAME);
         privilege = MyApp.app.getPrivilege();
         devType = getIntent().getExtras().getInt("devType");
+        if(devType==75||devType==77){
+            timer_tv.setVisibility(View.VISIBLE);
+        }else{
+            timer_tv.setVisibility(View.GONE);
+        }
         power_change_history_text.setVisibility(View.VISIBLE);//@@8.28
         ButterKnife.bind(this);
         refreshListView();
@@ -89,13 +96,19 @@ public class ElectricActivity extends MvpActivity<ElectricPresenter> implements 
         });
     }
 
-    @OnClick({R.id.power_change_history_text})
+    @OnClick({R.id.power_change_history_text,R.id.timer_tv})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.power_change_history_text:
                 Intent intent=new Intent(mContext, ElectricChangeHistoryActivity.class);
                 intent.putExtra("mac",electricMac);
                 startActivity(intent);
+                break;
+            case R.id.timer_tv:
+                Intent intent2=new Intent(mContext, AutoTimeSettingActivity.class);
+                intent2.putExtra("mac",electricMac);
+                intent2.putExtra("devType",devType+"");
+                startActivity(intent2);
                 break;
             default:
                 break;

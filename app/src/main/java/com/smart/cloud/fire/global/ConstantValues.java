@@ -25,8 +25,9 @@ public class ConstantValues {
     //测试IP:
     public static final String SERVER_IP_NEW_TEST="http://119.29.224.28:51090/fireSystem/";
     //正式IP:
-    public static final String SERVER_IP_NEW ="http://119.29.155.148:51091/fireSystem/";
-//    public static final String SERVER_IP_NEW ="http://192.168.4.120:8080/fireSystem/";
+    public static final String SERVER_IP_NEW ="http://119.29.155.148:51999/fireSystem/";
+//    public static final String SERVER_IP_NEW ="http://49.4.64.182:51091/zdst/";
+//    public static final String SERVER_IP_NEW ="http://192.168.4.120:8080 /fireSystem/";
 //    public static final String SERVER_IP_NEW ="http://192.168.0.188:8080/fireSystem/";
 
     public static final String SERVER_PUSH ="http://119.29.155.148/GeTuiPush/";
@@ -38,7 +39,7 @@ public class ConstantValues {
     public static final String PACKAGE_NAME = "com.smart.cloud.fire.utils.";
     public static final String FORGET_PASSWORD_URL = "http://cloudlinks.cn/pw/";
     //更新接口
-    public static final String UPDATE_URL="http://119.29.155.148/download/update_zdst.xml";
+    public static final String UPDATE_URL="http://139.159.220.138:6660/download/update_zdst.xml";
 //    public static final String UPDATE_URL="http://119.29.223.106:51091/download/update_smartfire.xml";
     public static final String ERROR_URL = "http://182.254.234.243:8080/UploadError/UploadServlet";
 

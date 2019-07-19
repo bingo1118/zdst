@@ -3,6 +3,7 @@ package com.smart.cloud.fire.retrofit;
 import com.smart.cloud.fire.global.Electric;
 import com.smart.cloud.fire.global.ElectricInfo;
 import com.smart.cloud.fire.global.ElectricValue;
+import com.smart.cloud.fire.global.ProofGasHistoryEntity;
 import com.smart.cloud.fire.global.SmokeSummary;
 import com.smart.cloud.fire.global.TemperatureTime;
 import com.smart.cloud.fire.mvp.fragment.ConfireFireFragment.ConfireFireModel;
@@ -279,7 +280,25 @@ Observable<TemperatureTime> getElectricTypeInfo(@Query("userId") String userId, 
     Observable<TemperatureTime> getWaterHistoryInfo(@Query("userId") String userId, @Query("privilege") String privilege,
                                                     @Query("smokeMac") String smokeMac, @Query("page") String page);
 
+    //获取燃气历史数据
+    @GET("getGasHistoryInfo")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<ProofGasHistoryEntity> getGasHistoryInfo(@Query("userId") String userId, @Query("privilege") String privilege,
+                                                        @Query("smokeMac") String smokeMac, @Query("page") String page);
+
+
     @GET("getTHDevInfoHistoryInfo")
     @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
     Observable<TemperatureTime> getTHDevInfoHistoryInfo(@Query("mac") String smokeMac, @Query("page") String page, @Query("type") String tepe);
+
+    //获取电气设备定时任务
+    @GET("getAllTimerTask")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<HttpError> getAllTimerTask(@Query("mac") String smokeMac);
+
+
+    //删除定时任务
+    @GET("removeElectrTimer")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<HttpError> removeElectrTimer(@Query("id") String id);
 }

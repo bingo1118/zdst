@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.smart.cloud.fire.activity.GasDevice.OneGasInfoActivity;
 import com.smart.cloud.fire.activity.Inspection.GPSMapActivity;
 import com.smart.cloud.fire.activity.THDevice.OneTHDevInfoActivity;
 import com.smart.cloud.fire.global.Contact;
@@ -95,8 +96,9 @@ public class ShopSmokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((ItemViewHolder) holder).categoryGroupLin.setOnClickListener(null
             );
             switch (devType){
-                case 57://@@
-                case 55://@@嘉德烟感
+                case 89:
+                case 87:
+                case 86:
                 case 61://@@嘉德南京烟感
                 case 58://@@嘉德移动烟感
                 case 56://@@NBIot烟感
@@ -111,8 +113,27 @@ public class ShopSmokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.yg_yg_zx);
                     }
                     break;
-                case 22:
-                case 23:
+                case 73://南京7020燃气
+                case 72://防爆燃气
+                    if (netStates == 0) {
+                        ((ItemViewHolder) holder).categoryGroupLin.setBackgroundResource(R.drawable.alarm_rela_lx_bg);
+                        ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.rq_ygtubiao_sxj_lx);
+                    } else {
+                        ((ItemViewHolder) holder).categoryGroupLin.setBackgroundResource(R.drawable.alarm_rela_zx_bg);
+                        ((ItemViewHolder) holder).groupImage.setImageResource(R.drawable.rq_ygtubiao_sxj);
+                    }
+                    ((ItemViewHolder) holder).categoryGroupLin.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(mContext, OneGasInfoActivity.class);
+                            intent.putExtra("Mac",normalSmoke.getMac());
+                            intent.putExtra("devType",normalSmoke.getDeviceType());
+                            intent.putExtra("devName",normalSmoke.getName());
+                            mContext.startActivity(intent);
+                        }
+                    });
+                    break;
+                case 93://金特莱南京燃气
                 case 16://@@9.29
                 case 2://燃气。。
                     if (netStates == 0) {
@@ -162,7 +183,11 @@ public class ShopSmokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     }
                     break;
                 case 125:
+                case 94://金特莱南京水压
+                case 78:
                 case 70:
+                case 68:
+                case 47:
                 case 42:
                 case 10://水压设备@@5.11。。
                     if (netStates == 0) {

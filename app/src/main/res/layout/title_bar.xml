@@ -50,6 +50,17 @@
             android:layout_marginRight="10dp"
             />
 
+        <TextView
+            android:id="@+id/timer_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="定时任务"
+            android:textColor="#fff"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingRight="10dp"
+            android:visibility="gone"/>
+
     </RelativeLayout>
     <TextView
         android:layout_below="@id/title_rela"
