@@ -24,10 +24,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.igexin.sdk.PushManager;
 import com.p2p.core.P2PHandler;
@@ -56,6 +58,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import fire.cloud.smart.com.smartcloudfire.R;
+import retrofit2.http.GET;
 
 /**
  * Created by Administrator on 2016/9/21.
@@ -238,13 +241,13 @@ public class MainActivity extends MvpActivity<MainPresenter> implements MainView
                         }.start();
                     }
                 });
-                final String ignoreVersion=intent.getStringExtra("ignoreVersion");//@@5.31
+                final String ignoreVersion = intent.getStringExtra("ignoreVersion");//@@5.31
                 button2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (null != dialog_update) {
                             dialog_update.cancel();
-                            SharedPreferencesManager.getInstance().putData(context,"ignoreVersion",ignoreVersion);//@@5.31
+                            SharedPreferencesManager.getInstance().putData(context, "ignoreVersion", ignoreVersion);//@@5.31
                         }
                     }
                 });
@@ -269,18 +272,18 @@ public class MainActivity extends MvpActivity<MainPresenter> implements MainView
      * 个推解绑@@5.16
      */
     private void unbindAlias() {
-        String userCID = SharedPreferencesManager.getInstance().getData(this,SharedPreferencesManager.SP_FILE_GWELL,"CID");//@@
+        String userCID = SharedPreferencesManager.getInstance().getData(this, SharedPreferencesManager.SP_FILE_GWELL, "CID");//@@
         String username = SharedPreferencesManager.getInstance().getData(mContext,
                 SharedPreferencesManager.SP_FILE_GWELL,
                 SharedPreferencesManager.KEY_RECENTNAME);
-        String url= ConstantValues.SERVER_IP_NEW+"loginOut?userId="+username+"&alias="+username+"&cid="+userCID+"&appId=2";//@@5.19添加app编号
+        String url = ConstantValues.SERVER_IP_NEW + "loginOut?userId=" + username + "&alias=" + username + "&cid=" + userCID + "&appId=2";//@@5.19添加app编号
         RequestQueue mQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Toast.makeText(mContext,response.getString("error"),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, response.getString("error"), Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

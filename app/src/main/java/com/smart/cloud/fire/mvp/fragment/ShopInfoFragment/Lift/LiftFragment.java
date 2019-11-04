@@ -22,7 +22,7 @@ import com.smart.cloud.fire.global.Area;
 import com.smart.cloud.fire.global.MyApp;
 import com.smart.cloud.fire.global.ShopType;
 import com.smart.cloud.fire.global.SmokeSummary;
-import com.smart.cloud.fire.mvp.fragment.MapFragment.Smoke;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.Yongchuan;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.ShopInfoFragment;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.ShopInfoFragmentPresenter;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.ShopInfoFragmentView;
@@ -48,10 +48,10 @@ public class LiftFragment extends MvpFragment<ShopInfoFragmentPresenter> impleme
     @Bind(R.id.mProgressBar)
     ProgressBar mProgressBar;
     private LinearLayoutManager linearLayoutManager;
-    private ShopSmokeAdapter shopSmokeAdapter;
+    private YongchuanAdapter shopSmokeAdapter;
     private int lastVisibleItem;
     private Context mContext;
-    private List<Smoke> list;
+    private List<Yongchuan> list;
     private int loadMoreCount;
     private boolean research = false;
     private String page;
@@ -77,8 +77,7 @@ public class LiftFragment extends MvpFragment<ShopInfoFragmentPresenter> impleme
         page = "1";
         list = new ArrayList<>();
         refreshListView();
-//        mvpPresenter.getAllSmoke(userID, privilege + "", page, list, 1,false);
-        Toast.makeText(mContext,"无数据",Toast.LENGTH_SHORT).show();
+        mvpPresenter.getAllYongchuan( page, list,false);
     }
 
     private void refreshListView() {
@@ -100,10 +99,9 @@ public class LiftFragment extends MvpFragment<ShopInfoFragmentPresenter> impleme
             public void onRefresh() {
                 page = "1";
                 list.clear();
-//                mvpPresenter.getAllSmoke(userID, privilege + "", page, list, 1,true);
+                mvpPresenter.getAllYongchuan( page, list,false);
                 mvpPresenter.getSmokeSummary(userID,privilege+"","", "","7");//@@8.11
 //                mvpPresenter.getSmokeSummary(userID,privilege+"","");
-                Toast.makeText(mContext,"无数据",Toast.LENGTH_SHORT).show();
                 swipereFreshLayout.setRefreshing(false);
             }
         });
@@ -126,7 +124,7 @@ public class LiftFragment extends MvpFragment<ShopInfoFragmentPresenter> impleme
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem+1 == count) {
                     if(loadMoreCount>=20){
                         page = Integer.parseInt(page) + 1 + "";
-                        mvpPresenter.getAllSmoke(userID, privilege + "", page, list, 1,true);
+                        mvpPresenter.getAllYongchuan( page, list,false);
                     }else{
                         T.showShort(mContext,"已经没有更多数据了");
                     }
@@ -158,11 +156,10 @@ public class LiftFragment extends MvpFragment<ShopInfoFragmentPresenter> impleme
         research = search;
         loadMoreCount = smokeList.size();
         list.clear();
-        list.addAll((List<Smoke>)smokeList);
-        shopSmokeAdapter = new ShopSmokeAdapter(mContext, list, mShopInfoFragmentPresenter);
+        list.addAll((List<Yongchuan>)smokeList);
+        shopSmokeAdapter = new YongchuanAdapter(mContext, list, mShopInfoFragmentPresenter);
         recyclerView.setAdapter(shopSmokeAdapter);
         swipereFreshLayout.setRefreshing(false);
-//        shopSmokeAdapter.changeMoreStatus(ShopSmokeAdapter.NO_DATA);
     }
 
     @Override
@@ -187,7 +184,7 @@ public class LiftFragment extends MvpFragment<ShopInfoFragmentPresenter> impleme
     @Override
     public void onLoadingMore(List<?> smokeList) {
         loadMoreCount = smokeList.size();
-        list.addAll((List<Smoke>)smokeList);
+        list.addAll((List<Yongchuan>)smokeList);
         shopSmokeAdapter.changeMoreStatus(ShopSmokeAdapter.LOADING_MORE);
     }
 

@@ -14,6 +14,11 @@ import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.AllDevFragment.AllDevF
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Electric.ElectricFragment;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.EnviDev.EnviDevFragment;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.GPS.GPSFragment;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.TransmissionDevice;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.YCLogin;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.Yongchuan;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.getAllTransmissionDevice;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.getAllYongchuan;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.OffLineDevFragment.OffLineDevFragment;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Security.SecurityFragment;
 import com.smart.cloud.fire.rxjava.ApiCallback;
@@ -30,32 +35,32 @@ import rx.functions.Func1;
  */
 public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentView> {
     private ShopInfoFragment shopInfoFragment;
-    public ShopInfoFragmentPresenter(ShopInfoFragmentView view,ShopInfoFragment shopInfoFragment){
+
+    public ShopInfoFragmentPresenter(ShopInfoFragmentView view, ShopInfoFragment shopInfoFragment) {
         this.shopInfoFragment = shopInfoFragment;
         attachView(view);
     }
 
 
-
-    public void getAllCamera(String userId, String privilege, String page, final List<Camera> list,boolean refresh){
-        if(!refresh){
+    public void getAllCamera(String userId, String privilege, String page, final List<Camera> list, boolean refresh) {
+        if (!refresh) {
             mvpView.showLoading();
         }
-        Observable mObservable = apiStores1.getAllCamera(userId,privilege,page,15);
-        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<HttpError>() {
+        Observable mObservable = apiStores1.getAllCamera(userId, privilege, page, 15);
+        addSubscription(mObservable, new SubscriberCallBack<>(new ApiCallback<HttpError>() {
             @Override
             public void onSuccess(HttpError model) {
                 int resule = model.getErrorCode();
-                if(resule==0){
+                if (resule == 0) {
                     List<Camera> cameraList = model.getCamera();
-                    if(list==null||list.size()==0){
-                        mvpView.getDataSuccess(cameraList,false);
-                    }else if(list!=null&&list.size()>=15){//@@11.07
+                    if (list == null || list.size() == 0) {
+                        mvpView.getDataSuccess(cameraList, false);
+                    } else if (list != null && list.size() >= 15) {//@@11.07
                         mvpView.onLoadingMore(cameraList);
                     }
-                }else{
+                } else {
                     List<Camera> cameraList = new ArrayList<>();
-                    mvpView.getDataSuccess(cameraList,false);
+                    mvpView.getDataSuccess(cameraList, false);
                     mvpView.getDataFail("无数据");
                 }
             }
@@ -63,7 +68,7 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
             @Override
             public void onFailure(int code, String msg) {
                 List<Camera> cameraList = new ArrayList<>();
-                mvpView.getDataSuccess(cameraList,false);
+                mvpView.getDataSuccess(cameraList, false);
                 mvpView.getDataFail("网络错误");
             }
 
@@ -77,21 +82,22 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
     /**
      * 获取选项列表数据。。
      * type:1表示查询商铺类型，2表示查询区域类型
+     *
      * @param userId
      * @param privilege
      * @param type
      */
-    public void getPlaceTypeId(String userId, String privilege, final int type){
+    public void getPlaceTypeId(String userId, String privilege, final int type) {
         Observable mObservable = null;
-        if(type==1){
-            mObservable= apiStores1.getPlaceTypeId(userId,privilege,"").map(new Func1<HttpError,ArrayList<Object>>() {
+        if (type == 1) {
+            mObservable = apiStores1.getPlaceTypeId(userId, privilege, "").map(new Func1<HttpError, ArrayList<Object>>() {
                 @Override
                 public ArrayList<Object> call(HttpError o) {
                     return o.getPlaceType();
                 }
             });
-        }else{
-            mObservable= apiStores1.getAreaId(userId,privilege,"").map(new Func1<HttpAreaResult,ArrayList<Object>>() {
+        } else {
+            mObservable = apiStores1.getAreaId(userId, privilege, "").map(new Func1<HttpAreaResult, ArrayList<Object>>() {
                 @Override
                 public ArrayList<Object> call(HttpAreaResult o) {
                     return o.getSmoke();
@@ -99,48 +105,50 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
             });
         }
         //跳转会shopinfofragment处理现实。。
-        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<ArrayList<Object>>() {
+        addSubscription(mObservable, new SubscriberCallBack<>(new ApiCallback<ArrayList<Object>>() {
             @Override
             public void onSuccess(ArrayList<Object> model) {
-                    if(model!=null&&model.size()>0){
-                        mvpView.getAreaType(model,type);
-                    }else{
-                        mvpView.getAreaTypeFail("无数据",type);
-                    }
+                if (model != null && model.size() > 0) {
+                    mvpView.getAreaType(model, type);
+                } else {
+                    mvpView.getAreaTypeFail("无数据", type);
+                }
             }
+
             @Override
             public void onFailure(int code, String msg) {
-                    mvpView.getAreaTypeFail("网络错误",type);
+                mvpView.getAreaTypeFail("网络错误", type);
             }
+
             @Override
             public void onCompleted() {
             }
         }));
     }
 
-    public void getNeedLossSmoke(String userId, String privilege, String areaId, String placeTypeId, final String page, boolean refresh, final int type,final List<Smoke> list,final OffLineDevFragment offLineDevFragment){
-        if(!refresh){
+    public void getNeedLossSmoke(String userId, String privilege, String areaId, String placeTypeId, final String page, boolean refresh, final int type, final List<Smoke> list, final OffLineDevFragment offLineDevFragment) {
+        if (!refresh) {
             mvpView.showLoading();
         }
-        Observable mObservable = apiStores1.getNeedLossSmoke(userId,privilege,areaId,page,placeTypeId,"2");//@@5.25添加appid字段
-        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<HttpError>() {
+        Observable mObservable = apiStores1.getNeedLossSmoke(userId, privilege, areaId, page, placeTypeId, "2");//@@5.25添加appid字段
+        addSubscription(mObservable, new SubscriberCallBack<>(new ApiCallback<HttpError>() {
             @Override
             public void onSuccess(HttpError model) {
-                int result=model.getErrorCode();
-                if(result==0){
+                int result = model.getErrorCode();
+                if (result == 0) {
                     List<Smoke> smokeList = model.getSmoke();
-                    if(type==1){
-                        if(list==null||list.size()==0){
-                            offLineDevFragment.getDataSuccess(smokeList,false);
-                        }else if(list!=null&&list.size()>=20){
+                    if (type == 1) {
+                        if (list == null || list.size() == 0) {
+                            offLineDevFragment.getDataSuccess(smokeList, false);
+                        } else if (list != null && list.size() >= 20) {
                             offLineDevFragment.onLoadingMore(smokeList);
                         }
-                    }else{
-                        offLineDevFragment.getDataSuccess(smokeList,true);
+                    } else {
+                        offLineDevFragment.getDataSuccess(smokeList, true);
                     }
-                }else{
+                } else {
                     List<Smoke> mSmokeList = new ArrayList<>();
-                    offLineDevFragment.getDataSuccess(mSmokeList,false);
+                    offLineDevFragment.getDataSuccess(mSmokeList, false);
                     offLineDevFragment.getDataFail("无数据");
                 }
 
@@ -158,32 +166,34 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
         }));
     }
 
-    public void getNeedSmoke(String userId, String privilege, String areaId, String placeTypeId, final AllDevFragment allDevFragment){
+    public void getNeedSmoke(String userId, String privilege, String areaId, String placeTypeId, final AllDevFragment allDevFragment) {
         mvpView.showLoading();
-        Observable mObservable = apiStores1.getNeedSmoke(userId,privilege,areaId,"",placeTypeId);
-        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<HttpError>() {
+        Observable mObservable = apiStores1.getNeedSmoke(userId, privilege, areaId, "", placeTypeId);
+        addSubscription(mObservable, new SubscriberCallBack<>(new ApiCallback<HttpError>() {
             @Override
             public void onSuccess(HttpError model) {
-                if(model!=null){
+                if (model != null) {
                     int errorCode = model.getErrorCode();
-                    if(errorCode==0){
+                    if (errorCode == 0) {
                         List<Smoke> smokes = model.getSmoke();
-                        allDevFragment.getDataSuccess(smokes,true);
-                    }else {
+                        allDevFragment.getDataSuccess(smokes, true);
+                    } else {
                         mvpView.getDataFail("无数据");
                         List<Smoke> smokes = new ArrayList<Smoke>();//@@4.27
-                        allDevFragment.getDataSuccess(smokes,true);//@@4.27
+                        allDevFragment.getDataSuccess(smokes, true);//@@4.27
                     }
-                }else{
+                } else {
                     mvpView.getDataFail("无数据");
                     List<Smoke> smokes = new ArrayList<Smoke>();//@@4.27
-                    allDevFragment.getDataSuccess(smokes,true);//@@4.27
+                    allDevFragment.getDataSuccess(smokes, true);//@@4.27
                 }
             }
+
             @Override
             public void onFailure(int code, String msg) {
                 mvpView.getDataFail("网络错误");
             }
+
             @Override
             public void onCompleted() {
                 mvpView.hideLoading();
@@ -192,32 +202,34 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
     }
 
     //@@5.13安防界面查询设备
-    public void getNeedSecurity(String userId, String privilege, String areaId, String placeTypeId, final SecurityFragment securityFragment){
+    public void getNeedSecurity(String userId, String privilege, String areaId, String placeTypeId, final SecurityFragment securityFragment) {
         mvpView.showLoading();
-        Observable mObservable = apiStores1.getNeedSecurity(userId,privilege,"",areaId,placeTypeId);
-        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<HttpError>() {
+        Observable mObservable = apiStores1.getNeedSecurity(userId, privilege, "", areaId, placeTypeId);
+        addSubscription(mObservable, new SubscriberCallBack<>(new ApiCallback<HttpError>() {
             @Override
             public void onSuccess(HttpError model) {
-                if(model!=null){
+                if (model != null) {
                     int errorCode = model.getErrorCode();
-                    if(errorCode==0){
+                    if (errorCode == 0) {
                         List<Smoke> smokes = model.getSmoke();
-                        securityFragment.getDataSuccess(smokes,true);
-                    }else {
+                        securityFragment.getDataSuccess(smokes, true);
+                    } else {
                         mvpView.getDataFail("无数据");
                         List<Smoke> smokes = new ArrayList<Smoke>();//@@4.27
-                        securityFragment.getDataSuccess(smokes,true);//@@4.27
+                        securityFragment.getDataSuccess(smokes, true);//@@4.27
                     }
-                }else{
+                } else {
                     mvpView.getDataFail("无数据");
                     List<Smoke> smokes = new ArrayList<Smoke>();//@@4.27
-                    securityFragment.getDataSuccess(smokes,true);//@@4.27
+                    securityFragment.getDataSuccess(smokes, true);//@@4.27
                 }
             }
+
             @Override
             public void onFailure(int code, String msg) {
                 mvpView.getDataFail("网络错误");
             }
+
             @Override
             public void onCompleted() {
                 mvpView.hideLoading();
@@ -226,32 +238,34 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
     }
 
     //@@5.13安防界面查询设备
-    public void getNeedEnviDev(String userId, String privilege, String areaId, String placeTypeId, final EnviDevFragment securityFragment){
+    public void getNeedEnviDev(String userId, String privilege, String areaId, String placeTypeId, final EnviDevFragment securityFragment) {
         mvpView.showLoading();
-        Observable mObservable = apiStores1.getNeedEnviDev(userId,privilege,"",areaId,placeTypeId);
-        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<HttpError>() {
+        Observable mObservable = apiStores1.getNeedEnviDev(userId, privilege, "", areaId, placeTypeId);
+        addSubscription(mObservable, new SubscriberCallBack<>(new ApiCallback<HttpError>() {
             @Override
             public void onSuccess(HttpError model) {
-                if(model!=null){
+                if (model != null) {
                     int errorCode = model.getErrorCode();
-                    if(errorCode==0){
+                    if (errorCode == 0) {
                         List<Smoke> smokes = model.getSmoke();
-                        securityFragment.getDataSuccess(smokes,true);
-                    }else {
+                        securityFragment.getDataSuccess(smokes, true);
+                    } else {
                         mvpView.getDataFail("无数据");
                         List<Smoke> smokes = new ArrayList<Smoke>();//@@4.27
-                        securityFragment.getDataSuccess(smokes,true);//@@4.27
+                        securityFragment.getDataSuccess(smokes, true);//@@4.27
                     }
-                }else{
+                } else {
                     mvpView.getDataFail("无数据");
                     List<Smoke> smokes = new ArrayList<Smoke>();//@@4.27
-                    securityFragment.getDataSuccess(smokes,true);//@@4.27
+                    securityFragment.getDataSuccess(smokes, true);//@@4.27
                 }
             }
+
             @Override
             public void onFailure(int code, String msg) {
                 mvpView.getDataFail("网络错误");
             }
+
             @Override
             public void onCompleted() {
                 mvpView.hideLoading();
@@ -260,32 +274,34 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
     }
 
     //@@5.13GPS界面查询设备
-    public void getNeedGPSDev(String userId, String privilege, String areaId, String placeTypeId, final GPSFragment gpsFragment){
+    public void getNeedGPSDev(String userId, String privilege, String areaId, String placeTypeId, final GPSFragment gpsFragment) {
         mvpView.showLoading();
-        Observable mObservable = apiStores1.getNeedGPSDev(userId,privilege,"",areaId,placeTypeId);
-        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<HttpError>() {
+        Observable mObservable = apiStores1.getNeedGPSDev(userId, privilege, "", areaId, placeTypeId);
+        addSubscription(mObservable, new SubscriberCallBack<>(new ApiCallback<HttpError>() {
             @Override
             public void onSuccess(HttpError model) {
-                if(model!=null){
+                if (model != null) {
                     int errorCode = model.getErrorCode();
-                    if(errorCode==0){
+                    if (errorCode == 0) {
                         List<Smoke> smokes = model.getSmoke();
-                        gpsFragment.getDataSuccess(smokes,true);
-                    }else {
+                        gpsFragment.getDataSuccess(smokes, true);
+                    } else {
                         mvpView.getDataFail("无数据");
                         List<Smoke> smokes = new ArrayList<Smoke>();//@@4.27
-                        gpsFragment.getDataSuccess(smokes,true);//@@4.27
+                        gpsFragment.getDataSuccess(smokes, true);//@@4.27
                     }
-                }else{
+                } else {
                     mvpView.getDataFail("无数据");
                     List<Smoke> smokes = new ArrayList<Smoke>();//@@4.27
-                    gpsFragment.getDataSuccess(smokes,true);//@@4.27
+                    gpsFragment.getDataSuccess(smokes, true);//@@4.27
                 }
             }
+
             @Override
             public void onFailure(int code, String msg) {
                 mvpView.getDataFail("网络错误");
             }
+
             @Override
             public void onCompleted() {
                 mvpView.hideLoading();
@@ -293,7 +309,7 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
         }));
     }
 
-    public void unSubscribe(String type){
+    public void unSubscribe(String type) {
         mvpView.hideLoading();
         onUnsubscribe();
         mvpView.unSubscribe(type);
@@ -311,13 +327,13 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
         mvpView.getChoiceArea(area);
     }
 
-    public void getSmokeSummary(String userId,String privilege,String areaId,String placeTypeId,String devType){
-        Observable mObservable = apiStores1.getSmokeSummary(userId,privilege,areaId,"2",placeTypeId,devType);//@@5.25添加appid字段
-        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<SmokeSummary>() {
+    public void getSmokeSummary(String userId, String privilege, String areaId, String placeTypeId, String devType) {
+        Observable mObservable = apiStores1.getSmokeSummary(userId, privilege, areaId, "2", placeTypeId, devType);//@@5.25添加appid字段
+        addSubscription(mObservable, new SubscriberCallBack<>(new ApiCallback<SmokeSummary>() {
             @Override
             public void onSuccess(SmokeSummary model) {
                 int resultCode = model.getErrorCode();
-                if(resultCode==0){
+                if (resultCode == 0) {
                     shopInfoFragment.getSmokeSummary(model);
                 }
             }
@@ -332,38 +348,37 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
         }));
     }
 
-    public void getAllSmoke(String userId, String privilege, String page, final List<Smoke> list, final int type,boolean refresh){
-        if(!refresh){
+    public void getAllSmoke(String userId, String privilege, String page, final List<Smoke> list, final int type, boolean refresh) {
+        if (!refresh) {
             mvpView.showLoading();
         }
-        Observable mObservable = apiStores1.getAllSmoke(userId,privilege,page);
-        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<HttpError>() {
+        Observable mObservable = apiStores1.getAllSmoke(userId, privilege, page);
+        addSubscription(mObservable, new SubscriberCallBack<>(new ApiCallback<HttpError>() {
             @Override
             public void onSuccess(HttpError model) {
-                int result=model.getErrorCode();
-                if(result==0){
+                int result = model.getErrorCode();
+                if (result == 0) {
                     List<Smoke> smokeList = model.getSmoke();
-                    if(type==1){
-                        if(list==null||list.size()==0){
-                            mvpView.getDataSuccess(smokeList,false);
-                        }else if(list!=null&&list.size()>=20){
+                    if (type == 1) {
+                        if (list == null || list.size() == 0) {
+                            mvpView.getDataSuccess(smokeList, false);
+                        } else if (list != null && list.size() >= 20) {
                             mvpView.onLoadingMore(smokeList);
                         }
                     }
-                }else{
+                } else {
                     List<Smoke> mSmokeList = new ArrayList<>();
-                    mvpView.getDataSuccess(mSmokeList,false);
+                    mvpView.getDataSuccess(mSmokeList, false);
                     mvpView.getDataFail("无数据");
                 }
             }
 
 
-
             @Override
             public void onFailure(int code, String msg) {
-                if(type!=1){
+                if (type != 1) {
                     List<Smoke> mSmokeList = new ArrayList<>();
-                    mvpView.getDataSuccess(mSmokeList,false);
+                    mvpView.getDataSuccess(mSmokeList, false);
                 }
                 mvpView.getDataFail("网络错误");
             }
@@ -374,39 +389,89 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
             }
         }));
     }
+
+    public void getAllYongchuan(final String page, final List<Yongchuan> list, boolean refresh) {
+        if (!refresh) {
+            mvpView.showLoading();
+        }
+//        Observable mObservable = apiStores4.getAllYongcuan("447f1d6f-17af-4b2e-927d-037b57804bf1", page);
+        Observable mObservable_login = apiStores4.login("admin","123456");
+        twoSubscription(mObservable_login,new Func1<YCLogin,Observable>() {
+                    @Override
+                    public Observable call(YCLogin loginModel) {
+                        if(loginModel.getCode()==0){
+                            Observable mObservable = apiStores4.getAllYongcuan(loginModel.getJsessionid(), page);
+                            return mObservable;//登陆内部服务器。。
+                        }else {
+                            Observable<YCLogin> observable = Observable.just(loginModel);
+                            return observable;
+                        }
+                    }
+                },new SubscriberCallBack<>(new ApiCallback<getAllYongchuan>() {
+            @Override
+            public void onSuccess(getAllYongchuan model) {
+                int result = model.getCode();
+                if (result == 0) {
+                    List<Yongchuan> smokeList = model.getPage().getList();
+                    if (list == null || list.size() == 0) {
+                        mvpView.getDataSuccess(smokeList, false);
+                    } else if (list != null && list.size() >= 20) {
+                        mvpView.onLoadingMore(smokeList);
+                    }
+
+                } else {
+                    List<Smoke> mSmokeList = new ArrayList<>();
+                    mvpView.getDataSuccess(mSmokeList, false);
+                    mvpView.getDataFail("无数据");
+                }
+            }
+
+
+            @Override
+            public void onFailure(int code, String msg) {
+                mvpView.getDataFail("网络错误");
+            }
+
+            @Override
+            public void onCompleted() {
+                mvpView.hideLoading();
+            }
+        }));
+    }
+
+
     //@@8.8获取GPS设备
-    public void getNeedGPSDev(String userId, String privilege, String page, final List<Smoke> list, final int type,boolean refresh){
-        if(!refresh){
+    public void getNeedGPSDev(String userId, String privilege, String page, final List<Smoke> list, final int type, boolean refresh) {
+        if (!refresh) {
             mvpView.showLoading();
         }
-        Observable mObservable = apiStores1.getNeedGPSDev(userId,privilege,"",page,"");
-        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<HttpError>() {
+        Observable mObservable = apiStores1.getNeedGPSDev(userId, privilege, "", page, "");
+        addSubscription(mObservable, new SubscriberCallBack<>(new ApiCallback<HttpError>() {
             @Override
             public void onSuccess(HttpError model) {
-                int result=model.getErrorCode();
-                if(result==0){
+                int result = model.getErrorCode();
+                if (result == 0) {
                     List<Smoke> smokeList = model.getSmoke();
-                    if(type==1){
-                        if(list==null||list.size()==0){
-                            mvpView.getDataSuccess(smokeList,false);
-                        }else if(list!=null&&list.size()>=20){
+                    if (type == 1) {
+                        if (list == null || list.size() == 0) {
+                            mvpView.getDataSuccess(smokeList, false);
+                        } else if (list != null && list.size() >= 20) {
                             mvpView.onLoadingMore(smokeList);
                         }
                     }
-                }else{
+                } else {
                     List<Smoke> mSmokeList = new ArrayList<>();
-                    mvpView.getDataSuccess(mSmokeList,false);
+                    mvpView.getDataSuccess(mSmokeList, false);
                     mvpView.getDataFail("无数据");
                 }
             }
 
 
-
             @Override
             public void onFailure(int code, String msg) {
-                if(type!=1){
+                if (type != 1) {
                     List<Smoke> mSmokeList = new ArrayList<>();
-                    mvpView.getDataSuccess(mSmokeList,false);
+                    mvpView.getDataSuccess(mSmokeList, false);
                 }
                 mvpView.getDataFail("网络错误");
             }
@@ -417,36 +482,38 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
             }
         }));
     }
+
     //@@5.15获取安防设备
-    public void getSecurityInfo(String userId, String privilege, String page, final List<Smoke> list, final int type,boolean refresh){
-        if(!refresh){
+    public void getSecurityInfo(String userId, String privilege, String page, final List<Smoke> list, final int type, boolean refresh) {
+        if (!refresh) {
             mvpView.showLoading();
         }
-        Observable mObservable = apiStores1.getSecurityInfo(userId,privilege,page);//@@5.15
-        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<HttpError>() {
+        Observable mObservable = apiStores1.getSecurityInfo(userId, privilege, page);//@@5.15
+        addSubscription(mObservable, new SubscriberCallBack<>(new ApiCallback<HttpError>() {
             @Override
             public void onSuccess(HttpError model) {
-                int result=model.getErrorCode();
-                if(result==0){
+                int result = model.getErrorCode();
+                if (result == 0) {
                     List<Smoke> smokeList = model.getSmoke();
-                    if(type==1){
-                        if(list==null||list.size()==0){
-                            mvpView.getDataSuccess(smokeList,false);
-                        }else if(list!=null&&list.size()>=20){
+                    if (type == 1) {
+                        if (list == null || list.size() == 0) {
+                            mvpView.getDataSuccess(smokeList, false);
+                        } else if (list != null && list.size() >= 20) {
                             mvpView.onLoadingMore(smokeList);
                         }
                     }
-                }else{
+                } else {
                     List<Smoke> mSmokeList = new ArrayList<>();
-                    mvpView.getDataSuccess(mSmokeList,false);
+                    mvpView.getDataSuccess(mSmokeList, false);
                     mvpView.getDataFail("无数据");
                 }
             }
+
             @Override
             public void onFailure(int code, String msg) {
-                if(type!=1){
+                if (type != 1) {
                     List<Smoke> mSmokeList = new ArrayList<>();
-                    mvpView.getDataSuccess(mSmokeList,false);
+                    mvpView.getDataSuccess(mSmokeList, false);
                 }
                 mvpView.getDataFail("网络错误");
             }
@@ -459,35 +526,36 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
     }
 
     //@@7.28获取环境探测器
-    public void getEnviDev(String userId, String privilege, String page, final List<Smoke> list, final int type,boolean refresh){
-        if(!refresh){
+    public void getEnviDev(String userId, String privilege, String page, final List<Smoke> list, final int type, boolean refresh) {
+        if (!refresh) {
             mvpView.showLoading();
         }
-        Observable mObservable = apiStores1.getNeedEnviDev(userId,privilege,page,"","");//@@7.28
-        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<HttpError>() {
+        Observable mObservable = apiStores1.getNeedEnviDev(userId, privilege, page, "", "");//@@7.28
+        addSubscription(mObservable, new SubscriberCallBack<>(new ApiCallback<HttpError>() {
             @Override
             public void onSuccess(HttpError model) {
-                int result=model.getErrorCode();
-                if(result==0){
+                int result = model.getErrorCode();
+                if (result == 0) {
                     List<Smoke> smokeList = model.getSmoke();
-                    if(type==1){
-                        if(list==null||list.size()==0){
-                            mvpView.getDataSuccess(smokeList,false);
-                        }else if(list!=null&&list.size()>=20){
+                    if (type == 1) {
+                        if (list == null || list.size() == 0) {
+                            mvpView.getDataSuccess(smokeList, false);
+                        } else if (list != null && list.size() >= 20) {
                             mvpView.onLoadingMore(smokeList);
                         }
                     }
-                }else{
+                } else {
                     List<Smoke> mSmokeList = new ArrayList<>();
-                    mvpView.getDataSuccess(mSmokeList,false);
+                    mvpView.getDataSuccess(mSmokeList, false);
                     mvpView.getDataFail("无数据");
                 }
             }
+
             @Override
             public void onFailure(int code, String msg) {
-                if(type!=1){
+                if (type != 1) {
                     List<Smoke> mSmokeList = new ArrayList<>();
-                    mvpView.getDataSuccess(mSmokeList,false);
+                    mvpView.getDataSuccess(mSmokeList, false);
                 }
                 mvpView.getDataFail("网络错误");
             }
@@ -498,45 +566,46 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
             }
         }));
     }
+
     /**
-     * @@4.27
      * @param userId
      * @param privilege
      * @param page
      * @param list
      * @param type
      * @param refresh
+     * @@4.27
      */
-    public void getAllElectricInfo(String userId, String privilege, String page, final List<Electric> list, final int type,boolean refresh){
-        if(!refresh){
+    public void getAllElectricInfo(String userId, String privilege, String page, final List<Electric> list, final int type, boolean refresh) {
+        if (!refresh) {
             mvpView.showLoading();
         }
-        Observable mObservable = apiStores1.getAllElectricInfo(userId,privilege,page);
-        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<ElectricInfo<Electric>>() {
+        Observable mObservable = apiStores1.getAllElectricInfo(userId, privilege, page);
+        addSubscription(mObservable, new SubscriberCallBack<>(new ApiCallback<ElectricInfo<Electric>>() {
             @Override
             public void onSuccess(ElectricInfo<Electric> model) {
-                int result=model.getErrorCode();
-                if(result==0){
+                int result = model.getErrorCode();
+                if (result == 0) {
                     List<Electric> electricList = model.getElectric();
-                    if(type==1){
-                        if(list==null||list.size()==0){
-                            mvpView.getDataSuccess(electricList,false);
-                        }else if(list!=null&&list.size()>=20){
+                    if (type == 1) {
+                        if (list == null || list.size() == 0) {
+                            mvpView.getDataSuccess(electricList, false);
+                        } else if (list != null && list.size() >= 20) {
                             mvpView.onLoadingMore(electricList);
                         }
                     }
-                }else{
+                } else {
                     List<Electric> electricList = new ArrayList<>();
-                    mvpView.getDataSuccess(electricList,false);
+                    mvpView.getDataSuccess(electricList, false);
                     mvpView.getDataFail("无数据");
                 }
             }
 
             @Override
             public void onFailure(int code, String msg) {
-                if(type!=1){
+                if (type != 1) {
                     List<Smoke> electricList = new ArrayList<>();
-                    mvpView.getDataSuccess(electricList,false);
+                    mvpView.getDataSuccess(electricList, false);
                 }
                 mvpView.getDataFail("网络错误");
             }
@@ -548,25 +617,25 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
         }));
     }
 
-    public void getAllElectricInfo(String userId,String privilege,String page,final int type,boolean refresh){
-        if(!refresh){
+    public void getAllElectricInfo(String userId, String privilege, String page, final int type, boolean refresh) {
+        if (!refresh) {
             mvpView.showLoading();
         }
-        Observable mObservable = apiStores1.getAllElectricInfo(userId,privilege,page);
-        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<ElectricInfo<Electric>>() {
+        Observable mObservable = apiStores1.getAllElectricInfo(userId, privilege, page);
+        addSubscription(mObservable, new SubscriberCallBack<>(new ApiCallback<ElectricInfo<Electric>>() {
             @Override
             public void onSuccess(ElectricInfo<Electric> model) {
                 int resultCode = model.getErrorCode();
-                if(resultCode==0){
+                if (resultCode == 0) {
                     List<Electric> electricList = model.getElectric();
-                    if(type==1){
-                        mvpView.getDataSuccess(electricList,false);
-                    }else{
+                    if (type == 1) {
+                        mvpView.getDataSuccess(electricList, false);
+                    } else {
                         mvpView.onLoadingMore(electricList);
                     }
-                }else{//@@4.28
+                } else {//@@4.28
                     List<Electric> electricList = new ArrayList<>();
-                    mvpView.getDataSuccess(electricList,false);
+                    mvpView.getDataSuccess(electricList, false);
                     mvpView.getDataFail("无数据");
                 }
             }
@@ -583,20 +652,20 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
         }));
     }
 
-//    userId=13622215085&privilege=2&areaId=14&placeTypeId=2&page
-    public void getNeedElectricInfo(String userId, String privilege, String areaId, String placeTypeId, String page, final ElectricFragment electricFragment){
+    //    userId=13622215085&privilege=2&areaId=14&placeTypeId=2&page
+    public void getNeedElectricInfo(String userId, String privilege, String areaId, String placeTypeId, String page, final ElectricFragment electricFragment) {
         mvpView.showLoading();
-        Observable mObservable = apiStores1.getNeedElectricInfo(userId,privilege,areaId,placeTypeId,page);
-        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<ElectricInfo<Electric>>() {
+        Observable mObservable = apiStores1.getNeedElectricInfo(userId, privilege, areaId, placeTypeId, page);
+        addSubscription(mObservable, new SubscriberCallBack<>(new ApiCallback<ElectricInfo<Electric>>() {
             @Override
             public void onSuccess(ElectricInfo<Electric> model) {
                 int resultCode = model.getErrorCode();
-                if(resultCode==0){
+                if (resultCode == 0) {
                     List<Electric> electricList = model.getElectric();
-                    electricFragment.getDataSuccess(electricList,true);
-                }else{
+                    electricFragment.getDataSuccess(electricList, true);
+                } else {
                     List<Electric> electricList = new ArrayList<>();
-                    electricFragment.getDataSuccess(electricList,false);
+                    electricFragment.getDataSuccess(electricList, false);
                     electricFragment.getDataFail("无数据");
                 }
             }

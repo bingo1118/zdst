@@ -21,22 +21,26 @@ import retrofit2.Retrofit;
  * Created by Administrator on 2016/9/8.
  */
 public class ArbitraryResponseBodyConverterFactory<T> extends Converter.Factory {
-    public static ArbitraryResponseBodyConverterFactory create() {
-        return create(new Gson());
+
+    String encode="GB2312";
+
+    public static ArbitraryResponseBodyConverterFactory create(String encode) {
+        return create(new Gson(),encode);
     }
 
     /**
      * Create an instance using {@code gson} for conversion. Encoding to JSON and
      * decoding from JSON (when no charset is specified by a header) will use UTF-8.
      */
-    public static ArbitraryResponseBodyConverterFactory create(Gson gson) {
-        return new ArbitraryResponseBodyConverterFactory(gson);
+    public static ArbitraryResponseBodyConverterFactory create(Gson gson,String encode) {
+        return new ArbitraryResponseBodyConverterFactory(gson,encode);
     }
     private final Gson gson;
 
-    private ArbitraryResponseBodyConverterFactory(Gson gson) {
+    private ArbitraryResponseBodyConverterFactory(Gson gson,String encode) {
         if (gson == null) throw new NullPointerException("gson == null");
         this.gson = gson;
+        this.encode=encode;
     }
 
     @Override
@@ -54,7 +58,7 @@ public class ArbitraryResponseBodyConverterFactory<T> extends Converter.Factory 
         @Override
         public T convert(ResponseBody value) throws IOException {
             try {
-                String str = new String(value.bytes(),"GB2312");
+                String str = new String(value.bytes(),encode);
                 return adapter.fromJson(str);
             } finally {
                 value.close();

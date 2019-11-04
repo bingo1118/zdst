@@ -40,7 +40,7 @@ public class TopIndicator extends LinearLayout {
     private List<TextView> mTextView = new ArrayList<>();
     private List<View> mViewList = new ArrayList<>();
     // 顶部菜单的文字数组
-    private CharSequence[] mLabels = new CharSequence[] { "消防设备", "电气火灾","安防设备","环境监测","视频监控","车辆管理","电梯监管", "离线设备"};//@@5.13
+    private CharSequence[] mLabels = new CharSequence[] { "智慧消防", "电气火灾","安防设备","环境监测","视频监控","车辆管理","传输装置", "离线设备"};//@@5.13
     private int mScreenWidth;
     private int mUnderLineWidth;
     // 底部线条移动初始位置

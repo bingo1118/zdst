@@ -123,6 +123,7 @@ public class MainPresenter extends BasePresenter<MainView> {
                 mTransaction = manager.beginTransaction();
                 mTransaction.replace(R.id.main_content, mMapFragment, "mAgencyMapFragment").commit();
                 break;
+            case 31:
             case ConstantValues.Privilege.SUPER_ADMIN:
             case ConstantValues.Privilege.ADMINISTATOR:
                 clickNumBefore=3;
@@ -130,7 +131,6 @@ public class MainPresenter extends BasePresenter<MainView> {
                 mTransaction = manager.beginTransaction();
                 mTransaction.replace(R.id.main_content, mMapFragment, "mMapFragment").commit();
                 break;
-
             default:
                 break;
         }

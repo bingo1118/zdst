@@ -9,6 +9,9 @@ import com.smart.cloud.fire.global.TemperatureTime;
 import com.smart.cloud.fire.mvp.fragment.ConfireFireFragment.ConfireFireModel;
 import com.smart.cloud.fire.mvp.fragment.MapFragment.HttpAreaResult;
 import com.smart.cloud.fire.mvp.fragment.MapFragment.HttpError;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.YCLogin;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.getAllTransmissionDevice;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.getAllYongchuan;
 import com.smart.cloud.fire.mvp.login.model.LoginModel;
 import com.smart.cloud.fire.mvp.register.model.RegisterModel;
 
@@ -66,6 +69,21 @@ public interface ApiStores {
     @GET("getAllSmoke")
     @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
     Observable<HttpError> getAllSmoke(@Query("userId") String userId, @Query("privilege") String privilege,@Query("page") String page);
+
+    //获取用传
+    @GET("scy/scyinfotransferinfo/list")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<getAllYongchuan> getAllYongcuan(@Query("jsessionid") String jsessionid, @Query("page") String page);
+
+    //获取用传下的设备
+    @GET("scy/scydeviceinfo/list")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<getAllTransmissionDevice> getAllTransmissionDevice(@Query("limit") String limit,@Query("deviceInfotransferId") String yc_mac,@Query("jsessionid") String jsessionid, @Query("page") String page);
+
+    //用传登陆
+    @GET("sys/login")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<YCLogin> login(@Query("username") String username, @Query("password") String password);
 
     //@@5.15获取用户安防设备列表
     @GET("getSecurityInfo")

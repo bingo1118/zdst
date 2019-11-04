@@ -25,12 +25,13 @@ public class ConstantValues {
     //测试IP:
     public static final String SERVER_IP_NEW_TEST="http://119.29.224.28:51090/fireSystem/";
     //正式IP:
-    public static final String SERVER_IP_NEW ="http://119.29.155.148:51999/fireSystem/";
+    public static final String SERVER_IP_NEW ="http://119.29.155.148:51091/fireSystem/";
 //    public static final String SERVER_IP_NEW ="http://49.4.64.182:51091/zdst/";
 //    public static final String SERVER_IP_NEW ="http://192.168.4.120:8080 /fireSystem/";
 //    public static final String SERVER_IP_NEW ="http://192.168.0.188:8080/fireSystem/";
 
     public static final String SERVER_PUSH ="http://119.29.155.148/GeTuiPush/";
+    public static final String SERVER_GET_TRANSMISSION_DEVICE ="http://114.115.218.246:8087/renren-scy/";
     public static final String SERVER_YOOSEE_IP_ONE ="http://api1.cloudlinks.cn/";
     public static final String SERVER_YOOSEE_IP_TWO = "http://api2.cloudlinks.cn/";
     public static final String SERVER_YOOSEE_IP_THREE = "http://api3.cloud-links.net/";
