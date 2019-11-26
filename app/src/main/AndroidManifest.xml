@@ -200,7 +200,8 @@
         <activity android:name="com.smart.cloud.fire.activity.GasDevice.OneGasInfoActivity" />
         <activity android:name="com.smart.cloud.fire.mvp.electric.AutoTimeSettingActivity" />
         <activity android:name="com.smart.cloud.fire.mvp.ElectrTimerTask.ElectrTimerTaskActivity" />
-        <activity android:name="com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Devices.YCDevicesActivity"></activity>
+        <activity android:name="com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Devices.YCDevicesActivity" />
+        <activity android:name="com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.AlarmHIstory.AlarmHistoryActivity"></activity>
     </application>
 
 </manifest>

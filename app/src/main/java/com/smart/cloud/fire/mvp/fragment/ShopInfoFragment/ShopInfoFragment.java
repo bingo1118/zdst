@@ -27,6 +27,7 @@ import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.CameraFragment.CameraF
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Electric.ElectricFragment;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.EnviDev.EnviDevFragment;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.GPS.GPSFragment;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Host.HostFragment;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.LiftFragment;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.OffLineDevFragment.OffLineDevFragment;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Security.SecurityFragment;
@@ -84,7 +85,7 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
     private ElectricFragment electricFragment;
     private SecurityFragment securityFragment;//@@5.13安防设备界面
     private EnviDevFragment enviDevFragment;//@@7.26
-    private GPSFragment gpsFragment;//@@8.7
+    private HostFragment hostFragment;//@@8.7
     private LiftFragment liftFragment;//@@8.7
     public static final int FRAGMENT_ALLSMOKE = 0;
     public static final int FRAGMENT_ELECTRIC = 1;
@@ -219,8 +220,8 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
                             mvpPresenter.getSmokeSummary(userID,privilege+"",areaId, shopTypeId,"4");//显示总数。。
                             break;
                         case FRAGMENT_GPS://@@7.26
-                            mvpPresenter.getNeedGPSDev(userID, privilege + "", areaId, shopTypeId, gpsFragment);//显示设备。。
-                            mvpPresenter.getSmokeSummary(userID,privilege+"",areaId, shopTypeId,"6");//显示总数。。
+//                            mvpPresenter.getNeedGPSDev(userID, privilege + "", areaId, shopTypeId, hostFragment);//显示设备。。
+//                            mvpPresenter.getSmokeSummary(userID,privilege+"",areaId, shopTypeId,"6");//显示总数。。
                             break;
                         default:
                             break;
@@ -307,11 +308,11 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
                 }
                 break;
             case FRAGMENT_GPS:
-                if (gpsFragment == null) {
-                    gpsFragment = new GPSFragment();
-                    ft.add(R.id.fragment_content, gpsFragment);
+                if (hostFragment == null) {
+                    hostFragment = new HostFragment();
+                    ft.add(R.id.fragment_content, hostFragment);
                 } else {
-                    ft.show(gpsFragment);
+                    ft.show(hostFragment);
                 }
                 break;
             case FRAGMENT_LIFT:
@@ -346,8 +347,8 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
         if (enviDevFragment != null) {//@@7.26
             ft.hide(enviDevFragment);
         }
-        if (gpsFragment != null) {//@@8.7
-            ft.hide(gpsFragment);
+        if (hostFragment != null) {//@@8.7
+            ft.hide(hostFragment);
         }
         if (liftFragment != null) {//@@8.7
             ft.hide(liftFragment);
@@ -394,7 +395,7 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
                 mvpPresenter.unSubscribe("enviDev");
                 break;
             case 5:
-                smokeTotal.setVisibility(View.VISIBLE);
+                smokeTotal.setVisibility(View.GONE);
                 mvpPresenter.unSubscribe("gps");
                 break;
             case 6:
@@ -433,8 +434,8 @@ public class ShopInfoFragment extends MvpFragment<ShopInfoFragmentPresenter> imp
         if (enviDevFragment != null) {//@@7.26
             enviDevFragment = null;
         }
-        if (gpsFragment != null) {//@@7.26
-            gpsFragment = null;
+        if (hostFragment != null) {//@@7.26
+            hostFragment = null;
         }
         if (liftFragment != null) {//@@7.26
             liftFragment = null;

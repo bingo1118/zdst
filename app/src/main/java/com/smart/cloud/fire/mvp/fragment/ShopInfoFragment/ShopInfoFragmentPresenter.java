@@ -390,55 +390,6 @@ public class ShopInfoFragmentPresenter extends BasePresenter<ShopInfoFragmentVie
         }));
     }
 
-    public void getAllYongchuan(final String page, final List<Yongchuan> list, boolean refresh) {
-        if (!refresh) {
-            mvpView.showLoading();
-        }
-//        Observable mObservable = apiStores4.getAllYongcuan("447f1d6f-17af-4b2e-927d-037b57804bf1", page);
-        Observable mObservable_login = apiStores4.login("admin","123456");
-        twoSubscription(mObservable_login,new Func1<YCLogin,Observable>() {
-                    @Override
-                    public Observable call(YCLogin loginModel) {
-                        if(loginModel.getCode()==0){
-                            Observable mObservable = apiStores4.getAllYongcuan(loginModel.getJsessionid(), page);
-                            return mObservable;//登陆内部服务器。。
-                        }else {
-                            Observable<YCLogin> observable = Observable.just(loginModel);
-                            return observable;
-                        }
-                    }
-                },new SubscriberCallBack<>(new ApiCallback<getAllYongchuan>() {
-            @Override
-            public void onSuccess(getAllYongchuan model) {
-                int result = model.getCode();
-                if (result == 0) {
-                    List<Yongchuan> smokeList = model.getPage().getList();
-                    if (list == null || list.size() == 0) {
-                        mvpView.getDataSuccess(smokeList, false);
-                    } else if (list != null && list.size() >= 20) {
-                        mvpView.onLoadingMore(smokeList);
-                    }
-
-                } else {
-                    List<Smoke> mSmokeList = new ArrayList<>();
-                    mvpView.getDataSuccess(mSmokeList, false);
-                    mvpView.getDataFail("无数据");
-                }
-            }
-
-
-            @Override
-            public void onFailure(int code, String msg) {
-                mvpView.getDataFail("网络错误");
-            }
-
-            @Override
-            public void onCompleted() {
-                mvpView.hideLoading();
-            }
-        }));
-    }
-
 
     //@@8.8获取GPS设备
     public void getNeedGPSDev(String userId, String privilege, String page, final List<Smoke> list, final int type, boolean refresh) {

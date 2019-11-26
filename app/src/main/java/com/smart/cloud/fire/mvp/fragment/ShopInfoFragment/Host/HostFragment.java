@@ -1,4 +1,4 @@
-package com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift;
+package com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Host;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -13,13 +13,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
+import com.smart.cloud.fire.adapter.HostAdapter;
 import com.smart.cloud.fire.adapter.ShopCameraAdapter;
 import com.smart.cloud.fire.adapter.ShopSmokeAdapter;
 import com.smart.cloud.fire.base.ui.MvpFragment;
+import com.smart.cloud.fire.global.Area;
 import com.smart.cloud.fire.global.MyApp;
-import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.Yongchuan;
+import com.smart.cloud.fire.global.Repeater;
+import com.smart.cloud.fire.global.ShopType;
+import com.smart.cloud.fire.global.SmokeSummary;
+import com.smart.cloud.fire.mvp.fragment.MapFragment.Smoke;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.ShopInfoFragment;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.ShopInfoFragmentPresenter;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.ShopInfoFragmentView;
 import com.smart.cloud.fire.utils.SharedPreferencesManager;
 import com.smart.cloud.fire.utils.T;
 
@@ -31,9 +38,9 @@ import butterknife.ButterKnife;
 import fire.cloud.smart.com.smartcloudfire.R;
 
 /**
- * Created by Rain on 2017/8/7.
+ * Created by Rain on 2019/11/5.
  */
-public class LiftFragment extends MvpFragment<LiftPresenter> implements LiftView {
+public class HostFragment extends MvpFragment<HostPresenter> implements HostView {
 
     @Bind(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -41,23 +48,21 @@ public class LiftFragment extends MvpFragment<LiftPresenter> implements LiftView
     SwipeRefreshLayout swipereFreshLayout;
     @Bind(R.id.mProgressBar)
     ProgressBar mProgressBar;
-    @Bind(R.id.num_total_text)
-    TextView num_total_text;
     private LinearLayoutManager linearLayoutManager;
-    private YongchuanAdapter shopSmokeAdapter;
+    private HostAdapter mAdapter;
     private int lastVisibleItem;
     private Context mContext;
-    private List<Yongchuan> list;
+    private List<Repeater> list;
     private int loadMoreCount;
     private boolean research = false;
     private String page;
     private String userID;
     private int privilege;
-    private LiftPresenter mPresenter;
+    private HostPresenter mPresenter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_lift, null);
+        View view = inflater.inflate(R.layout.fragment_all_dev, null);
         ButterKnife.bind(this, view);
         return view;
     }
@@ -73,7 +78,7 @@ public class LiftFragment extends MvpFragment<LiftPresenter> implements LiftView
         page = "1";
         list = new ArrayList<>();
         refreshListView();
-        mvpPresenter.getAllYongchuan( page, list,false);
+        mvpPresenter.getHost(userID, privilege + "", page, list, 1,false);
     }
 
     private void refreshListView() {
@@ -95,8 +100,7 @@ public class LiftFragment extends MvpFragment<LiftPresenter> implements LiftView
             public void onRefresh() {
                 page = "1";
                 list.clear();
-                mvpPresenter.getAllYongchuan( page, list,false);
-                swipereFreshLayout.setRefreshing(false);
+                mvpPresenter.getHost(userID, privilege + "", page, list, 1,true);
             }
         });
 
@@ -105,20 +109,19 @@ public class LiftFragment extends MvpFragment<LiftPresenter> implements LiftView
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (research) {
-                    if(shopSmokeAdapter!=null){
-                        shopSmokeAdapter.changeMoreStatus(ShopCameraAdapter.NO_DATA);
+                    if(mAdapter!=null){
+                        mAdapter.changeMoreStatus(ShopCameraAdapter.NO_DATA);
                     }
                     return;
                 }
-                if(shopSmokeAdapter==null){
+                if(mAdapter==null){
                     return;
                 }
-                int count = shopSmokeAdapter.getItemCount();
-//                int itemCount = lastVisibleItem+2;
+                int count = mAdapter.getItemCount();
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem+1 == count) {
                     if(loadMoreCount>=20){
                         page = Integer.parseInt(page) + 1 + "";
-                        mvpPresenter.getAllYongchuan( page, list,false);
+                        mvpPresenter.getHost(userID, privilege + "", page, list, 1,true);
                     }else{
                         T.showShort(mContext,"已经没有更多数据了");
                     }
@@ -135,8 +138,8 @@ public class LiftFragment extends MvpFragment<LiftPresenter> implements LiftView
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
-    protected LiftPresenter createPresenter() {
-        mPresenter = new LiftPresenter(this);
+    protected HostPresenter createPresenter() {
+        mPresenter = new HostPresenter(this);
         return mPresenter;
     }
 
@@ -146,23 +149,23 @@ public class LiftFragment extends MvpFragment<LiftPresenter> implements LiftView
     }
 
     @Override
-    public void getDataSuccess(List<?> smokeList, boolean search, int totalCount) {
+    public void getDataSuccess(List<?> smokeList,boolean search) {
         research = search;
         loadMoreCount = smokeList.size();
         list.clear();
-        list.addAll((List<Yongchuan>)smokeList);
-        shopSmokeAdapter = new YongchuanAdapter(mContext, list, mPresenter);
-        recyclerView.setAdapter(shopSmokeAdapter);
+        list.addAll((List<Repeater>)smokeList);
+        mAdapter = new HostAdapter(mContext, list);
+        recyclerView.setAdapter(mAdapter);
         swipereFreshLayout.setRefreshing(false);
-        num_total_text.setText("总数:"+totalCount);
+//        shopSmokeAdapter.changeMoreStatus(ShopSmokeAdapter.NO_DATA);
     }
 
     @Override
     public void getDataFail(String msg) {
         T.showShort(mContext, msg);
         swipereFreshLayout.setRefreshing(false);
-        if(shopSmokeAdapter!=null){
-            shopSmokeAdapter.changeMoreStatus(ShopSmokeAdapter.NO_DATA);
+        if(mAdapter!=null){
+            mAdapter.changeMoreStatus(ShopSmokeAdapter.NO_DATA);
         }
     }
 
@@ -179,8 +182,8 @@ public class LiftFragment extends MvpFragment<LiftPresenter> implements LiftView
     @Override
     public void onLoadingMore(List<?> smokeList) {
         loadMoreCount = smokeList.size();
-        list.addAll((List<Yongchuan>)smokeList);
-        shopSmokeAdapter.changeMoreStatus(ShopSmokeAdapter.LOADING_MORE);
+        list.addAll((List<Repeater>)smokeList);
+        mAdapter.changeMoreStatus(ShopSmokeAdapter.LOADING_MORE);
     }
 
     @Override
@@ -189,5 +192,3 @@ public class LiftFragment extends MvpFragment<LiftPresenter> implements LiftView
         ButterKnife.unbind(this);
     }
 }
-
-

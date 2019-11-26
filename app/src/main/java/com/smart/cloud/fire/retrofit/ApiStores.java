@@ -10,6 +10,7 @@ import com.smart.cloud.fire.mvp.fragment.ConfireFireFragment.ConfireFireModel;
 import com.smart.cloud.fire.mvp.fragment.MapFragment.HttpAreaResult;
 import com.smart.cloud.fire.mvp.fragment.MapFragment.HttpError;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.YCLogin;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.getAlarmHistoryEntity;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.getAllTransmissionDevice;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.getAllYongchuan;
 import com.smart.cloud.fire.mvp.login.model.LoginModel;
@@ -71,14 +72,29 @@ public interface ApiStores {
     Observable<HttpError> getAllSmoke(@Query("userId") String userId, @Query("privilege") String privilege,@Query("page") String page);
 
     //获取用传
-    @GET("scy/scyinfotransferinfo/list")
+    @GET("scy/scyinfotransferinfo/listIncludeDeviceNum")
     @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
     Observable<getAllYongchuan> getAllYongcuan(@Query("jsessionid") String jsessionid, @Query("page") String page);
 
     //获取用传下的设备
     @GET("scy/scydeviceinfo/list")
     @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
-    Observable<getAllTransmissionDevice> getAllTransmissionDevice(@Query("limit") String limit,@Query("deviceInfotransferId") String yc_mac,@Query("jsessionid") String jsessionid, @Query("page") String page);
+    Observable<getAllTransmissionDevice> getAllTransmissionDevice(@Query("limit") String limit,@Query("deviceInfotransferId") String yc_mac
+            ,@Query("jsessionid") String jsessionid, @Query("page") String page
+            ,@Query("fireDevice") String fireDevice, @Query("troubleDevice") String troubleDevice);
+
+    //获取用传下的报警历史记录
+    @GET("scy/scydeviceloginfo/deviceLogList")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<getAlarmHistoryEntity> getAlarmHistoryEntity(@Query("limit") String limit, @Query("infotransferId") String yc_mac
+            ,@Query("jsessionid") String jsessionid, @Query("page") String page);
+
+    //获取用传下的报警历史记录
+    @GET("scy/scydeviceloginfo/deviceLogList")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<getAlarmHistoryEntity> getAlarmHistoryEntityByConsident(@Query("limit") String limit, @Query("infotransferId") String yc_mac
+            ,@Query("jsessionid") String jsessionid, @Query("page") String page
+            , @Query("fireAlarm") String fireAlarm, @Query("troubleAlarm") String troubleAlarm);
 
     //用传登陆
     @GET("sys/login")
@@ -255,9 +271,9 @@ public interface ApiStores {
                                                                @Query("smokeMac") String smokeMac,@Query("devType") String devType);
 
 //    getElectricTypeInfo?userId=13428282520&privilege=2&smokeMac=32110533&electricType=6&electricNum=1&page=
-@GET("getElectricTypeInfo")
-@Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
-Observable<TemperatureTime> getElectricTypeInfo(@Query("userId") String userId, @Query("privilege") String privilege,
+    @GET("getElectricTypeInfo")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<TemperatureTime> getElectricTypeInfo(@Query("userId") String userId, @Query("privilege") String privilege,
                                                 @Query("smokeMac") String smokeMac, @Query("electricType") String electricType,
                                                 @Query("electricNum") String electricNum, @Query("page") String page, @Query("devType") int devType);
 //    getNeedElectricInfo?userId=13622215085&privilege=2&areaId=14&placeTypeId=2&page
@@ -287,6 +303,12 @@ Observable<TemperatureTime> getElectricTypeInfo(@Query("userId") String userId, 
     Observable<HttpError> getNeedGPSDev(@Query("userId") String userId, @Query("privilege") String privilege,
                                         @Query("areaId") String areaId,@Query("page") String page,
                                         @Query("placeTypeId") String placeTypeId);
+
+    //获取用户所有的主机
+    @GET("getRepeaterInfo")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<HttpError> getRepeaterInfo(@Query("userId") String userId, @Query("privilege") String privilege,
+                                        @Query("page") String page, @Query("search") String search);
 
     //获取电气设备切换设备
     @GET("getEleNeedHis")

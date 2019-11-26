@@ -19,6 +19,7 @@ import com.smart.cloud.fire.activity.THDevice.OneTHDevInfoActivity;
 import com.smart.cloud.fire.global.Contact;
 import com.smart.cloud.fire.mvp.LineChart.LineChartActivity;
 import com.smart.cloud.fire.mvp.fragment.MapFragment.Smoke;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.AlarmHIstory.AlarmHistoryActivity;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Devices.YCDevicesActivity;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.TransmissionDevice;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.Yongchuan;
@@ -47,9 +48,9 @@ public class YongchuanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private LayoutInflater mInflater;
     private Context mContext;
     private List<Yongchuan> listNormalSmoke;
-    private ShopInfoFragmentPresenter mShopInfoFragmentPresenter;
+    private LiftPresenter mShopInfoFragmentPresenter;
 
-    public YongchuanAdapter(Context mContext, List<Yongchuan> listNormalSmoke, ShopInfoFragmentPresenter mShopInfoFragmentPresenter) {
+    public YongchuanAdapter(Context mContext, List<Yongchuan> listNormalSmoke, LiftPresenter mShopInfoFragmentPresenter) {
         this.mInflater = LayoutInflater.from(mContext);
         this.mContext = mContext;
         this.listNormalSmoke = listNormalSmoke;
@@ -105,32 +106,32 @@ public class YongchuanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 }
             });
 
-            ((ItemViewHolder) holder).tv_name.setText(normalSmoke.getInfotransferName());
+//            ((ItemViewHolder) holder).tv_name.setText(normalSmoke.getInfotransferName());
             ((ItemViewHolder) holder).tv_mac.setText("ID:" + normalSmoke.getInfotransferNum());
             ((ItemViewHolder) holder).tv_address.setText("地址:"+normalSmoke.getInfotransferAddress());
-            ((ItemViewHolder) holder).tv_state.setText("运行状态:"+(normalSmoke.getInfotransferRunningState().equals("1")?"正常":"测试"));
+            ((ItemViewHolder) holder).tv_state.setText("运行状态:"+(normalSmoke.getInfotransferRunningState().equals("1")?"在线":"离线"));
+            ((ItemViewHolder) holder).tv_dev_state.setText("消防设备状态:"+(normalSmoke.getInfotransferFireAlarm().equals("1")?"火警":"无火警"));
+            ((ItemViewHolder) holder).tv_dev_sum.setText(normalSmoke.getDeviceNum());
+            ((ItemViewHolder) holder).tv_fault_sum.setText(normalSmoke.getTroubleDeviceNum());
+            ((ItemViewHolder) holder).tv_alarm_sum.setText(normalSmoke.getFireDeviceNum());
             ((ItemViewHolder) holder).tv_more.setOnClickListener(new View.OnClickListener() {
                 boolean isShow=false;
                 @Override
                 public void onClick(View v) {
-                    if(!isShow){
-                        ((ItemViewHolder) holder).more_line.setVisibility(View.VISIBLE);
-                        isShow=true;
-                    }else{
-                        ((ItemViewHolder) holder).more_line.setVisibility(View.GONE);
-                        isShow=false;
-                    }
+                    Intent i=new Intent(mContext, AlarmHistoryActivity.class);
+                    i.putExtra("mac",normalSmoke.getInfotransferNum());
+                    mContext.startActivity(i);
                 }
             });
-            ((ItemViewHolder) holder).tv_fire_state.setText("火警状态:"+(normalSmoke.getInfotransferFireAlarm().equals("1")?"火警":"无火警"));
-            ((ItemViewHolder) holder).tv_trouble_state.setText("故障状态:"+(normalSmoke.getInfotransferTroubleAlarm().equals("1")?"故障":"正常"));
-            ((ItemViewHolder) holder).tv_mainpower_state.setText("主电状态:"+(normalSmoke.getInfotransferMainPowerTrouble().equals("1")?"故障":"正常"));
-            ((ItemViewHolder) holder).tv_secondpower_state.setText("备电状态:"+(normalSmoke.getInfotransferStandbyPowerTrouble().equals("1")?"故障":"正常"));
-            ((ItemViewHolder) holder).tv_channel_state.setText("信道状态:"+(normalSmoke.getInfotransferChannelTrouble().equals("1")?"故障":"正常"));
-            ((ItemViewHolder) holder).tv_line_state.setText("线路状态:"+(normalSmoke.getInfotransferLineTrouble().equals("1")?"故障":"正常"));
-
-            ((ItemViewHolder) holder).groupPrincipal1.setText(normalSmoke.getInfotransferManagerName());
-            ((ItemViewHolder) holder).groupPhone1.setText(normalSmoke.getInfotransferManagerPhone());
+//            ((ItemViewHolder) holder).tv_fire_state.setText("火警状态:"+(normalSmoke.getInfotransferFireAlarm().equals("1")?"火警":"无火警"));
+//            ((ItemViewHolder) holder).tv_trouble_state.setText("故障状态:"+(normalSmoke.getInfotransferTroubleAlarm().equals("1")?"故障":"正常"));
+//            ((ItemViewHolder) holder).tv_mainpower_state.setText("主电状态:"+(normalSmoke.getInfotransferMainPowerTrouble().equals("1")?"故障":"正常"));
+//            ((ItemViewHolder) holder).tv_secondpower_state.setText("备电状态:"+(normalSmoke.getInfotransferStandbyPowerTrouble().equals("1")?"故障":"正常"));
+//            ((ItemViewHolder) holder).tv_channel_state.setText("信道状态:"+(normalSmoke.getInfotransferChannelTrouble().equals("1")?"故障":"正常"));
+//            ((ItemViewHolder) holder).tv_line_state.setText("线路状态:"+(normalSmoke.getInfotransferLineTrouble().equals("1")?"故障":"正常"));
+//
+//            ((ItemViewHolder) holder).groupPrincipal1.setText(normalSmoke.getInfotransferManagerName());
+//            ((ItemViewHolder) holder).groupPhone1.setText(normalSmoke.getInfotransferManagerPhone());
             ((ItemViewHolder) holder).groupPhone1.setOnClickListener(new View.OnClickListener() {//拨打电话提示框。。
                 @Override
                 public void onClick(View v) {
@@ -214,6 +215,14 @@ public class YongchuanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         TextView groupPhone1;
         @Bind(R.id.category_group_lin)
         LinearLayout categoryGroupLin;
+        @Bind(R.id.tv_dev_state)
+        TextView tv_dev_state;
+        @Bind(R.id.tv_dev_sum)
+        TextView tv_dev_sum;
+        @Bind(R.id.tv_fault_sum)
+        TextView tv_fault_sum;
+        @Bind(R.id.tv_alarm_sum)
+        TextView tv_alarm_sum;
 
         public ItemViewHolder(View view) {
             super(view);

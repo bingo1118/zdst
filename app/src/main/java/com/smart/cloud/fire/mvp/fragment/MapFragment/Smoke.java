@@ -48,6 +48,7 @@ public class Smoke implements Serializable {
     private Camera camera;
     private int areaId;
     private int deviceType;
+    private int electrState;//@@11.01
 
     private EnviInfo enviInfo;//@@7.28
 
@@ -217,5 +218,13 @@ public class Smoke implements Serializable {
 
     public void setEnviInfo(EnviInfo enviInfo) {
         this.enviInfo = enviInfo;
+    }
+
+    public int getElectrState() {
+        return electrState;
+    }
+
+    public void setElectrState(int electrState) {
+        this.electrState = electrState;
     }
 }

@@ -1,5 +1,6 @@
-package com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Devices;
+package com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.AlarmHIstory;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,9 +14,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.smart.cloud.fire.adapter.YCDevicesAdapter;
 import com.smart.cloud.fire.base.ui.MvpActivity;
-import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.TransmissionDevice;
+import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.AlarmHistoryEntity;
 import com.smart.cloud.fire.utils.T;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import fire.cloud.smart.com.smartcloudfire.R;
 
-public class YCDevicesActivity extends MvpActivity<YCDevicesPresenter> implements YCDevicesView {
+public class AlarmHistoryActivity extends MvpActivity<AlarmHistoryPresenter> implements AlarmHistoryView {
 
     @Bind(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -35,21 +35,19 @@ public class YCDevicesActivity extends MvpActivity<YCDevicesPresenter> implement
     ProgressBar mProgressBar;
     @Bind(R.id.title_text)
     TextView title_text;
-    @Bind(R.id.num_total_text)
-    TextView num_total_text;
     @Bind(R.id.rg_sum)
     RadioGroup rg_sum;
     @Bind(R.id.rb_dev_sum)
     RadioButton rb_dev_sum;
 
-    private YCDevicesPresenter mPresenter;
-    private YCDevicesAdapter mAdapter;
+    private AlarmHistoryPresenter mPresenter;
+    private AlarmHIstoryAdapter mAdapter;
     private Context mContext;
     private LinearLayoutManager linearLayoutManager;
     private String yc_mac;
     private String yc_name;
     private String page="1";
-    private List<TransmissionDevice> list;
+    private List<AlarmHistoryEntity> list;
     private int loadMoreCount;
     private int lastVisibleItem;
     private boolean research = false;
@@ -58,21 +56,19 @@ public class YCDevicesActivity extends MvpActivity<YCDevicesPresenter> implement
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ycdevices);
+        setContentView(R.layout.activity_alarm_history);
+
         mContext=this;
         ButterKnife.bind(this);
         yc_mac=getIntent().getStringExtra("mac");
-        yc_name=getIntent().getStringExtra("name");
         list = new ArrayList<>();
         refreshListView();
-//        mPresenter.getAllTransmissionDevice(yc_mac,list,page,false);
-        title_text.setText(yc_name);
         title_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 page = "1";
                 list.clear();
-                mPresenter.getAllTransmissionDevice(yc_mac,list,page,type,false);
+                mPresenter.getAllAlarmHistory(yc_mac,list,page,type,false);
                 swipeFreshLayout.setRefreshing(false);
             }
         });
@@ -84,17 +80,15 @@ public class YCDevicesActivity extends MvpActivity<YCDevicesPresenter> implement
                 switch (checkedId){
                     case R.id.rb_dev_sum:
                         type=0;
-                        mPresenter.getAllTransmissionDevice(yc_mac,list,page,type,false);
                         break;
                     case R.id.rb_alarm_sum:
                         type=1;
-                        mPresenter.getAllTransmissionDevice(yc_mac,list,page,type,false);
                         break;
                     case R.id.rb_fault_sum:
                         type=2;
-                        mPresenter.getAllTransmissionDevice(yc_mac,list,page,type,false);
                         break;
                 }
+                mPresenter.getAllAlarmHistory(yc_mac,list,page,type,false);
             }
         });
         rb_dev_sum.setChecked(true);
@@ -119,7 +113,7 @@ public class YCDevicesActivity extends MvpActivity<YCDevicesPresenter> implement
             public void onRefresh() {
                 page = "1";
                 list.clear();
-                mPresenter.getAllTransmissionDevice(yc_mac,list,page,type,false);
+                mPresenter.getAllAlarmHistory(yc_mac,list,page,type,false);
                 swipeFreshLayout.setRefreshing(false);
             }
         });
@@ -130,7 +124,7 @@ public class YCDevicesActivity extends MvpActivity<YCDevicesPresenter> implement
                 super.onScrollStateChanged(recyclerView, newState);
                 if (research) {
                     if(mAdapter!=null){
-                        mAdapter.changeMoreStatus(YCDevicesAdapter.NO_DATA);
+                        mAdapter.changeMoreStatus(AlarmHIstoryAdapter.NO_DATA);
                     }
                     return;
                 }
@@ -142,7 +136,7 @@ public class YCDevicesActivity extends MvpActivity<YCDevicesPresenter> implement
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem+1 == count) {
                     if(loadMoreCount>=20){
                         page = Integer.parseInt(page) + 1 + "";
-                        mPresenter.getAllTransmissionDevice(yc_mac,list,page,type,false);
+                        mPresenter.getAllAlarmHistory(yc_mac,list,page,type,false);
                     }else{
                         T.showShort(mContext,"已经没有更多数据了");
                     }
@@ -158,28 +152,25 @@ public class YCDevicesActivity extends MvpActivity<YCDevicesPresenter> implement
     }
 
     @Override
-    protected YCDevicesPresenter createPresenter() {
+    protected AlarmHistoryPresenter createPresenter() {
         if(mPresenter==null){
-            mPresenter=new YCDevicesPresenter(this);
+            mPresenter=new AlarmHistoryPresenter(this);
         }
         return mPresenter;
     }
 
-
-
     @Override
-    public void getDataSuccess(List<?> smokeList, boolean search, int totalCount) {
-        research = search;
+    public void getDataSuccess(List<?> smokeList, boolean research, int totalCount) {
+        research = research;
         if(smokeList.size()==0){
             T.showShort(mContext,"无数据");
         }
         loadMoreCount = smokeList.size();
         list.clear();
-        list.addAll((List<TransmissionDevice>)smokeList);
-        mAdapter = new YCDevicesAdapter(mContext, list, mPresenter);
+        list.addAll((List<AlarmHistoryEntity>)smokeList);
+        mAdapter = new AlarmHIstoryAdapter(mContext, list, mPresenter);
         recyclerView.setAdapter(mAdapter);
         swipeFreshLayout.setRefreshing(false);
-        num_total_text.setText("总数:"+totalCount);
     }
 
     @Override
@@ -204,7 +195,7 @@ public class YCDevicesActivity extends MvpActivity<YCDevicesPresenter> implement
     @Override
     public void onLoadingMore(List<?> smokeList) {
         loadMoreCount = smokeList.size();
-        list.addAll((List<TransmissionDevice>)smokeList);
+        list.addAll((List<AlarmHistoryEntity>)smokeList);
         mAdapter.changeMoreStatus(mAdapter.LOADING_MORE);
     }
 }

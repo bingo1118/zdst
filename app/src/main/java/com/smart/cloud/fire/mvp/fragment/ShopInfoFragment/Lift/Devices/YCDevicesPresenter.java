@@ -22,7 +22,7 @@ public class YCDevicesPresenter extends BasePresenter<YCDevicesView>{
         attachView(electricView);
     }
 
-    public void getAllTransmissionDevice(final String yc_mac, final List<TransmissionDevice> list, final String page, final boolean refresh){
+    public void getAllTransmissionDevice(final String yc_mac, final List<TransmissionDevice> list, final String page, final int type, final boolean refresh){
             if(!refresh){
             mvpView.showLoading();
         }
@@ -32,7 +32,7 @@ public class YCDevicesPresenter extends BasePresenter<YCDevicesView>{
             @Override
             public Observable call(YCLogin loginModel) {
                 if(loginModel.getCode()==0){
-                    Observable mObservable = apiStores4.getAllTransmissionDevice("20",yc_mac,loginModel.getJsessionid(),page);
+                    Observable mObservable = apiStores4.getAllTransmissionDevice("20",yc_mac,loginModel.getJsessionid(),page,type==1?"1":null,type==2?"1":null);
                     return mObservable;//登陆内部服务器。。
                 }else {
                     Observable<YCLogin> observable = Observable.just(loginModel);
@@ -46,14 +46,14 @@ public class YCDevicesPresenter extends BasePresenter<YCDevicesView>{
                 if (resultCode == 0) {
                     List<TransmissionDevice> smokeList = model.getPage().getList();
                     if (list == null || list.size() == 0) {
-                        mvpView.getDataSuccess(smokeList, false);
+                        mvpView.getDataSuccess(smokeList, false,model.getPage().getTotalCount());
                     } else if (list != null && list.size() >= 20) {
                         mvpView.onLoadingMore(smokeList);
                     }
 
                 } else {
                     List<TransmissionDevice> mSmokeList = new ArrayList<>();
-                    mvpView.getDataSuccess(mSmokeList, false);
+                    mvpView.getDataSuccess(mSmokeList, false, model.getPage().getTotalCount());
                     mvpView.getDataFail("无数据");
                 }
             }

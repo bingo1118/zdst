@@ -1,13 +1,11 @@
-package com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Devices;
-
-import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.TransmissionDevice;
+package com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift;
 
 import java.util.List;
 
 /**
- * Created by Rain on 2019/10/30.
+ * Created by Rain on 2019/11/6.
  */
-public interface YCDevicesView {
+public interface LiftView {
     void getDataSuccess(List<?> smokeList, boolean research, int totalCount);
 
     void getDataFail(String msg);
