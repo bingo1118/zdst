@@ -37,8 +37,10 @@ public class AlarmHistoryActivity extends MvpActivity<AlarmHistoryPresenter> imp
     TextView title_text;
     @Bind(R.id.rg_sum)
     RadioGroup rg_sum;
-    @Bind(R.id.rb_dev_sum)
-    RadioButton rb_dev_sum;
+//    @Bind(R.id.rb_dev_sum)
+//    RadioButton rb_dev_sum;
+    @Bind(R.id.rb_alarm_sum)
+    RadioButton rb_alarm_sum;
 
     private AlarmHistoryPresenter mPresenter;
     private AlarmHIstoryAdapter mAdapter;
@@ -51,7 +53,7 @@ public class AlarmHistoryActivity extends MvpActivity<AlarmHistoryPresenter> imp
     private int loadMoreCount;
     private int lastVisibleItem;
     private boolean research = false;
-    int type=0;
+    int type=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +93,7 @@ public class AlarmHistoryActivity extends MvpActivity<AlarmHistoryPresenter> imp
                 mPresenter.getAllAlarmHistory(yc_mac,list,page,type,false);
             }
         });
-        rb_dev_sum.setChecked(true);
+        rb_alarm_sum.setChecked(true);
     }
 
     private void refreshListView() {

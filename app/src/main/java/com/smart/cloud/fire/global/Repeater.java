@@ -12,6 +12,7 @@ public class Repeater {
     private int netstate;
     private String repeaterMac;
     private String netStates;
+    private String address;
 
     public void setHoststate(int hoststate) {
         this.hoststate = hoststate;
@@ -62,4 +63,11 @@ public class Repeater {
         return netStates;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }

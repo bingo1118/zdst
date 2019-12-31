@@ -17,6 +17,9 @@ import com.smart.cloud.fire.ui.ForwardDownActivity;
 import com.smart.cloud.fire.utils.SharedPreferencesManager;
 import com.squareup.leakcanary.LeakCanary;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import fire.cloud.smart.com.smartcloudfire.R;
 
 /**
@@ -32,6 +35,7 @@ public class MyApp extends Application {
     private int privilege=-1;
     public LocationService locationService;
     public Vibrator mVibrator;
+    public static Map<String,Long> lastAlarmTime=new HashMap<>();
 
     @Override
     public void onCreate() {

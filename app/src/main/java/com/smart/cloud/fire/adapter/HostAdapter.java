@@ -11,8 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -96,7 +98,7 @@ public class HostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * @param position
      */
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ItemViewHolder) {
             final Repeater normalSmoke = listNormalSmoke.get(position);
             ItemViewHolder itemViewHolder=(ItemViewHolder)holder;
@@ -115,10 +117,19 @@ public class HostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     break;
             }
             itemViewHolder.mac_tv.setText(normalSmoke.getRepeaterMac());
+            if(normalSmoke.getAddress()!=null&&normalSmoke.getAddress().length()>0&&!normalSmoke.getAddress().equals("null")){
+                itemViewHolder.address_tv.setText("地址:"+normalSmoke.getAddress());
+            }
             itemViewHolder.restart_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showNormalDialog(normalSmoke.getRepeaterMac());
+                }
+            });
+            itemViewHolder.rela.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showSetAddressDialog(normalSmoke.getRepeaterMac(), position);
                 }
             });
             holder.itemView.setTag(position);
@@ -172,6 +183,10 @@ public class HostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView state_tv;
         @Bind(R.id.restart_btn)
         Button restart_btn;
+        @Bind(R.id.address_tv)
+        TextView address_tv;
+        @Bind(R.id.rela)
+        RelativeLayout rela;
         public ItemViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
@@ -267,5 +282,52 @@ public class HostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 T.showShort(mContext,"网络错误");
             }
         });
+    }
+
+    private void showSetAddressDialog(final String repeater, final int point){
+        final EditText editText = new EditText(mContext);
+        AlertDialog.Builder inputDialog =
+                new AlertDialog.Builder(mContext);
+        inputDialog.setTitle("主机地址设置").setView(editText);
+        inputDialog.setPositiveButton("确定",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String address=editText.getText().toString();
+                        if(address.length()>0){
+                            setAddress(repeater,address,point);
+                        }else{
+                            T.showShort(mContext,"请输入地址");
+                        }
+
+                    }
+                }).show();
+    }
+
+    private void setAddress(String repeater, final String address, final int point) {
+        String url= ConstantValues.SERVER_IP_NEW+"setRepeaterAddress?mac="+repeater+"&address="+address;
+        VolleyHelper.getInstance(mContext).getJsonResponse(url,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            int errorCode=response.getInt("errorCode");
+                            if(errorCode==0){
+                                T.showShort(mContext,response.getString("error"));
+                                listNormalSmoke.get(point).setAddress(address);
+                                notifyDataSetChanged();
+                            }else{
+                                T.showShort(mContext,response.getString("error"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        T.showShort(mContext,"网络错误");
+                    }
+                });
     }
 }

@@ -230,7 +230,7 @@ public class CameraFragment extends MvpFragment<ShopInfoFragmentPresenter> imple
         shopCameraAdapter.changeMoreStatus(ShopCameraAdapter.NO_DATA);
         String[] cameralist=new String[smokeList.size()];//@@5.18
         for(int i=0;i<smokeList.size();i++){
-            cameralist[i]=list.get(i).getCameraId();
+            cameralist[i]=list.get(i).getCameraId().length()>10?"00000000":list.get(i).getCameraId();
         }//@@5.18
         P2PHandler.getInstance().getFriendStatus(cameralist);//@@5.18
     }
@@ -262,7 +262,7 @@ public class CameraFragment extends MvpFragment<ShopInfoFragmentPresenter> imple
 
         String[] cameralist=new String[smokeList.size()];//@@10.17
         for(int i=0;i<smokeList.size();i++){
-            cameralist[i]=((List<Camera>)smokeList).get(i).getCameraId();
+            cameralist[i]=((List<Camera>)smokeList).get(i).getCameraId().length()>0?"00000000":((List<Camera>)smokeList).get(i).getCameraId();
         }//@@5.18
         P2PHandler.getInstance().getFriendStatus(cameralist);//@@10.17
     }

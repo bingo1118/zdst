@@ -9,7 +9,7 @@
         android:id="@+id/title_text"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:text="报警历史列表"
+        android:text="历史记录"
         android:textSize="18sp"
         android:gravity="center"
         android:textColor="@color/white"
@@ -22,15 +22,15 @@
         android:gravity="center"
         android:padding="5dp"
         android:orientation="horizontal">
-        <RadioButton
-            android:id="@+id/rb_dev_sum"
-            android:layout_width="70dp"
-            android:layout_height="30dp"
-            android:text="设备记录"
-            android:gravity="center"
-            android:layout_margin="5dp"
-            android:background="@drawable/rb_sum_selector"
-            android:button="@null" />
+        <!--<RadioButton-->
+            <!--android:id="@+id/rb_dev_sum"-->
+            <!--android:layout_width="70dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:text="设备记录"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:background="@drawable/rb_sum_selector"-->
+            <!--android:button="@null" />-->
         <RadioButton
             android:id="@+id/rb_alarm_sum"
             android:layout_width="70dp"

@@ -114,7 +114,8 @@
                 android:layout_marginLeft="20dp"
                 android:textColor="#404040"
                 android:gravity="center_vertical"
-                android:text="火警状态:"/>
+                android:text="火警状态:"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/tv_trouble_state"
@@ -123,7 +124,8 @@
                 android:layout_marginLeft="20dp"
                 android:textColor="#404040"
                 android:gravity="center_vertical"
-                android:text="故障状态:"/>
+                android:text="故障状态:"
+                android:visibility="gone"/>
 
 
         </LinearLayout>

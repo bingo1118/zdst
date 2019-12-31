@@ -77,6 +77,17 @@ public class DemoIntentService extends GTIntentService {
             if(null!=alarmTime&&(System.currentTimeMillis()-TimeFormat.date2TimeStamp(alarmTime))>30*60*1000){
                 return;
             }
+            PushAlarmMsg pushAlarmMsg1 = jsJson(dataJson);
+
+            //五分钟内不再报警弹窗
+            String mac=pushAlarmMsg1.getMac();
+            if(MyApp.lastAlarmTime.containsKey(mac)){
+                long lastAlarmTime=MyApp.lastAlarmTime.get(mac);
+                if((System.currentTimeMillis()-lastAlarmTime)<5*60*1000){
+                    return;
+                }
+            }
+            MyApp.lastAlarmTime.put(mac,System.currentTimeMillis());
 
             int alarm = dataJson.getInt("alarmType");
             int deviceType = dataJson.getInt("deviceType");
@@ -403,7 +414,7 @@ public class DemoIntentService extends GTIntentService {
                 case 53:
                 case 52:
                 case 5://电气
-                    PushAlarmMsg pushAlarmMsg1 = jsJson(dataJson);
+
                     int alarmFamily = pushAlarmMsg1.getAlarmFamily();
                     String alarmMsg = null;
                     switch (alarmFamily){
@@ -412,7 +423,7 @@ public class DemoIntentService extends GTIntentService {
                             break;
                         case 161:
                             alarmMsg = "电气探测器发出：手动分闸";
-                            break;
+                            return;
                         case 160:
                             alarmMsg = "电气探测器发出：设备属性更改";
                             break;

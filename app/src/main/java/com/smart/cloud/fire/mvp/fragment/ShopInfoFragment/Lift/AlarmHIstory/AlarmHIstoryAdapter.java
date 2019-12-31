@@ -96,21 +96,13 @@ public class AlarmHIstoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ((ItemViewHolder) holder).tv_time.setText(normalSmoke.getEventTime());
 
         if(normalSmoke.getFireAlarm()==0){
-            ((ItemViewHolder) holder).tv_fire_state.setVisibility(View.GONE);
-            ((ItemViewHolder) holder).tv_fire_state.setText("火警状态:无");
             ((ItemViewHolder) holder).fire_img.setVisibility(View.GONE);
         }else{
-            ((ItemViewHolder) holder).tv_fire_state.setVisibility(View.VISIBLE);
-            ((ItemViewHolder) holder).tv_fire_state.setText("火警状态:火警");
             ((ItemViewHolder) holder).fire_img.setVisibility(View.VISIBLE);
         }
         if(normalSmoke.getTroubleAlarm()==0){
-            ((ItemViewHolder) holder).tv_trouble_state.setVisibility(View.GONE);
-            ((ItemViewHolder) holder).tv_trouble_state.setText("故障状态:无");
             ((ItemViewHolder) holder).trouble_img.setVisibility(View.GONE);
         }else{
-            ((ItemViewHolder) holder).tv_trouble_state.setVisibility(View.VISIBLE);
-            ((ItemViewHolder) holder).tv_trouble_state.setText("故障状态:故障");
             ((ItemViewHolder) holder).trouble_img.setVisibility(View.VISIBLE);
         }
         holder.itemView.setTag(normalSmoke);

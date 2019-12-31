@@ -41,7 +41,8 @@
                 android:textSize="14sp"
                 android:layout_below="@+id/tv_name"
                 android:layout_alignLeft="@+id/tv_name"
-                android:layout_alignStart="@+id/tv_name" />
+                android:layout_alignStart="@+id/tv_name"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 
@@ -52,7 +53,8 @@
             android:layout_marginLeft="20dp"
             android:textColor="#404040"
             android:gravity="center_vertical"
-            android:text="状态:"/>
+            android:text="状态:"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tv_address"
@@ -69,7 +71,8 @@
             android:layout_height="30dp"
             android:textColor="@color/tab_text_selected"
             android:gravity="center"
-            android:text="更多信息>>"/>
+            android:text="更多信息>>"
+            android:visibility="gone"/>
 
 
         <LinearLayout
