@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.smart.cloud.fire.utils.JsonUtils;
 import com.smart.cloud.fire.utils.TestAuthorityUtil;
 
 import net.sourceforge.zbar.Config;
@@ -161,6 +162,13 @@ public class CaptureActivity extends Activity{
 				SymbolSet syms = mImageScanner.getResults();
 				for (Symbol sym : syms) {
 					resultStr = sym.getData();
+				}
+			}
+
+			if(resultStr!=null){
+				String temp= JsonUtils.isJson(resultStr);
+				if(temp!=null){
+					resultStr=temp;
 				}
 			}
 
