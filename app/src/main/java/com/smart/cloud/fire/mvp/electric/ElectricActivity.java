@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.smart.cloud.fire.adapter.ElectricActivityAdapterTest;
 import com.smart.cloud.fire.base.ui.MvpActivity;
+import com.smart.cloud.fire.global.ElectricDXDetailEntity;
 import com.smart.cloud.fire.global.ElectricValue;
 import com.smart.cloud.fire.global.MyApp;
 import com.smart.cloud.fire.mvp.LineChart.LineChartActivity;
@@ -140,6 +141,11 @@ public class ElectricActivity extends MvpActivity<ElectricPresenter> implements 
     }
 
     @Override
+    public void getDataDXSuccess(ElectricDXDetailEntity entity) {
+
+    }
+
+    @Override
     public void getDataFail(String msg) {
         swipeFreshLayout.setRefreshing(false);
         T.showShort(mContext,msg);
@@ -153,5 +159,10 @@ public class ElectricActivity extends MvpActivity<ElectricPresenter> implements 
     @Override
     public void hideLoading() {
         mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void getDataDXyuzhiSuccess(ElectricDXDetailEntity model) {
+
     }
 }

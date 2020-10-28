@@ -1,11 +1,13 @@
 package com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.AlarmHIstory;
 
 import com.smart.cloud.fire.base.presenter.BasePresenter;
+import com.smart.cloud.fire.global.MyApp;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.AlarmHistoryEntity;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.YCLogin;
 import com.smart.cloud.fire.mvp.fragment.ShopInfoFragment.Lift.Entity.getAlarmHistoryEntity;
 import com.smart.cloud.fire.rxjava.ApiCallback;
 import com.smart.cloud.fire.rxjava.SubscriberCallBack;
+import com.smart.cloud.fire.utils.SharedPreferencesManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,10 @@ public class AlarmHistoryPresenter extends BasePresenter<AlarmHistoryView> {
             mvpView.showLoading();
         }
 //        Observable mObservable = apiStores4.getAllTransmissionDevice("20",yc_mac,"",page);
-        Observable mObservable_login = apiStores4.login("admin","123456");
+        String userId = SharedPreferencesManager.getInstance().getData(MyApp.app, SharedPreferencesManager.SP_FILE_GWELL, SharedPreferencesManager.KEY_RECENTNAME);
+        String userPwd = SharedPreferencesManager.getInstance().getData(MyApp.app, SharedPreferencesManager.SP_FILE_GWELL, SharedPreferencesManager.KEY_RECENTPASS);
+        Observable mObservable_login = apiStores4.login(userId,userPwd);
+//        Observable mObservable_login = apiStores4.login("admin","123456");
         twoSubscription(mObservable_login,new Func1<YCLogin,Observable>() {
             @Override
             public Observable call(YCLogin loginModel) {

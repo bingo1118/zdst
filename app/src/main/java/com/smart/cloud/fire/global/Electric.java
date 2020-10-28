@@ -1,9 +1,11 @@
 package com.smart.cloud.fire.global;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/11/3.
  */
-public class Electric {
+public class Electric implements Serializable {
 
     /**
      * addSmokeTime : 2016-11-03 15:07:14

@@ -64,31 +64,32 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             @Override
             public void onSuccess(LoginModel model) {
                 String errorCode = model.getError_code();
+                String userCID = SharedPreferencesManager.getInstance().getData(context,SharedPreferencesManager.SP_FILE_GWELL,"CID");//@@5.16
                 if(errorCode.equals("0")){
                     editSharePreference(context,model,User,Pwd);
                     //登陆内部服务器获取用户权限
-                    String userCID = SharedPreferencesManager.getInstance().getData(context,SharedPreferencesManager.SP_FILE_GWELL,"CID");//@@5.16
-                    loginServer2(User,Pwd,userCID);
+                    loginServer2(User,Pwd,userCID,"1");
 //                    loginServer(User);
                 }else{
                     mvpView.hideLoading();
                     switch (errorCode){
                         case "2":
-                            T.showShort(context,"用户不存在");
+//                            T.showShort(context,"用户不存在");
                             break;
                         case "3":
-                            T.showShort(context,"密码错误");
+//                            T.showShort(context,"密码错误");
                             break;
                         case "9":
-                            T.showShort(context,"用户名不能为空");
+//                            T.showShort(context,"用户名不能为空");
                             break;
                         default:
-                            T.showShort(context,"用户名或密码错误");//@@4.27
+//                            T.showShort(context,"用户名或密码错误");//@@4.27
                             break;
                     }
-                    if(type==0){
-                        mvpView.autoLoginFail();
-                    }
+                    loginServer2(User,Pwd,userCID,"0");
+//                    if(type==0){
+//                        mvpView.autoLoginFail();
+//                    }
                 }
             }
 
@@ -152,8 +153,8 @@ public class LoginPresenter extends BasePresenter<LoginView> {
      * 登陆内部服务器，获取信息到Login Model，errorCode=0表示登陆成功，设置权限。。
      * @param userId
      */
-    private void loginServer2(String userId,String pwd,String cid){
-        Observable<LoginModel> observable = apiStores1.login2(userId,pwd,cid,"2");//@@5.19添加app编号
+    private void loginServer2(final String userId, final String pwd, String cid,String ifregister){
+        Observable<LoginModel> observable = apiStores1.login2(userId,pwd,cid,"2",ifregister);//@@5.19添加app编号
         addSubscription(observable,new SubscriberCallBack<>(new ApiCallback<LoginModel>() {
             @Override
             public void onSuccess(LoginModel model) {
@@ -165,6 +166,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                     SharedPreferencesManager.getInstance().putIntData(context,
                             SharedPreferencesManager.SP_FILE_GWELL,
                             SharedPreferencesManager.KEY_RECENT_PRIVILEGE, model.getPrivilege());
+                    login_success(userId,pwd,model.getPrivilege(),model.getName());
                     //跳转到主界面
                     mvpView.getDataSuccess(model);
                 }else{
@@ -257,6 +259,27 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                         }
                     }
                 }));
+    }
+
+    private void login_success(String userId, String pwd, int privilege, String name) {
+        //获取到内部服务器的用户权限，并配置到MyAPP
+        MyApp.app.setPrivilege(privilege);
+        SharedPreferencesManager.getInstance().putData(context,
+                SharedPreferencesManager.SP_FILE_GWELL,
+                SharedPreferencesManager.KEY_RECENTPASS,
+                pwd);
+        SharedPreferencesManager.getInstance().putData(context,
+                SharedPreferencesManager.SP_FILE_GWELL,
+                SharedPreferencesManager.KEY_RECENTNAME,
+                userId);
+        SharedPreferencesManager.getInstance().putData(context,
+                SharedPreferencesManager.SP_FILE_GWELL,
+                SharedPreferencesManager.KEY_RECENTPASS_NUMBER
+                ,name);//@@7.12 保存账号密码
+//                    @@5.5存储用户权限。。
+        SharedPreferencesManager.getInstance().putIntData(context,
+                SharedPreferencesManager.SP_FILE_GWELL,
+                SharedPreferencesManager.KEY_RECENT_PRIVILEGE, privilege);
     }
 
     private void editSharePreference(Context mContext, LoginModel object, String userId, String userPwd){

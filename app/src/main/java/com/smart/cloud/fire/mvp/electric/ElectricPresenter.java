@@ -3,6 +3,7 @@ package com.smart.cloud.fire.mvp.electric;
 import android.widget.Toast;
 
 import com.smart.cloud.fire.base.presenter.BasePresenter;
+import com.smart.cloud.fire.global.ElectricDXDetailEntity;
 import com.smart.cloud.fire.global.ElectricInfo;
 import com.smart.cloud.fire.global.ElectricValue;
 import com.smart.cloud.fire.rxjava.ApiCallback;
@@ -47,6 +48,61 @@ public class ElectricPresenter extends BasePresenter<ElectricView>{
                         mvpView.getDataFail("无数据");
                     }
                     mvpView.getDataSuccess(electricValueBeen);
+                }
+            }
+
+            @Override
+            public void onFailure(int code, String msg) {
+                mvpView.getDataFail("网络错误，请检查网络");
+            }
+
+            @Override
+            public void onCompleted() {
+                mvpView.hideLoading();
+            }
+        }));
+    }
+
+    //获取第三方单相数据
+    public void getOneElectricDXInfo(String userId, String privilege, String mac, int devType, boolean refresh){
+//        if(!refresh){
+        mvpView.showLoading();
+//        }
+        Observable mObservable = apiStores1.getOneElectricDXInfo(userId,privilege,mac,devType+"");
+        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<ElectricDXDetailEntity>() {
+            @Override
+            public void onSuccess(ElectricDXDetailEntity model) {
+                int resultCode = model.getErrorCode();
+                if(resultCode==0){
+                    mvpView.getDataDXSuccess(model);
+                }else{
+                    mvpView.getDataDXSuccess(new ElectricDXDetailEntity());
+                }
+            }
+
+            @Override
+            public void onFailure(int code, String msg) {
+                mvpView.getDataFail("网络错误，请检查网络");
+            }
+
+            @Override
+            public void onCompleted() {
+                mvpView.hideLoading();
+            }
+        }));
+    }
+
+    //获取第三方单相阈值参数数据
+    public void getOneElectricDXyuzhi(String mac){
+        Observable mObservable = apiStores1.getElectrDXThreshold2(mac);
+        addSubscription(mObservable,new SubscriberCallBack<>(new ApiCallback<ElectricDXDetailEntity>() {
+            @Override
+            public void onSuccess(ElectricDXDetailEntity model) {
+                int resultCode = model.getErrorCode();
+                if(resultCode==0){
+                    mvpView.getDataDXyuzhiSuccess(model);
+                }else{
+                    mvpView.getDataDXyuzhiSuccess(new ElectricDXDetailEntity());
                 }
             }
 

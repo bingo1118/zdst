@@ -362,9 +362,13 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
                         deviceType="59";
                     }//@@NB北秦电气设备
                     if((smokeMac.charAt(smokeMac.length()-1)+"").equals("Z")){
-                        electrState=0;
-                        deviceType="76";
-                    }//@@NB直连三相电气设备
+                        electrState=1;
+                        deviceType="6";
+                    }//@@来源第三方单相电气设备
+                    if((smokeMac.charAt(smokeMac.length()-1)+"").equals("X")){
+                        electrState=1;
+                        deviceType="7";
+                    }//@@来源第三方三相电气设备
                     if((smokeMac.charAt(smokeMac.length()-1)+"").equals("Y")){
                         electrState=1;;
                         deviceType="77";
@@ -396,6 +400,7 @@ public class ConfireFireFragmentPresenter extends BasePresenter<ConfireFireFragm
                     smokeMac = smokeMac.replace("T","");//电气火灾
                     smokeMac = smokeMac.replace("H","");//电气火灾
                     smokeMac = smokeMac.replace("V","");//电气火灾
+                    smokeMac = smokeMac.replace("X","");//电气火灾
                     break;
                 case "T":
                     if((smokeMac.charAt(smokeMac.length()-1)+"").equals("N")){

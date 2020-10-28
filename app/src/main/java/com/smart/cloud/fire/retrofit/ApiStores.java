@@ -1,6 +1,7 @@
 package com.smart.cloud.fire.retrofit;
 
 import com.smart.cloud.fire.global.Electric;
+import com.smart.cloud.fire.global.ElectricDXDetailEntity;
 import com.smart.cloud.fire.global.ElectricInfo;
 import com.smart.cloud.fire.global.ElectricValue;
 import com.smart.cloud.fire.global.ProofGasHistoryEntity;
@@ -41,7 +42,8 @@ public interface ApiStores {
     //登录本地服务器2，登陆新接口2017.5.16
     @GET("login")
     @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
-    Observable<LoginModel> login2(@Query("userId") String userId,@Query("pwd") String pwd,@Query("cid") String cid,@Query("appId") String appId);
+    Observable<LoginModel> login2(@Query("userId") String userId,@Query("pwd") String pwd
+            ,@Query("cid") String cid,@Query("appId") String appId,@Query("ifregister") String ifregister);
 
     //获取短信验证码
     @FormUrlEncoded
@@ -95,6 +97,21 @@ public interface ApiStores {
     Observable<getAlarmHistoryEntity> getAlarmHistoryEntityByConsident(@Query("limit") String limit, @Query("infotransferId") String yc_mac
             ,@Query("jsessionid") String jsessionid, @Query("page") String page
             , @Query("fireAlarm") String fireAlarm, @Query("troubleAlarm") String troubleAlarm);
+
+    @GET("getOneElectricInfo")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<ElectricDXDetailEntity> getOneElectricDXInfo(@Query("userId") String userId, @Query("privilege") String privilege,
+                                                            @Query("smokeMac") String smokeMac, @Query("devType") String devType);
+
+
+    @GET("getElectrDXThreshold")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<ElectricDXDetailEntity> getElectrDXThreshold(@Query("mac") String smokeMac);
+
+    @GET("getElectrDXThreshold2")
+    @Headers("Content-Type: application/x-www-form-urlencoded;charset=utf-8")
+    Observable<ElectricDXDetailEntity> getElectrDXThreshold2(@Query("mac") String smokeMac);
+
 
     //用传登陆
     @GET("sys/login")
