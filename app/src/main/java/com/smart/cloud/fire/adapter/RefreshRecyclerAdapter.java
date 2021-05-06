@@ -320,6 +320,8 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 case 59:
                 case 52:
                 case 53:
+                case 7:
+                case 6:
                 case 5:
                     ((ItemViewHolder) holder).smokeMac.setText("电气:");
                     int alarmFamily = mNormalAlarmMessage.getAlarmFamily();
@@ -382,18 +384,19 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                             ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.duanlu1);//@@12.26
                             break;
                         default:
-                            ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.xx_huojing);
+                            ((ItemViewHolder) holder).smokeMac.setText("声光:");
+                            ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.shengguang);
                             break;
                     }
                     ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
                     ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
                     break;
-                case 7:
-                    ((ItemViewHolder) holder).smokeMac.setText("声光:");
-                    ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.shengguang);
-                    ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
-                    ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
-                    break;
+//                case 7:
+//                    ((ItemViewHolder) holder).smokeMac.setText("声光:");
+//                    ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.shengguang);
+//                    ((ItemViewHolder) holder).smokeMac.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+//                    ((ItemViewHolder) holder).smokeMacTv.setTextColor(mContext.getResources().getColor(R.color.hj_color_text));
+//                    break;
                 case 8:
                     ((ItemViewHolder) holder).smokeMac.setText("手报:");
                     ((ItemViewHolder) holder).alarmMarkImage.setImageResource(R.drawable.shoubao);
